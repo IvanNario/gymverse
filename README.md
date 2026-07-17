@@ -106,7 +106,7 @@ Antes de desplegar:
 - Define `CLIENT_ORIGIN` y `ADMIN_ORIGIN` con los dominios reales.
 - Configura `MERCADO_PAGO_ACCESS_TOKEN` y `MERCADO_PAGO_WEBHOOK_URL`.
 - Configura Cloudinary; las imagenes subidas no se guardan en local.
-- Revisa `DEPLOYMENT.md` para desplegar API en Render y cliente/admin en Netlify.
+- Revisa `DEPLOYMENT.md` para desplegar API, cliente y admin en Vercel.
 - Ejecuta:
 
 ```bash

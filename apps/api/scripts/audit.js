@@ -40,15 +40,16 @@ addCheck(".env ignorado", gitignore.split(/\r?\n/).includes(".env"), "No subas s
 
 const userModel = readFileSync(resolve(root, "apps/api/src/models/User.js"), "utf8");
 const orderRoutes = readFileSync(resolve(root, "apps/api/src/routes/orders.js"), "utf8");
+const appFile = readFileSync(resolve(root, "apps/api/src/app.js"), "utf8");
 const serverFile = readFileSync(resolve(root, "apps/api/src/server.js"), "utf8");
 const encryptionFile = readFileSync(resolve(root, "apps/api/src/utils/encryption.js"), "utf8");
 const adminRoutes = readFileSync(resolve(root, "apps/api/src/routes/admin.js"), "utf8");
 addCheck("Sin tarjetas guardadas en usuarios", !userModel.includes("paymentMethods"), "El modelo User no debe almacenar tarjetas.");
 addCheck("Pedidos no aceptan método card", !orderRoutes.includes('"card", "pickup"') && !orderRoutes.includes("paymentMethodId"), "El checkout debe usar Mercado Pago o pago al recoger.");
-addCheck("API usa sanitizador de payload", serverFile.includes("rejectUnsafePayload"), "Activa protección contra claves peligrosas en JSON.");
-addCheck("API no cachea datos sensibles", serverFile.includes("Cache-Control") && serverFile.includes("no-store"), "Las respuestas /api deben usar no-store.");
+addCheck("API usa sanitizador de payload", appFile.includes("rejectUnsafePayload"), "Activa protección contra claves peligrosas en JSON.");
+addCheck("API no cachea datos sensibles", appFile.includes("Cache-Control") && appFile.includes("no-store"), "Las respuestas /api deben usar no-store.");
 addCheck("Cifrado de campos sensibles disponible", encryptionFile.includes("aes-256-gcm"), "Usa cifrado autenticado para datos personales.");
-addCheck("Imagenes no se guardan en local", !serverFile.includes('"/uploads"') && !adminRoutes.includes("writeFile("), "Usa almacenamiento externo para imagenes subidas.");
+addCheck("Imagenes no se guardan en local", !appFile.includes('"/uploads"') && !serverFile.includes('"/uploads"') && !adminRoutes.includes("writeFile("), "Usa almacenamiento externo para imagenes subidas.");
 
 const envFile = resolve(root, ".env");
 if (existsSync(envFile)) {

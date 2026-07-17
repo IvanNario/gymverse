@@ -10,7 +10,7 @@
     "doctor": "node scripts/doctor.js",
     "seed": "node scripts/seed.js",
     "audit": "node scripts/audit.js",
-    "check": "node --check src/server.js && node --check scripts/seed.js && node --check scripts/doctor.js && node --check scripts/audit.js"
+    "check": "node --check src/app.js && node --check src/server.js && node --check api/index.js && node --check scripts/seed.js && node --check scripts/doctor.js && node --check scripts/audit.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

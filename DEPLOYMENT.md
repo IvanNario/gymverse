@@ -1,16 +1,15 @@
-# Despliegue GymVerse
+# Despliegue GymVerse en Vercel
 
-GymVerse se despliega como tres servicios:
+GymVerse se despliega como tres proyectos separados en Vercel:
 
-- API en Render: `apps/api`.
-- PWA cliente en Netlify: `apps/customer`.
-- Panel admin en Netlify: `apps/admin`.
+- API serverless: `apps/api`.
+- PWA cliente: `apps/customer`.
+- Panel admin: `apps/admin`.
 
 ## 1. Preparar GitHub
 
-1. Crea un repositorio privado o publico en GitHub.
-2. Sube este proyecto completo.
-3. Confirma que GitHub Actions ejecute `GymVerse CI`.
+1. Sube el proyecto completo al repositorio de GitHub.
+2. Confirma que GitHub Actions ejecute `GymVerse CI`.
 
 El workflow valida:
 
@@ -18,17 +17,15 @@ El workflow valida:
 - Auditoria interna de seguridad.
 - Vulnerabilidades de dependencias de produccion.
 
-## 2. API en Render
+## 2. API en Vercel
 
-Puedes crear el servicio desde `render.yaml` o manualmente.
+Crea un proyecto de Vercel conectado al repo:
 
-Configuracion esperada:
-
-- Runtime: Node.
-- Build command: `npm install`.
-- Start command: `npm run start -w apps/api`.
-- Health check: `/health`.
-- Node: `20`.
+- Root Directory: `apps/api`
+- Framework Preset: `Other`
+- Build Command: vacio
+- Output Directory: vacio
+- Install Command: `npm install`
 
 Variables de entorno requeridas:
 
@@ -52,50 +49,51 @@ Variables de entorno requeridas:
 Webhook de Mercado Pago:
 
 ```text
-https://TU-API-RENDER.onrender.com/api/orders/mercado-pago/webhook
+https://TU-API-VERCEL.vercel.app/api/orders/mercado-pago/webhook
 ```
 
-## 3. Cliente en Netlify
+## 3. Cliente en Vercel
 
-Crea un sitio en Netlify usando como base:
+Crea otro proyecto de Vercel:
 
-```text
-apps/customer
-```
-
-Netlify leera `apps/customer/netlify.toml`.
+- Root Directory: `apps/customer`
+- Framework Preset: `Vite`
+- Build Command: `npm run build`
+- Output Directory: `dist`
+- Install Command: `npm install`
 
 Variable requerida:
 
 ```text
-VITE_API_URL=https://TU-API-RENDER.onrender.com/api
+VITE_API_URL=https://TU-API-VERCEL.vercel.app/api
 ```
 
-## 4. Admin en Netlify
+## 4. Admin en Vercel
 
-Crea otro sitio en Netlify usando como base:
+Crea otro proyecto de Vercel:
 
-```text
-apps/admin
-```
-
-Netlify leera `apps/admin/netlify.toml`.
+- Root Directory: `apps/admin`
+- Framework Preset: `Vite`
+- Build Command: `npm run build`
+- Output Directory: `dist`
+- Install Command: `npm install`
 
 Variable requerida:
 
 ```text
-VITE_API_URL=https://TU-API-RENDER.onrender.com/api
+VITE_API_URL=https://TU-API-VERCEL.vercel.app/api
 ```
 
 El admin esta configurado con `noindex` para no aparecer en buscadores.
 
 ## 5. Variables cruzadas
 
-Cuando Netlify entregue las URLs finales:
+Cuando Vercel entregue las URLs finales:
 
-- En Render, define `CLIENT_ORIGIN` con la URL publica de la PWA.
-- En Render, define `ADMIN_ORIGIN` con la URL publica del admin.
-- En Mercado Pago, usa el webhook publico de Render.
+- En el proyecto API, define `CLIENT_ORIGIN` con la URL publica de la PWA.
+- En el proyecto API, define `ADMIN_ORIGIN` con la URL publica del admin.
+- En Mercado Pago, usa el webhook publico del proyecto API.
+- En Google Cloud, agrega la URL publica del cliente en Authorized JavaScript origins.
 
 ## 6. Checklist final
 
@@ -107,18 +105,15 @@ npm run audit
 npm audit --omit=dev
 ```
 
-En Render revisa:
+En Vercel revisa:
 
 - `/health` responde `status: ok`.
 - MongoDB conecta correctamente.
 - `MERCADO_PAGO_WEBHOOK_URL` incluye `/api/orders/mercado-pago/webhook`.
 - Cloudinary esta configurado para subir imagenes sin guardarlas en disco local.
-
-En Netlify revisa:
-
 - Cliente abre y consume catalogo.
 - Admin abre y permite iniciar sesion.
-- Ambas apps usan `https`.
+- Las tres apps usan `https`.
 
 Seguridad:
 

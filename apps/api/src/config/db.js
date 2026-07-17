@@ -3,6 +3,11 @@ import { env } from "./env.js";
 
 export async function connectDatabase() {
   mongoose.set("strictQuery", true);
+  if (mongoose.connection.readyState === 1) return mongoose.connection;
+  if (mongoose.connection.readyState === 2) {
+    await mongoose.connection.asPromise();
+    return mongoose.connection;
+  }
   try {
     await mongoose.connect(env.mongoUri, {
       dbName: env.mongoDbName,

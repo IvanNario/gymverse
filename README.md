@@ -1,5 +1,7 @@
 # GymVerse Platform
 
+Repositorio de la App y Administrador GymVerse.
+
 Plataforma separada para GymVerse con:
 
 - `apps/api`: API con Express y MongoDB.

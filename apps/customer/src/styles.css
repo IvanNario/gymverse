@@ -1,0 +1,2974 @@
+:root {
+  --teal: #00809d;
+  --cream: #fcf8dd;
+  --yellow: #ffd700;
+  --gold: #d3af37;
+  --ink: #101115;
+  --panel: #24242d;
+  --panel2: #30313b;
+  --muted: #aeb0b8;
+  --line: rgba(255, 255, 255, 0.1);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  color: var(--cream);
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(255, 215, 0, 0.15), transparent 25rem),
+    radial-gradient(circle at 85% 0%, rgba(0, 128, 157, 0.2), transparent 24rem),
+    #08090b;
+}
+
+button,
+input,
+select,
+textarea {
+  max-width: 100%;
+  font: inherit;
+}
+
+button {
+  max-width: 100%;
+  border: 0;
+  cursor: pointer;
+  transition: transform 160ms ease, background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+}
+
+select {
+  color-scheme: dark;
+  appearance: none;
+  padding-right: 2.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 0.65rem;
+  background-color: #18191f;
+  background-image: linear-gradient(45deg, transparent 50%, var(--yellow) 50%), linear-gradient(135deg, var(--yellow) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 50%, calc(100% - 12px) 50%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+
+select:focus {
+  border-color: rgba(255, 215, 0, 0.55);
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.12);
+}
+
+option {
+  color: var(--cream);
+  background: #18191f;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.appLoadingScreen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(255, 215, 0, 0.16), transparent 22rem),
+    radial-gradient(circle at 85% 0%, rgba(0, 128, 157, 0.2), transparent 24rem),
+    #08090b;
+}
+
+.loadingCard {
+  width: min(100%, 22rem);
+  display: grid;
+  justify-items: center;
+  gap: 0.85rem;
+  padding: 1.35rem;
+  border: 1px solid var(--line);
+  border-radius: 0.95rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.025)), var(--panel);
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.32);
+}
+
+.loadingCard img {
+  width: 3.3rem;
+  height: 3.3rem;
+  border-radius: 0.9rem;
+}
+
+.loadingCard strong,
+.loadingCard span {
+  display: block;
+  text-align: center;
+}
+
+.loadingCard span {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.phoneShell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+  overflow-x: hidden;
+  background: #111218;
+}
+
+.screen {
+  min-width: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: clamp(1rem, 2vw, 1.5rem) clamp(1rem, 2.5vw, 1.75rem) calc(6rem + env(safe-area-inset-bottom, 0px));
+  animation: screenIn 220ms ease both;
+}
+
+.screen > *,
+.panel,
+.emptyCard,
+.productCard,
+.cartItem,
+.orderCard,
+.rewardOrderCard,
+.notificationCard {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.appHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.appHeader > *,
+.sectionTop > *,
+.primaryButton,
+.iconTextButton,
+.ghostRound {
+  min-width: 0;
+}
+
+.appHeader h1,
+.screen h1,
+.heroCard h2,
+.productCard h3,
+.orderCard h2,
+.cartItem h3 {
+  overflow-wrap: anywhere;
+}
+
+.appHeader span,
+.overline,
+.heroCard span,
+.productCard span,
+.profileCard span,
+.field span,
+.totals span {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.appHeader h1,
+.screen h1,
+.heroCard h2 {
+  margin: 0.2rem 0 0;
+}
+
+.appHeader img {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  object-fit: cover;
+}
+
+.heroCard {
+  margin-top: 1rem;
+  padding: 1.1rem;
+  min-height: 9rem;
+  display: flex;
+  align-items: end;
+  border-radius: 1rem;
+  color: var(--ink);
+  background: linear-gradient(135deg, var(--yellow), var(--gold));
+}
+
+.heroCard span {
+  color: rgba(16, 17, 21, 0.68);
+}
+
+.heroCard p {
+  max-width: 34rem;
+  margin: 0.4rem 0 0;
+  color: rgba(16, 17, 21, 0.72);
+}
+
+.heroCard.rewardHero {
+  background: linear-gradient(135deg, var(--yellow), var(--teal));
+}
+
+.rewardStrip {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.9rem;
+  padding: 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.promoStripCustomer {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.9rem;
+  padding: 0.85rem;
+  border: 1px solid rgba(255, 215, 0, 0.24);
+  border-radius: 0.9rem;
+  background: rgba(255, 215, 0, 0.075);
+}
+
+.promoCustomerList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  gap: 0.6rem;
+}
+
+.promoCustomerCard {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  color: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: var(--panel);
+  text-align: left;
+}
+
+.promoCustomerCard strong {
+  color: var(--yellow);
+}
+
+.promoCustomerCard span,
+.promoCustomerCard small {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.promoCustomerCard small {
+  color: var(--yellow);
+  font-weight: 900;
+}
+
+.contentHero {
+  background: linear-gradient(135deg, #e8f7ee, var(--yellow));
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.contentCard,
+.contentReader,
+.contentRelated,
+.contentProduct {
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  background: var(--panel);
+}
+
+.contentCard {
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.9rem;
+  color: var(--cream);
+  text-align: left;
+}
+
+.contentCard > div,
+.contentCard small {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--yellow);
+}
+
+.contentCard h2,
+.contentCard p {
+  margin: 0;
+}
+
+.contentCard p,
+.contentCard small {
+  font-size: 0.82rem;
+}
+
+.contentCard p {
+  color: var(--muted);
+  line-height: 1.42;
+}
+
+.contentReader {
+  overflow: hidden;
+}
+
+.contentReaderHero {
+  display: grid;
+  gap: 0.45rem;
+  padding: 1rem;
+  color: var(--ink);
+  background: linear-gradient(135deg, var(--yellow), #e8f7ee);
+}
+
+.contentReaderHero svg {
+  color: var(--ink);
+}
+
+.contentReaderHero p,
+.contentReaderHero span {
+  margin: 0;
+  color: rgba(16, 17, 21, 0.72);
+}
+
+.contentBody {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1rem;
+}
+
+.contentBody p {
+  margin: 0;
+  color: var(--cream);
+  line-height: 1.62;
+}
+
+.contentRelated {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding: 1rem;
+}
+
+.contentProductList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.65rem;
+}
+
+.contentProduct {
+  display: grid;
+  grid-template-columns: 3.2rem 1fr;
+  gap: 0.65rem;
+  align-items: center;
+  padding: 0.7rem;
+  color: var(--cream);
+  text-align: left;
+}
+
+.contentProduct img {
+  width: 3.2rem;
+  height: 3.2rem;
+  object-fit: contain;
+  border-radius: 0.55rem;
+  background: #f7f7f3;
+}
+
+.contentProduct span {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--yellow);
+}
+
+.rewardStripTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--yellow);
+  font-weight: 800;
+}
+
+.rewardItems {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.6rem;
+}
+
+.rewardRedeemCard {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  color: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: var(--panel);
+  text-align: left;
+}
+
+.rewardRedeemCard strong {
+  color: var(--yellow);
+}
+
+.rewardRedeemCard small {
+  color: var(--muted);
+}
+
+.rewardRedeemCard:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.searchBar,
+.authCard label,
+.field {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 0.85rem;
+  padding: 0.82rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: var(--panel);
+}
+
+.searchBar input,
+.authCard input {
+  flex: 1;
+  min-width: 0;
+  color: var(--cream);
+  border: 0;
+  outline: 0;
+  background: transparent;
+}
+
+.field select {
+  flex: 1;
+  min-width: 0;
+  color: var(--cream);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  outline: 0;
+  background-color: #18191f;
+  padding: 0.65rem 2.4rem 0.65rem 0.75rem;
+}
+
+.chips {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 1rem 0 0.2rem;
+  scrollbar-width: none;
+}
+
+.chips button,
+.segmented button {
+  flex: 0 0 auto;
+  min-height: 2.35rem;
+  padding: 0.58rem 0.85rem;
+  color: var(--cream);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--panel);
+}
+
+.segmented button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.chips .active,
+.segmented .active {
+  color: var(--ink);
+  border-color: var(--yellow);
+  background: var(--yellow);
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.9rem;
+}
+
+.productCard,
+.cartItem,
+.checkoutCard,
+.orderCard,
+.profileCard,
+.profileStats article,
+.emptyCard {
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  background: var(--panel);
+}
+
+.productCard {
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  color: var(--cream);
+  text-align: left;
+}
+
+.favoriteButton {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.55rem;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  color: var(--cream);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  background: rgba(16, 17, 21, 0.68);
+}
+
+.favoriteButton.active,
+.ghostRound.activeFavorite {
+  color: var(--ink);
+  border-color: var(--yellow);
+  background: var(--yellow);
+}
+
+.productGridEmpty {
+  grid-column: 1 / -1;
+}
+
+.productInfo {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.75rem;
+}
+
+.productCard strong {
+  color: var(--cream);
+}
+
+.productCard h3,
+.cartItem h3,
+.orderCard h3 {
+  margin: 0.25rem 0;
+  font-size: 0.95rem;
+}
+
+.productCard p,
+.cartItem p,
+.orderCard p,
+.bodyText,
+.profileCard p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.productArt,
+.detailArt,
+.cartThumb {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #f7f7f3;
+}
+
+.productArt img,
+.detailArt img {
+  position: absolute;
+  width: auto;
+  height: auto;
+  max-width: calc(100% - 0.9rem);
+  max-height: calc(100% - 0.9rem);
+  object-fit: contain;
+}
+
+.cartThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.productArt {
+  aspect-ratio: 1.45;
+  height: auto;
+}
+
+.productArt img {
+  inset: 0.45rem;
+}
+
+.detailArt {
+  min-height: 16rem;
+  max-height: 28rem;
+  aspect-ratio: 16 / 8;
+  border-radius: 1rem;
+}
+
+.detailArt img {
+  inset: 0.8rem;
+  max-width: calc(100% - 1.6rem);
+  max-height: calc(100% - 1.6rem);
+}
+
+.productDetailScreen {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.productDetailLayout {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.productDetailInfo {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.productDetailInfo h1 {
+  overflow-wrap: anywhere;
+  line-height: 1.03;
+}
+
+.productDetailInfo .bodyText {
+  max-width: 44rem;
+  line-height: 1.55;
+}
+
+.productDetailInfo .variantGrid,
+.productDetailInfo .stickyAction {
+  margin-top: 0;
+}
+
+.cartThumb {
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 0.65rem;
+}
+
+.variantGrid,
+.cartList,
+.orderList {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.variantGrid button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem;
+  color: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: var(--panel);
+  text-align: left;
+}
+
+.variantGrid .active {
+  color: var(--ink);
+  border-color: var(--yellow);
+  background: var(--yellow);
+}
+
+.stickyAction {
+  position: static;
+  display: grid;
+  grid-template-columns: minmax(0, 0.78fr) minmax(8rem, 1fr);
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 1rem;
+  padding: 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02)), rgba(17, 18, 24, 0.94);
+}
+
+.detailTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.availabilityLine {
+  display: block;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.availabilityLine span {
+  color: var(--muted);
+}
+
+.availabilityLine strong {
+  color: var(--cream);
+}
+
+.primaryButton,
+.iconTextButton,
+.dangerButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 2.8rem;
+  border-radius: 999px;
+  font-weight: 800;
+}
+
+.primaryButton {
+  width: 100%;
+  color: var(--ink);
+  background: var(--yellow);
+}
+
+.iconTextButton,
+.selectionBar button {
+  color: var(--yellow);
+  background: transparent;
+}
+
+.dangerButton {
+  width: 2.5rem;
+  color: #ffb1b1;
+  background: rgba(255, 87, 87, 0.14);
+}
+
+.cartItem,
+.orderCard {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.7rem;
+  align-items: center;
+  padding: 0.75rem;
+}
+
+.stepper {
+  display: grid;
+  grid-template-columns: 1.8rem 1.4rem 1.8rem;
+  align-items: center;
+  gap: 0.25rem;
+  text-align: center;
+}
+
+.stepper button {
+  width: 1.8rem;
+  height: 1.8rem;
+  display: grid;
+  place-items: center;
+  color: var(--cream);
+  border-radius: 50%;
+  background: var(--panel2);
+}
+
+.checkoutCard {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1rem;
+  padding: 0.9rem;
+}
+
+.couponBox {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.65rem;
+  align-items: end;
+  padding: 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.couponBox .paymentField {
+  min-width: 0;
+}
+
+.couponBox .iconTextButton {
+  min-height: 2.65rem;
+  padding-inline: 0.9rem;
+  border: 1px solid rgba(255, 215, 0, 0.24);
+  background: rgba(255, 215, 0, 0.08);
+}
+
+.couponApplied {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.7rem 0.8rem;
+  color: var(--ink);
+  border-radius: 0.7rem;
+  background: var(--yellow);
+}
+
+.couponApplied strong,
+.couponApplied span {
+  display: block;
+}
+
+.couponApplied span {
+  margin-top: 0.1rem;
+  color: rgba(16, 17, 21, 0.68);
+  font-size: 0.78rem;
+}
+
+.couponApplied button {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  color: var(--ink);
+  border-radius: 50%;
+  background: rgba(16, 17, 21, 0.1);
+}
+
+.paymentGateway {
+  display: grid;
+  grid-template-columns: minmax(16rem, 0.78fr) minmax(18rem, 1.22fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.paymentInfoPanel,
+.paymentFormPanel {
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+}
+
+.paymentInfoPanel {
+  display: grid;
+  align-content: start;
+  gap: 0.9rem;
+  padding: 1rem;
+  color: var(--ink);
+  background: linear-gradient(145deg, #dfe8ff, #c5d2ff);
+}
+
+.paymentInfoPanel h2 {
+  margin: 0.2rem 0 0;
+  color: #315fd4;
+  font-size: 1.1rem;
+}
+
+.paymentInfoPanel span,
+.paymentInfoPanel small {
+  color: rgba(16, 17, 21, 0.66);
+  font-size: 0.78rem;
+}
+
+.paymentInfoPanel small {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.paymentInfoPanel ol {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+  padding-left: 1rem;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.acceptedCards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.acceptedCards span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 3rem;
+  min-height: 1.7rem;
+  padding: 0 0.45rem;
+  color: #315fd4;
+  border-radius: 0.35rem;
+  background: #f8fbff;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.paymentFormPanel {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.paymentModes {
+  margin-bottom: 0.1rem;
+}
+
+.paymentField {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.paymentField.wide {
+  grid-column: 1 / -1;
+}
+
+.paymentField span {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.paymentField input,
+.paymentField select,
+.inputWithIcon {
+  min-height: 2.65rem;
+  width: 100%;
+  color: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  outline: 0;
+  background-color: #18191f;
+}
+
+.paymentField input {
+  padding: 0.65rem 0.75rem;
+}
+
+.paymentField select {
+  padding: 0.65rem 2.4rem 0.65rem 0.75rem;
+}
+
+.inputWithIcon {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0 0.75rem;
+}
+
+.inputWithIcon input {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.pickupPaymentNotice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.pickupPaymentNotice svg {
+  color: var(--yellow);
+}
+
+.pickupPaymentNotice p {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.checkoutLoading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem;
+  border: 1px solid rgba(255, 215, 0, 0.28);
+  border-radius: 0.8rem;
+  background: rgba(255, 215, 0, 0.08);
+  animation: expandIn 180ms ease both;
+}
+
+.checkoutLoading p {
+  margin: 0.15rem 0 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.loadingSpinner,
+.buttonSpinner {
+  display: inline-block;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  border: 2px solid rgba(16, 17, 21, 0.25);
+  border-top-color: var(--ink);
+  animation: spin 780ms linear infinite;
+}
+
+.loadingSpinner {
+  width: 2rem;
+  height: 2rem;
+  border-color: rgba(255, 215, 0, 0.25);
+  border-top-color: var(--yellow);
+}
+
+.buttonSpinner {
+  width: 1rem;
+  height: 1rem;
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem;
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: #18191f;
+}
+
+.totals {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.totals strong {
+  text-align: right;
+}
+
+.pill {
+  display: inline-block;
+  padding: 0.35rem 0.55rem;
+  color: var(--ink);
+  border-radius: 999px;
+  background: var(--yellow);
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.pointsBadge {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 0.75rem;
+  padding: 0.4rem 0.65rem;
+  color: var(--ink);
+  border-radius: 999px;
+  background: var(--yellow);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.reviewSummary {
+  margin-top: 0.75rem;
+}
+
+.reviewSummary div {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.75rem;
+  color: var(--yellow);
+  border: 1px solid rgba(255, 215, 0, 0.24);
+  border-radius: 999px;
+  background: rgba(255, 215, 0, 0.08);
+}
+
+.reviewSummary span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.profileCard {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1rem;
+  min-width: 0;
+}
+
+.profileCard img {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 1rem;
+}
+
+.profileStats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 1rem 0;
+}
+
+.profileTabs {
+  display: flex;
+  gap: 0.45rem;
+  margin-top: 1rem;
+  padding: 0.3rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.profileTabs button {
+  flex: 1;
+  min-width: 6.5rem;
+  min-height: 2.45rem;
+  color: var(--cream);
+  border-radius: 999px;
+  background: transparent;
+  font-weight: 800;
+}
+
+.profileTabs .active {
+  color: var(--ink);
+  background: var(--yellow);
+}
+
+.profileStats article {
+  padding: 0.9rem;
+  min-width: 0;
+}
+
+.profileStats strong {
+  display: block;
+  color: var(--yellow);
+  font-size: 1.45rem;
+}
+
+.profileScreen {
+  display: grid;
+  align-content: start;
+  justify-items: center;
+}
+
+.profileScreen > * {
+  width: min(100%, 48rem);
+}
+
+.profileScreen .heroProfile {
+  width: min(100%, 52rem);
+}
+
+.bottomNav {
+  position: fixed;
+  right: 1rem;
+  bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  left: 1rem;
+  max-width: 428px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.35rem;
+  margin: 0 auto;
+  padding: 0.35rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: rgba(22, 23, 30, 0.96);
+  z-index: 20;
+  overflow: hidden;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.35);
+}
+
+.bottomNav button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  gap: 0.2rem;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0.55rem 0.2rem;
+  color: var(--muted);
+  border-radius: 0.75rem;
+  background: transparent;
+  font-size: 0.7rem;
+}
+
+.bottomNav button span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.navBadge {
+  position: absolute;
+  top: 0.2rem;
+  right: 0.45rem;
+  min-width: 1.05rem;
+  height: 1.05rem;
+  display: grid;
+  place-items: center;
+  padding: 0 0.25rem;
+  color: var(--ink);
+  border-radius: 999px;
+  background: var(--yellow);
+  font-size: 0.62rem;
+}
+
+.bottomNav .active {
+  color: var(--ink);
+  background: var(--yellow);
+}
+
+.authScreen {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  width: 100%;
+  padding: 1.25rem;
+  background: transparent;
+}
+
+.authPanel {
+  width: min(100%, 26.5rem);
+  display: grid;
+  gap: 1rem;
+  padding: 1.15rem;
+  border: 1px solid var(--line);
+  border-radius: 1.2rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015)), #111218;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.26);
+  animation: screenIn 220ms ease both;
+}
+
+.authBrand {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.9rem;
+  align-items: center;
+}
+
+.authBrand img {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 1rem;
+  object-fit: cover;
+}
+
+.authBrand span {
+  color: var(--yellow);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.authBrand h1,
+.authBrand p {
+  margin: 0;
+}
+
+.authBrand p {
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.authSwitch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.75rem;
+  padding: 0.25rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.authSwitch button {
+  min-height: 2.35rem;
+  color: var(--cream);
+  border-radius: 999px;
+  background: transparent;
+  font-weight: 900;
+}
+
+.authSwitch .active {
+  color: var(--ink);
+  background: var(--yellow);
+}
+
+.googleAuthBox {
+  display: grid;
+  gap: 0.45rem;
+  justify-items: stretch;
+  min-width: 0;
+}
+
+.googleButtonSlot {
+  min-height: 2.75rem;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 999px;
+}
+
+.googleButtonSlot.loading {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.googleAuthBox span {
+  color: var(--muted);
+  font-size: 0.76rem;
+  text-align: center;
+}
+
+.googleFallbackButton {
+  min-height: 2.75rem;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  font-weight: 900;
+}
+
+.authDivider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.authDivider::before,
+.authDivider::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: var(--line);
+}
+
+.authCard {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.authCard label {
+  margin-top: 0;
+  background: #18191f;
+}
+
+.authCard .primaryButton {
+  margin-top: 0.2rem;
+}
+
+.authAssurance {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  color: var(--muted);
+  border: 1px solid rgba(255, 215, 0, 0.18);
+  border-radius: 0.85rem;
+  background: rgba(255, 215, 0, 0.065);
+  font-size: 0.76rem;
+}
+
+.authAssurance svg {
+  flex: 0 0 auto;
+  color: var(--yellow);
+}
+
+.errorText {
+  color: #ffb1b1;
+}
+
+.emptyCard {
+  padding: 1rem;
+  color: var(--muted);
+}
+
+.toast {
+  position: fixed;
+  right: 1rem;
+  bottom: 6rem;
+  left: 1rem;
+  max-width: 428px;
+  margin: 0 auto;
+  padding: 0.8rem 1rem;
+  color: var(--ink);
+  border-radius: 0.8rem;
+  background: var(--yellow);
+  font-weight: 800;
+}
+
+.appVersionBadge {
+  position: fixed;
+  right: 1rem;
+  bottom: 5.05rem;
+  z-index: 12;
+  padding: 0.25rem 0.55rem;
+  color: rgba(252, 248, 221, 0.64);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: rgba(16, 17, 21, 0.72);
+  backdrop-filter: blur(10px);
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.sectionTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.sectionTop.compact {
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
+
+.sectionTop span,
+.profileForm label span {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.sectionTop h1 {
+  margin: 0.15rem 0 0;
+}
+
+.ghostRound {
+  display: grid;
+  place-items: center;
+  width: 2.65rem;
+  height: 2.65rem;
+  color: var(--yellow);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--panel);
+}
+
+.ghostRound:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.addressPreview,
+.profileForm,
+.orderDetail {
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.addressPreview {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.8rem;
+}
+
+.addressPreview p,
+.addressLine {
+  margin: 0.2rem 0 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.orderCard.detailed {
+  display: block;
+  overflow: hidden;
+  padding: 0;
+}
+
+.orderSummary {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 0.7rem;
+  align-items: center;
+  padding: 0.8rem;
+  color: var(--cream);
+  background: transparent;
+  text-align: left;
+}
+
+.orderSummaryMain {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.65rem;
+  align-items: center;
+  min-width: 0;
+}
+
+.orderSummaryMain h3,
+.orderSummaryMain p {
+  overflow-wrap: anywhere;
+}
+
+.orderSelect {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--line);
+  border-radius: 0.55rem;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.orderSelect input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--yellow);
+}
+
+.selectionBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.selectionBar span {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.selectionBar button {
+  color: var(--yellow);
+  background: transparent;
+}
+
+.orderCard.open .orderSummary svg {
+  transform: rotate(180deg);
+}
+
+.orderDetail {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0 0.8rem 0.8rem;
+  padding: 0.85rem;
+  animation: expandIn 180ms ease both;
+}
+
+.orderTimeline {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.timelineStep {
+  position: relative;
+  display: grid;
+  gap: 0.35rem;
+  align-items: start;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.timelineStep span {
+  display: grid;
+  place-items: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: #18191f;
+  font-weight: 900;
+}
+
+.timelineStep strong {
+  overflow-wrap: anywhere;
+}
+
+.timelineStep.done {
+  color: var(--cream);
+}
+
+.timelineStep.done span {
+  color: var(--ink);
+  border-color: var(--yellow);
+  background: var(--yellow);
+}
+
+.orderException {
+  padding: 0.75rem;
+  color: #ffb1b1;
+  border: 1px solid rgba(255, 87, 87, 0.22);
+  border-radius: 0.75rem;
+  background: rgba(255, 87, 87, 0.1);
+  font-size: 0.82rem;
+}
+
+.pickupCodeCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  color: var(--ink);
+  border-radius: 0.75rem;
+  background: var(--yellow);
+}
+
+.pickupCodeCard span {
+  color: rgba(16, 17, 21, 0.68);
+  font-size: 0.78rem;
+}
+
+.pickupCodeCard strong {
+  font-size: 1.1rem;
+  letter-spacing: 0;
+}
+
+.returnStatusCard {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  border: 1px solid rgba(255, 215, 0, 0.24);
+  border-radius: 0.75rem;
+  background: rgba(255, 215, 0, 0.08);
+}
+
+.returnStatusCard span,
+.returnForm label span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.returnStatusCard p {
+  margin: 0.15rem 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.pendingPaymentBox {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.85rem;
+  border: 1px solid rgba(255, 215, 0, 0.38);
+  border-radius: 0.9rem;
+  background: rgba(255, 215, 0, 0.1);
+}
+
+.pendingPaymentBox div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.pendingPaymentBox span {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.returnForm {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.returnForm label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.returnForm textarea {
+  width: 100%;
+  min-height: 5rem;
+  padding: 0.7rem;
+  color: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  outline: 0;
+  background: #18191f;
+}
+
+.notificationList {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.paginationControls {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  margin-top: 0.85rem;
+}
+
+.paginationControls button {
+  display: grid;
+  place-items: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  color: var(--yellow);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.paginationControls span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.notificationPermission {
+  width: 100%;
+  min-height: 2.9rem;
+  border: 1px solid rgba(255, 215, 0, 0.35);
+  border-radius: 0.9rem;
+  background: rgba(255, 215, 0, 0.1);
+  color: var(--yellow);
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  margin-bottom: 0.85rem;
+}
+
+.notificationActions {
+  display: inline-flex;
+  gap: 0.45rem;
+}
+
+.dangerRound {
+  color: #ffb1b1;
+  border-color: rgba(255, 87, 87, 0.25);
+  background: rgba(255, 87, 87, 0.1);
+}
+
+.notificationCard {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.75rem;
+  padding: 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  background: var(--panel);
+}
+
+.notificationCard.unread {
+  border-color: rgba(255, 215, 0, 0.35);
+  background: rgba(255, 215, 0, 0.08);
+}
+
+.notificationCard svg {
+  color: var(--yellow);
+}
+
+.notificationCard > div {
+  min-width: 0;
+}
+
+.notificationTitleLine {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.notificationTitleLine strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.notificationCard p {
+  margin: 0.25rem 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+  overflow-wrap: anywhere;
+}
+
+.notificationCard span {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.notificationCard .noticeCode {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: fit-content;
+  margin-bottom: 0;
+  padding: 0.22rem 0.5rem;
+  color: var(--ink);
+  border-radius: 999px;
+  background: var(--yellow);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
+.supportScreen {
+  display: grid;
+  gap: 1rem;
+}
+
+.supportHero,
+.supportForm,
+.supportTickets,
+.supportThread {
+  border: 1px solid var(--line);
+  border-radius: 1.1rem;
+  background: var(--panel);
+  padding: 1rem;
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.22);
+}
+
+.supportHero {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.supportHero svg {
+  color: var(--yellow);
+  flex: 0 0 auto;
+}
+
+.supportHero h1,
+.supportHero p,
+.supportForm h2,
+.supportTickets h2,
+.supportThread h2 {
+  margin: 0;
+}
+
+.supportHero span,
+.supportHero p,
+.supportTicketMini small,
+.supportThreadHead span,
+.supportBubble span {
+  color: var(--muted);
+}
+
+.supportForm,
+.supportTickets,
+.supportThread {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.supportForm label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.supportForm label span {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.supportForm input,
+.supportForm select,
+.supportForm textarea,
+.supportReplyCustomer textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: rgba(0, 0, 0, 0.24);
+  color: var(--cream);
+  padding: 0.85rem;
+  outline: none;
+}
+
+.supportForm textarea,
+.supportReplyCustomer textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+.supportTicketMini {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--cream);
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.85rem;
+  text-align: left;
+}
+
+.supportTicketMini.active {
+  border-color: rgba(255, 215, 0, 0.55);
+  background: rgba(255, 215, 0, 0.12);
+}
+
+.supportThreadHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.ghostRound.text {
+  width: auto;
+  padding: 0 0.9rem;
+  border-radius: 999px;
+}
+
+.supportBubble {
+  width: min(88%, 26rem);
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.045);
+  padding: 0.8rem;
+}
+
+.supportBubble.mine {
+  justify-self: end;
+  border-color: rgba(255, 215, 0, 0.38);
+  background: rgba(255, 215, 0, 0.12);
+}
+
+.supportBubble p {
+  margin: 0 0 0.35rem;
+}
+
+.supportReplyCustomer {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.orderItems {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.orderItems div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.25rem 0.8rem;
+}
+
+.orderItems small {
+  color: var(--muted);
+}
+
+.rewardHistory {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.reviewsPanel {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+
+.reviewForm,
+.reviewCard {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  background: var(--panel);
+}
+
+.reviewForm label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.reviewForm label span,
+.reviewMessage,
+.reviewCard span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.reviewForm select,
+.reviewForm textarea {
+  width: 100%;
+  color: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  outline: 0;
+  background-color: #18191f;
+}
+
+.reviewForm select {
+  min-height: 2.6rem;
+  padding: 0.65rem 2.4rem 0.65rem 0.75rem;
+}
+
+.reviewForm textarea {
+  min-height: 5.5rem;
+  padding: 0.65rem 0.75rem;
+}
+
+.reviewList {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.reviewCard > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.stars {
+  display: flex;
+  gap: 0.15rem;
+  color: var(--yellow);
+}
+
+.reviewCard p {
+  margin: 0;
+  color: var(--cream);
+  line-height: 1.45;
+}
+
+.rewardOrderCard {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.rewardOrderCard .orderItems {
+  grid-column: 1 / -1;
+  padding-top: 0.55rem;
+  border-top: 1px solid var(--line);
+}
+
+.productCard,
+.cartItem,
+.checkoutCard,
+.orderCard,
+.profileCard,
+.profileStats article,
+.emptyCard,
+.contentCard,
+.rewardStrip,
+.promoStripCustomer,
+.promoCustomerCard,
+.rewardRedeemCard,
+.paymentFormPanel,
+.addressPreview,
+.profileForm,
+.legalLinkCard,
+.legalDocument,
+.orderDetail,
+.returnForm,
+.notificationCard:not(.unread),
+.reviewForm,
+.reviewCard {
+  border-color: rgba(255, 255, 255, 0.12);
+  border-radius: 0.85rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02)), var(--panel);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
+}
+
+.totals.mini {
+  padding-top: 0.55rem;
+  border-top: 1px solid var(--line);
+}
+
+.dangerTextButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 2.5rem;
+  color: #ffb1b1;
+  border-radius: 999px;
+  background: rgba(255, 87, 87, 0.12);
+}
+
+.successText {
+  margin: 0;
+  padding: 0.7rem 0.8rem;
+  color: #dfffea;
+  border: 1px solid rgba(61, 220, 132, 0.28);
+  border-radius: 0.75rem;
+  background: rgba(61, 220, 132, 0.1);
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.profileForm {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  padding: 1rem;
+}
+
+.profileForm h2 {
+  margin: 0.4rem 0 0;
+  font-size: 1rem;
+}
+
+.profileForm label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.profileForm input {
+  min-height: 2.6rem;
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  color: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  outline: 0;
+  background: #18191f;
+}
+
+.profileForm input[readonly] {
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.035);
+  cursor: default;
+}
+
+.gymAffiliationPanel {
+  align-content: start;
+}
+
+.affiliatedGymList,
+.gymSearchResults {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.affiliatedGymCard,
+.pickupEmptyState {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.pickupEmptyState {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.stockWarning {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.8rem;
+  color: #ffd6d6;
+  border: 1px solid rgba(255, 87, 87, 0.28);
+  border-radius: 0.8rem;
+  background: rgba(255, 87, 87, 0.1);
+}
+
+.stockWarning span {
+  color: #ffd6d6;
+  font-size: 0.78rem;
+}
+
+.affiliatedGymCard strong,
+.affiliatedGymCard span,
+.affiliatedGymCard small,
+.pickupEmptyState p {
+  min-width: 0;
+}
+
+.affiliatedGymCard strong {
+  display: block;
+  color: var(--cream);
+  line-height: 1.25;
+}
+
+.affiliatedGymCard span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.affiliatedGymCard small,
+.pickupEmptyState p {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.affiliatedGymCard svg,
+.pickupEmptyState svg {
+  color: var(--yellow);
+}
+
+.gymSearchForm {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.7rem;
+  align-items: end;
+}
+
+.gymSearchForm label {
+  min-width: 0;
+}
+
+.gymSearchForm .inputWithIcon {
+  min-height: 2.85rem;
+  padding-inline: 0.85rem;
+  border-color: rgba(255, 255, 255, 0.13);
+  background: #14151b;
+}
+
+.gymSearchForm .inputWithIcon input {
+  min-height: 0;
+  padding: 0;
+  color: var(--cream);
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.gymSearchForm .inputWithIcon:focus-within {
+  border-color: rgba(255, 215, 0, 0.55);
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+}
+
+.gymSearchForm .primaryButton {
+  width: auto;
+  min-width: 5.8rem;
+  min-height: 2.85rem;
+  padding-inline: 1rem;
+  white-space: nowrap;
+}
+
+.gymSearchForm .primaryButton:disabled {
+  color: rgba(252, 248, 221, 0.65);
+  opacity: 1;
+  background: rgba(255, 215, 0, 0.32);
+}
+
+.dangerGhost {
+  color: #ffb1b1;
+  border-color: rgba(255, 87, 87, 0.28);
+  background: rgba(255, 87, 87, 0.12);
+}
+
+.iconTextButton.compact {
+  width: auto;
+  min-height: 2.35rem;
+  padding-inline: 0.85rem;
+}
+
+.iconTextButton.compact.isAffiliated:disabled {
+  color: var(--cream);
+  opacity: 1;
+  border: 1px solid rgba(255, 215, 0, 0.34);
+  background: rgba(255, 215, 0, 0.13);
+}
+
+.confirmOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(8, 9, 11, 0.72);
+  backdrop-filter: blur(12px);
+}
+
+.confirmPanel {
+  width: min(100%, 30rem);
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 1rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.025)), var(--panel);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.36);
+}
+
+.confirmIcon {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  color: var(--yellow);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 0.85rem;
+  background: rgba(255, 215, 0, 0.08);
+}
+
+.confirmPanel span {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.confirmPanel h2,
+.confirmPanel p {
+  margin: 0.2rem 0 0;
+}
+
+.confirmPanel p {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.confirmSummary {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.confirmSummary div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.confirmSummary strong {
+  text-align: right;
+}
+
+.confirmActions {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.7rem;
+}
+
+.legalLinkCard {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 48rem;
+  margin-top: 0.75rem;
+  padding: 0.9rem;
+  color: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02)), var(--panel);
+  text-align: left;
+}
+
+.legalLinkCard svg {
+  color: var(--yellow);
+  flex: 0 0 auto;
+}
+
+.legalLinkCard span,
+.legalLinkCard small {
+  display: block;
+  min-width: 0;
+}
+
+.legalLinkCard small,
+.profileLegalFoot {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.profileLegalFoot {
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.legalScreen {
+  padding-bottom: 7rem;
+}
+
+.legalHero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  color: var(--ink);
+  border-radius: 0.95rem;
+  background: linear-gradient(135deg, var(--yellow), #fff2a3);
+}
+
+.legalHero span,
+.legalHero p {
+  color: rgba(16, 17, 21, 0.68);
+}
+
+.legalHero h1,
+.legalHero p {
+  margin: 0.25rem 0 0;
+}
+
+.legalHero strong {
+  white-space: nowrap;
+}
+
+.legalLayout {
+  display: grid;
+  gap: 1rem;
+}
+
+.legalTabs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.55rem;
+}
+
+.legalTabs button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.8rem;
+  padding: 0.75rem;
+  color: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: var(--panel);
+  text-align: left;
+}
+
+.legalTabs button svg {
+  flex: 0 0 auto;
+  color: var(--yellow);
+}
+
+.legalTabs .active {
+  color: var(--ink);
+  border-color: var(--yellow);
+  background: var(--yellow);
+}
+
+.legalTabs .active svg {
+  color: var(--ink);
+}
+
+.legalDocument {
+  position: relative;
+  display: grid;
+  gap: 1rem;
+  overflow: hidden;
+  padding: clamp(1rem, 2.5vw, 1.35rem);
+  border: 1px solid var(--line);
+  border-radius: 0.95rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02)), var(--panel);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
+}
+
+.legalWatermark {
+  position: absolute;
+  right: -1rem;
+  top: 1rem;
+  color: rgba(255, 255, 255, 0.035);
+  font-size: clamp(3rem, 12vw, 7rem);
+  font-weight: 900;
+  pointer-events: none;
+  transform: rotate(-8deg);
+}
+
+.legalDocumentHead {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.legalDocumentHead svg {
+  color: var(--yellow);
+  flex: 0 0 auto;
+}
+
+.legalDocumentHead h2,
+.legalDocumentHead p,
+.legalBlock h3,
+.legalBlock p {
+  margin: 0.2rem 0 0;
+}
+
+.legalDocumentHead span,
+.legalDocumentHead p,
+.legalBlock p,
+.legalFooter {
+  color: var(--muted);
+}
+
+.legalBlock {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.25rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--line);
+}
+
+.legalBlock p {
+  line-height: 1.6;
+}
+
+.legalFooter {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.78rem;
+}
+
+.formGrid.customer {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.formGrid.customer .wide {
+  grid-column: 1 / -1;
+}
+
+.confirmationScreen {
+  display: grid;
+  place-items: center;
+}
+
+.paymentConfirmation {
+  width: min(100%, 42rem);
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1rem, 3vw, 1.4rem);
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: rgba(36, 36, 45, 0.96);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+
+.paymentConfirmation > span {
+  color: var(--yellow);
+  font-weight: 900;
+}
+
+.paymentConfirmation h1,
+.paymentConfirmation p {
+  margin: 0;
+}
+
+.paymentConfirmation p {
+  color: var(--muted);
+}
+
+.successPulse {
+  position: relative;
+  width: 5rem;
+  height: 5rem;
+  display: grid;
+  place-items: center;
+  margin: 0 auto;
+  color: var(--ink);
+  border-radius: 50%;
+  background: var(--yellow);
+}
+
+.successPulse::before {
+  position: absolute;
+  inset: -0.5rem;
+  content: "";
+  border-radius: inherit;
+  border: 1px solid rgba(255, 215, 0, 0.45);
+  animation: pulseRing 1200ms ease-out infinite;
+}
+
+.confirmationSummary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+  gap: 0.75rem;
+}
+
+.confirmationSummary div {
+  display: grid;
+  gap: 0.35rem;
+  place-items: center;
+  min-height: 7rem;
+  padding: 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.confirmationSummary svg {
+  color: var(--yellow);
+}
+
+.confirmationSummary span {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.confirmationActions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+@keyframes screenIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes expandIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulseRing {
+  from {
+    opacity: 0.85;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.18);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+@media (min-width: 780px) {
+  .phoneShell {
+    max-width: none;
+    min-height: 100vh;
+    background: transparent;
+  }
+
+  .screen {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 6.5rem;
+  }
+
+  .productDetailScreen {
+    max-width: 1040px;
+  }
+
+  .productDetailLayout {
+    grid-template-columns: minmax(18rem, 0.95fr) minmax(18rem, 1.05fr);
+    align-items: start;
+  }
+
+  .productDetailScreen .detailArt {
+    min-height: 24rem;
+    aspect-ratio: 1;
+    position: sticky;
+    top: 1rem;
+  }
+
+  .productDetailScreen .reviewsPanel {
+    margin-top: 1.25rem;
+  }
+
+  .legalScreen {
+    max-width: 1040px;
+  }
+
+  .legalLayout {
+    grid-template-columns: minmax(14rem, 0.35fr) minmax(0, 0.65fr);
+    align-items: start;
+  }
+
+  .legalTabs {
+    position: sticky;
+    top: 1rem;
+    grid-template-columns: 1fr;
+  }
+
+  .authPanel {
+    padding: 1.45rem;
+  }
+
+  .appHeader,
+  .heroCard,
+  .searchBar,
+  .chips,
+  .productGrid,
+  .cartList,
+  .checkoutCard,
+  .orderList,
+  .profileCard,
+  .profileStats,
+  .profileForm,
+  .iconTextButton {
+    max-width: none;
+  }
+
+  .heroCard {
+    min-height: 13rem;
+  }
+
+  .productGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .cartScreen,
+  .ordersScreen,
+  .profileScreen {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    align-content: start;
+  }
+
+  .profileScreen {
+    max-width: 58rem;
+    justify-items: center;
+  }
+
+  .cartScreen .sectionTop,
+  .ordersScreen .sectionTop,
+  .ordersScreen .selectionBar,
+  .ordersScreen .orderList,
+  .profileScreen .heroProfile,
+  .profileScreen .profileTabs,
+  .profileScreen .profileStats,
+  .profileScreen > .iconTextButton,
+  .profileScreen .profileForm,
+  .profileScreen .legalLinkCard,
+  .profileScreen .profileLegalFoot {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: min(100%, 48rem);
+  }
+
+  .profileScreen .heroProfile {
+    width: min(100%, 52rem);
+  }
+
+  .profileScreen > .iconTextButton {
+    justify-self: center;
+    width: min(100%, 48rem);
+    padding-inline: 1rem;
+    border: 1px solid var(--line);
+    background: rgba(255, 215, 0, 0.08);
+  }
+
+  .profileScreen .profileTabs,
+  .profileScreen .profileStats,
+  .profileScreen .profileForm {
+    margin-top: 0;
+  }
+
+  .checkoutCard,
+  .profileForm {
+    position: sticky;
+    top: 1rem;
+  }
+
+  .cartScreen .checkoutCard {
+    grid-column: 1 / -1;
+    position: static;
+  }
+
+  .profileScreen .profileForm {
+    max-width: 64rem;
+    position: static;
+  }
+
+  .bottomNav {
+    max-width: 620px;
+  }
+}
+
+@media (min-width: 1180px) {
+  .productGrid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .profileStats,
+  .confirmationSummary,
+  .confirmationActions,
+  .confirmActions,
+  .formGrid.customer,
+  .gymSearchForm,
+  .paymentGateway,
+  .couponBox {
+    grid-template-columns: 1fr;
+  }
+
+  .cartItem {
+    grid-template-columns: 1fr;
+  }
+
+  .selectionBar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .sectionTop {
+    align-items: flex-start;
+  }
+
+  .notificationActions {
+    flex: 0 0 auto;
+  }
+
+  .appVersionBadge {
+    right: 0.85rem;
+    bottom: 5.2rem;
+  }
+
+  .legalHero,
+  .legalFooter {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .legalTabs {
+    grid-template-columns: 1fr;
+  }
+
+  .productDetailScreen {
+    padding-inline: 0.85rem;
+  }
+
+  .detailTop {
+    margin-bottom: 0.65rem;
+  }
+
+  .detailTop .iconTextButton {
+    width: auto;
+    min-width: 0;
+    padding-inline: 0.9rem;
+  }
+
+  .productDetailScreen .detailArt {
+    min-height: 14rem;
+    max-height: none;
+    aspect-ratio: 4 / 3;
+    border-radius: 0.85rem;
+  }
+
+  .variantGrid button,
+  .stickyAction {
+    min-width: 0;
+  }
+
+  .stickyAction {
+    grid-template-columns: 1fr;
+  }
+
+  .pendingPaymentBox {
+    grid-template-columns: 1fr;
+  }
+
+  .confirmActions {
+    grid-template-columns: 1fr;
+  }
+
+  .availabilityLine {
+    white-space: normal;
+  }
+
+  .productDetailInfo .primaryButton {
+    width: 100%;
+  }
+
+  .profileCard {
+    align-items: flex-start;
+  }
+
+  .profileCard img {
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 0.8rem;
+  }
+
+  .profileTabs {
+    border-radius: 0.85rem;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding: 0.25rem;
+    scroll-snap-type: x proximity;
+  }
+
+  .profileTabs button {
+    flex: 0 0 auto;
+    min-width: max-content;
+    padding-inline: 0.9rem;
+    scroll-snap-align: start;
+    white-space: nowrap;
+  }
+
+  .legalLinkCard {
+    align-items: flex-start;
+  }
+
+  .affiliatedGymCard,
+  .pickupEmptyState {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .affiliatedGymCard .iconTextButton,
+  .pickupEmptyState .iconTextButton {
+    width: 100%;
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "name": "GymVerse Shop",
+  "short_name": "GymVerse",
+  "start_url": "/",
+  "scope": "/",
+  "id": "/",
+  "description": "Tienda fitness con recompensas, contenido y retiro en gimnasios afiliados.",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#101115",
+  "theme_color": "#FFD700",
+  "categories": ["shopping", "health", "fitness"],
+  "shortcuts": [
+    {
+      "name": "Tienda",
+      "short_name": "Tienda",
+      "url": "/?view=shop",
+      "icons": [{ "src": "/logo-yellow-bg.png", "sizes": "512x512", "type": "image/png" }]
+    },
+    {
+      "name": "Pedidos",
+      "short_name": "Pedidos",
+      "url": "/?view=orders",
+      "icons": [{ "src": "/logo-yellow-bg.png", "sizes": "512x512", "type": "image/png" }]
+    }
+  ],
+  "icons": [
+    {
+      "src": "/logo-yellow-bg.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

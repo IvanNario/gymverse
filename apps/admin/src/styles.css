@@ -1,0 +1,2989 @@
+:root {
+  --teal: #00809d;
+  --cream: #fcf8dd;
+  --yellow: #ffd700;
+  --gold: #d3af37;
+  --ink: #101115;
+  --panel: #20212a;
+  --panel2: #2b2c36;
+  --muted: #aeb0b8;
+  --line: rgba(255, 255, 255, 0.1);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--cream);
+  overflow-x: hidden;
+  background: #0d0e12;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  max-width: 100%;
+  border: 0;
+  cursor: pointer;
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+}
+
+input,
+textarea,
+select {
+  max-width: 100%;
+  color: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 0.55rem;
+  background: #171820;
+  outline: 0;
+}
+
+select {
+  color-scheme: dark;
+  appearance: none;
+  padding-right: 2.4rem;
+  border-color: rgba(255, 255, 255, 0.13);
+  background-color: #171820;
+  background-image: linear-gradient(45deg, transparent 50%, var(--yellow) 50%), linear-gradient(135deg, var(--yellow) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 50%, calc(100% - 12px) 50%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+
+select:focus {
+  border-color: rgba(255, 215, 0, 0.55);
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.12);
+}
+
+option {
+  color: var(--cream);
+  background: #171820;
+}
+
+.appLoadingScreen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(255, 215, 0, 0.12), transparent 22rem),
+    radial-gradient(circle at 85% 0%, rgba(0, 128, 157, 0.16), transparent 24rem),
+    #0d0e12;
+}
+
+.loadingCard {
+  width: min(100%, 22rem);
+  display: grid;
+  justify-items: center;
+  gap: 0.85rem;
+  padding: 1.35rem;
+  color: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.025)), var(--panel);
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.28);
+}
+
+.loadingCard img {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 0.85rem;
+}
+
+.loadingCard strong,
+.loadingCard span {
+  display: block;
+  text-align: center;
+}
+
+.loadingCard span {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.loadingSpinner {
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid rgba(255, 215, 0, 0.25);
+  border-top-color: var(--yellow);
+  border-radius: 50%;
+  animation: spin 780ms linear infinite;
+}
+
+.adminShell {
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(16.5rem, 17.75rem) minmax(0, 1fr);
+  overflow: hidden;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 1.25rem;
+  padding: 1.25rem 1rem 1.25rem 1.25rem;
+  border-right: 1px solid var(--line);
+  background: #101115;
+  overflow: hidden;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.brand img {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+}
+
+.brand strong,
+.brand span {
+  display: block;
+}
+
+.brand span,
+.pageHeader span,
+.metricCard span,
+.listRow span,
+.entityCard p,
+.entityCard span {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.sidebar nav {
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  margin-right: 0;
+  padding: 0.1rem 0.25rem 0.9rem 0;
+  scroll-padding-block: 0.65rem;
+  scrollbar-width: none;
+}
+
+.sidebar nav::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.sidebarSection {
+  display: block;
+  margin: 0.75rem 0 0.15rem;
+  padding: 0 0.25rem;
+  color: rgba(252, 248, 221, 0.46);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.sidebarSection:first-child {
+  margin-top: 0;
+}
+
+.sidebar nav button,
+.logoutButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  min-width: 0;
+  padding: 0.85rem 0.95rem;
+  color: var(--cream);
+  border-radius: 0.6rem;
+  background: transparent;
+  text-align: left;
+}
+
+.sidebar nav button {
+  overflow: hidden;
+}
+
+.sidebar nav button span,
+.logoutButton span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebarBadge {
+  margin-left: auto;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  display: grid;
+  place-items: center;
+  padding: 0 0.3rem;
+  color: var(--ink);
+  border-radius: 999px;
+  background: var(--yellow);
+  font-size: 0.68rem;
+}
+
+.sidebar nav .active,
+.sidebar nav button:hover {
+  color: var(--ink);
+  background: var(--yellow);
+}
+
+.logoutButton {
+  flex-shrink: 0;
+  color: #ffb1b1;
+  background: rgba(255, 87, 87, 0.12);
+  margin-right: 0.25rem;
+}
+
+.logoutButton.inline {
+  width: auto;
+}
+
+.workspace {
+  min-width: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  padding: clamp(1rem, 2vw, 1.75rem);
+}
+
+.page,
+.panel,
+.editorPanel,
+.table,
+.dataPanel,
+.analyticsPanel,
+.overviewPage {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.gymShell {
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(16.5rem, 17.75rem) minmax(0, 1fr);
+  overflow: hidden;
+  background: #0d0e12;
+}
+
+.gymSidebar .brand span {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.gymPortal {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  padding: clamp(1rem, 2.2vw, 1.75rem);
+}
+
+.gymHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: var(--panel);
+}
+
+.gymHeaderStatus {
+  display: grid;
+  gap: 0.2rem;
+  text-align: right;
+}
+
+.gymHeaderStatus span:first-child {
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.gymHeaderStatus span:last-child {
+  font-weight: 800;
+}
+
+.gymSummaryGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.gymSearch {
+  margin: 0;
+}
+
+.gymOrderList {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.gymOrderCard {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: var(--panel);
+}
+
+.gymOrderTop,
+.gymOrderActions,
+.pickupConfirm {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.gymOrderTop {
+  justify-content: space-between;
+}
+
+.gymOrderTop h2,
+.gymOrderTop p {
+  margin: 0.25rem 0 0;
+}
+
+.gymOrderTop p,
+.gymOrderMeta span {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.gymOrderMeta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.gymOrderMeta div {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.gymOrderActions {
+  flex-wrap: wrap;
+  padding-top: 0.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.gymOrderActions select,
+.pickupConfirm input {
+  min-height: 2.55rem;
+  padding: 0.65rem 2.4rem 0.65rem 0.75rem;
+}
+
+.pickupConfirm {
+  flex: 1 1 20rem;
+  flex-wrap: wrap;
+}
+
+.pickupConfirm input {
+  flex: 1;
+  min-width: 10rem;
+  padding-right: 0.75rem;
+}
+
+.pickupConfirm small {
+  flex-basis: 100%;
+  color: #ffb1b1;
+}
+
+.pickupDone {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.55rem;
+  padding: 0 0.85rem;
+  color: var(--ink);
+  border-radius: 999px;
+  background: var(--yellow);
+  font-weight: 800;
+}
+
+.gymStockWorkspace {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.gymLocalStock,
+.gymRestockForm,
+.gymRequestList {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.gymStockList,
+.gymRequestList {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.gymStockItem,
+.gymRequestCard,
+.gymRestockRow {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.gymStockItem,
+.gymRequestCard {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.gymStockItem span,
+.gymRequestCard span,
+.gymRequestCard small {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.gymRestockRow {
+  grid-template-columns: minmax(10rem, 1fr) minmax(9rem, 0.8fr) minmax(5rem, 0.35fr) auto;
+  align-items: center;
+}
+
+.gymRestockRow select,
+.gymRestockRow input,
+.gymRestockForm textarea {
+  width: 100%;
+  min-height: 2.55rem;
+  padding: 0.65rem 0.75rem;
+}
+
+.gymRestockRow select {
+  padding-right: 2.4rem;
+}
+
+.gymRestockForm textarea {
+  min-height: 5rem;
+  color: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 0.7rem;
+  outline: 0;
+  background: #18191f;
+}
+
+.page {
+  display: grid;
+  gap: clamp(0.85rem, 1.4vw, 1.2rem);
+  animation: pageIn 220ms ease both;
+}
+
+.pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.pageHeader h1,
+.panel h2,
+.entityCard h2 {
+  margin: 0.15rem 0 0;
+}
+
+.primaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  color: var(--ink);
+  border-radius: 999px;
+  background: var(--yellow);
+  font-weight: 800;
+  min-width: 0;
+  white-space: normal;
+}
+
+.primaryButton.compact {
+  width: auto;
+}
+
+.metricGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11.5rem), 1fr));
+  gap: 0.85rem;
+}
+
+.metricCard,
+.panel,
+.table,
+.entityCard,
+.loginPanel {
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: var(--panel);
+}
+
+.metricCard {
+  display: grid;
+  align-content: space-between;
+  gap: 0.65rem;
+  min-height: 7.1rem;
+  padding: 1rem;
+}
+
+.metricCard svg {
+  color: var(--yellow);
+}
+
+.metricCard strong {
+  color: var(--yellow);
+  font-size: 1.45rem;
+}
+
+.overviewMetrics {
+  gap: 0.9rem;
+}
+
+.overviewPage {
+  max-width: 100rem;
+}
+
+.overviewTopGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.overviewHeroPanel {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: start;
+  overflow: hidden;
+  padding: 1.15rem;
+  color: var(--ink);
+  border-radius: 0.85rem;
+  background: linear-gradient(135deg, var(--yellow), #fff2a3);
+}
+
+.overviewHeroPanel > svg {
+  color: rgba(16, 17, 21, 0.72);
+}
+
+.overviewHeroPanel span,
+.overviewHeroPanel p {
+  color: rgba(16, 17, 21, 0.68);
+}
+
+.overviewHeroPanel h2,
+.overviewHeroPanel p {
+  margin: 0.25rem 0 0;
+}
+
+.overviewHeroPanel h2 {
+  color: var(--ink);
+  font-size: clamp(2rem, 4vw, 3.45rem);
+  line-height: 0.95;
+}
+
+.overviewHeroStats {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  gap: 0.65rem;
+  margin-top: 0.6rem;
+}
+
+.overviewHeroStats div {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+  padding: 0.75rem;
+  border: 1px solid rgba(16, 17, 21, 0.12);
+  border-radius: 0.7rem;
+  background: rgba(255, 255, 255, 0.34);
+}
+
+.overviewHeroStats strong {
+  color: var(--ink);
+  font-size: 1.05rem;
+  overflow-wrap: anywhere;
+}
+
+.overviewHeroStats .positive strong {
+  color: #17672c;
+}
+
+.overviewHeroStats .negative strong {
+  color: #9d2424;
+}
+
+.overviewAlertsPanel,
+.overviewListBlock {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.overviewAlertsPanel h2,
+.overviewPanelTitle h2 {
+  margin: 0;
+}
+
+.overviewAlertRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.7rem;
+  align-items: center;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.7rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.overviewAlertRow svg,
+.overviewPanelTitle svg {
+  color: var(--yellow);
+}
+
+.overviewAlertRow strong,
+.overviewAlertRow span {
+  display: block;
+}
+
+.overviewAlertRow span {
+  margin-top: 0.15rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.overviewAlertRow b {
+  color: var(--yellow);
+  font-size: 1.2rem;
+  white-space: nowrap;
+}
+
+.overviewStatusGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: 0.85rem;
+}
+
+.overviewStatusCard {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: center;
+  min-height: 5.8rem;
+  padding: 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: var(--panel);
+}
+
+.overviewStatusCard svg {
+  color: var(--yellow);
+}
+
+.overviewStatusCard span,
+.overviewStatusCard small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.overviewStatusCard strong {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--yellow);
+  font-size: 1.35rem;
+}
+
+.overviewWorkGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17.5rem, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.overviewListBlock.large {
+  grid-column: span 2;
+}
+
+.overviewPanelTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.overviewPanelTitle h2 {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.overviewPanelTitle svg {
+  flex: 0 0 auto;
+}
+
+.overviewPanelTitle span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.overviewOrderRow,
+.overviewMiniRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(max-content, auto);
+  gap: 0.7rem;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.overviewOrderRow:last-child,
+.overviewMiniRow:last-child {
+  border-bottom: 0;
+}
+
+.overviewOrderRow strong,
+.overviewOrderRow span,
+.overviewMiniRow strong,
+.overviewMiniRow span {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.overviewOrderRow span,
+.overviewMiniRow span {
+  margin-top: 0.15rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.overviewOrderRow b,
+.overviewMiniRow b {
+  color: var(--cream);
+  justify-self: end;
+  white-space: nowrap;
+}
+
+.overviewEmpty {
+  padding: 0.9rem;
+  color: var(--muted);
+  border: 1px dashed var(--line);
+  border-radius: 0.7rem;
+  background: rgba(255, 255, 255, 0.025);
+  font-size: 0.84rem;
+}
+
+.analyticsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: 1rem;
+}
+
+.automationGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.automationRules,
+.automationPreview,
+.automationHistory {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.automationRules h2,
+.automationPreview h2,
+.automationHistory h2 {
+  margin: 0;
+}
+
+.automationRule,
+.automationItem,
+.automationRun {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.automationRule {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.automationRule > div {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.automationRule svg,
+.automationItem b {
+  color: var(--yellow);
+}
+
+.automationRule p,
+.automationRun p {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.automationItem,
+.automationRun {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.automationItem span,
+.automationRun span {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.automationRunStats {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 0.15rem 0.55rem;
+  align-items: baseline;
+  text-align: right;
+}
+
+.automationRunStats strong {
+  color: var(--yellow);
+}
+
+.contentEditor {
+  width: min(100%, 70rem);
+}
+
+.contentBodyInput {
+  min-height: 13rem !important;
+}
+
+.relatedProductPicker {
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.relatedProductGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.55rem;
+}
+
+.relatedProductOption {
+  padding: 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.usersWorkspace {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.roleEditor {
+  position: sticky;
+  top: 1rem;
+}
+
+.rolePreview,
+.userRoleCard {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+  padding: 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.rolePreview p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.permissionChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.permissionChips span {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  min-height: 1.65rem;
+  padding: 0.35rem 0.55rem;
+  color: var(--cream);
+  border: 1px solid rgba(255, 215, 0, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 215, 0, 0.08);
+  font-size: 0.72rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.permissionChips.compact span {
+  color: var(--muted);
+  border-color: var(--line);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.usersListPanel {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.userRoleGrid {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.userRoleTop {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+.userRoleTop strong,
+.userRoleTop span {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.userRoleTop > div > span,
+.roleNameLine span {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.roleNameLine {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.roleNameLine svg {
+  color: var(--yellow);
+}
+
+.analyticsPanel {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.analyticsPanel h2 {
+  margin: 0;
+}
+
+.analyticsList,
+.lowStockAnalytics {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.paginationControls {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  margin-top: 0.85rem;
+}
+
+.paginationControls button {
+  display: grid;
+  place-items: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  color: var(--yellow);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.paginationControls span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.analyticsRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(max-content, auto);
+  gap: 0.4rem 0.85rem;
+  align-items: center;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.7rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.analyticsRow strong,
+.analyticsRow span {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.analyticsRow span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.analyticsRow b {
+  color: var(--yellow);
+  justify-self: end;
+  white-space: nowrap;
+}
+
+.barTrack {
+  grid-column: 1 / -1;
+  height: 0.45rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.barTrack i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--yellow);
+}
+
+.compactHeader {
+  margin-top: 0.5rem;
+}
+
+.twoColumns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 1rem;
+}
+
+.panel {
+  padding: 1rem;
+}
+
+.listRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.listRow b {
+  white-space: nowrap;
+}
+
+.listRow:last-child {
+  border-bottom: 0;
+}
+
+.listRow strong,
+.listRow span {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.listRow > div {
+  min-width: 0;
+}
+
+.table {
+  overflow: auto;
+}
+
+.tableHead,
+.tableRow {
+  display: grid;
+  min-width: 0;
+  gap: 0.8rem;
+  align-items: center;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.tableHead {
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.82rem;
+}
+
+.tableRow:last-child {
+  border-bottom: 0;
+}
+
+.orders {
+  grid-template-columns: minmax(10rem, 1.1fr) minmax(9rem, 0.95fr) minmax(8rem, 0.95fr) minmax(5.25rem, 0.58fr) minmax(8.25rem, 0.82fr) minmax(9.5rem, 0.95fr) minmax(9rem, 0.7fr);
+}
+
+.rewardOrders {
+  grid-template-columns: minmax(8rem, 0.9fr) minmax(8rem, 0.85fr) minmax(11rem, 1.25fr) minmax(5rem, 0.5fr) minmax(10rem, 0.9fr) minmax(5rem, 0.5fr);
+}
+
+.tableGroup {
+  border-bottom: 1px solid var(--line);
+}
+
+.tableGroup:last-child {
+  border-bottom: 0;
+}
+
+.tableGroup .tableRow {
+  border-bottom: 0;
+}
+
+.inventory {
+  grid-template-columns: 1fr 0.75fr 0.75fr 1.4fr 0.5fr;
+}
+
+.tableRow span {
+  color: var(--muted);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.tableRow strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.tableRow select {
+  min-width: 0;
+  width: 100%;
+  color: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 0.45rem;
+  background-color: var(--panel2);
+  padding: 0.5rem 2.4rem 0.5rem 0.65rem;
+}
+
+.mobileSelectCell {
+  min-width: 0;
+}
+
+.tableRow .ghostButton {
+  min-height: 2.25rem;
+  padding-inline: 0.65rem;
+}
+
+.lowStock {
+  color: var(--yellow) !important;
+  font-weight: 800;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 0.9rem;
+}
+
+.entityCard {
+  padding: 1rem;
+}
+
+.entityCard > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.gymAccessPanel {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding: 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.gymAccessHead {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.gymAccessHead span,
+.gymAccessForm label span {
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.gymAccessHead strong {
+  display: block;
+  margin-top: 0.2rem;
+  overflow-wrap: anywhere;
+}
+
+.accessStatus {
+  flex: 0 0 auto;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.35rem 0.55rem;
+  color: var(--ink);
+  border-radius: 999px;
+  background: var(--yellow);
+  font-size: 0.72rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.accessStatus.disabled {
+  color: #ffb1b1;
+  background: rgba(255, 87, 87, 0.12);
+}
+
+.gymAccessForm {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.gymAccessForm label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.gymAccessForm input {
+  width: 100%;
+  min-height: 2.45rem;
+  padding: 0.6rem 0.7rem;
+}
+
+.gymAccessForm .ghostButton {
+  grid-column: 1 / -1;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 1.75rem;
+  padding: 0.35rem 0.55rem;
+  color: #101115 !important;
+  border-radius: 999px;
+  background: var(--yellow);
+  font-size: 0.75rem;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.loginPage {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  place-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.loginPanel {
+  width: min(100%, 25rem);
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+.loginPanel img {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 1rem;
+}
+
+.loginPanel h1 {
+  margin: 0;
+}
+
+.loginExamples {
+  width: min(100%, 36rem);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.45rem 0.75rem;
+  padding: 0.8rem 1rem;
+  color: rgba(252, 248, 221, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.035);
+  font-size: 0.78rem;
+}
+
+.loginExamples strong {
+  color: var(--yellow);
+}
+
+.loginHint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.loginPanel form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.loginPanel label {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  background: var(--panel2);
+}
+
+.loginPanel input {
+  width: 100%;
+  color: var(--cream);
+  border: 0;
+  outline: 0;
+  background: transparent;
+}
+
+.errorText {
+  color: #ffb1b1;
+  margin: 0;
+}
+
+.toast {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  padding: 0.8rem 1rem;
+  color: var(--ink);
+  border-radius: 0.75rem;
+  background: var(--yellow);
+  font-weight: 800;
+}
+
+.confirmOverlay {
+  position: fixed;
+  inset: 0 0 0 clamp(16.5rem, 18vw, 17.75rem);
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(5, 6, 9, 0.7);
+  backdrop-filter: blur(10px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.confirmPanel {
+  width: min(100%, 28rem);
+  max-height: calc(100dvh - 2rem);
+  display: grid;
+  gap: 0.9rem;
+  padding: 1rem;
+  color: var(--cream);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0.95rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.025)), var(--panel);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.42);
+  overflow-y: auto;
+}
+
+.confirmIcon {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  color: var(--yellow);
+  border: 1px solid rgba(255, 215, 0, 0.28);
+  border-radius: 0.8rem;
+  background: rgba(255, 215, 0, 0.08);
+}
+
+.confirmPanel span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.confirmPanel h2,
+.confirmPanel p {
+  margin: 0.2rem 0 0;
+}
+
+.confirmPanel p {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.confirmActions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.headerActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  justify-content: flex-end;
+}
+
+.summaryPill {
+  padding: 0.55rem 0.75rem;
+  color: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel);
+}
+
+.pageTabs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.35rem;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.pageTabs button:not(.primaryButton) {
+  min-height: 2.45rem;
+  padding: 0 0.85rem;
+  color: var(--cream);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  font-weight: 750;
+}
+
+.pageTabs button:not(.primaryButton):hover,
+.pageTabs button:not(.primaryButton).active {
+  color: var(--ink);
+  background: var(--yellow);
+}
+
+.pageTabs .primaryButton {
+  margin-left: auto;
+}
+
+.filterPanel {
+  display: grid;
+  grid-template-columns: minmax(18rem, 1.4fr) repeat(3, minmax(10rem, 0.7fr));
+  gap: 0.7rem;
+  align-items: end;
+  padding: 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.filterPanel label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.filterPanel label span,
+.formHint,
+.resultMeta {
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.searchField {
+  min-height: 2.65rem;
+  display: flex !important;
+  align-items: center;
+  gap: 0.6rem !important;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  background: #171820;
+}
+
+.searchField svg {
+  color: var(--yellow);
+}
+
+.searchField input {
+  width: 100%;
+  min-width: 0;
+  color: var(--cream);
+  border: 0;
+  outline: 0;
+  background: transparent;
+}
+
+.filterPanel select {
+  width: 100%;
+  min-height: 2.65rem;
+  padding: 0.65rem 2.4rem 0.65rem 0.75rem;
+}
+
+.resultMeta {
+  padding-inline: 0.15rem;
+}
+
+.emptyState {
+  grid-column: 1 / -1;
+  padding: 1rem;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: var(--panel);
+}
+
+.returnList,
+.notificationList.admin {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.notificationComposer {
+  margin-bottom: 1rem;
+}
+
+.dataPanel {
+  overflow: hidden;
+}
+
+.dataTable {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.dataTableHead,
+.dataTableRow {
+  display: grid;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.dataTableHead {
+  color: var(--muted);
+  font-size: 0.78rem;
+  padding: 0 0.85rem;
+}
+
+.dataTableRow {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.035);
+  padding: 0.85rem;
+}
+
+.dataTableRow > * {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.dataTableRow small {
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.dataTableHead.audit,
+.dataTableRow.audit {
+  grid-template-columns: minmax(7rem, 0.8fr) minmax(7rem, 1fr) minmax(8rem, 1.1fr) minmax(6rem, 0.8fr) minmax(10rem, 1.5fr);
+}
+
+.dataTableHead.finance,
+.dataTableRow.finance {
+  grid-template-columns: minmax(6rem, 0.8fr) minmax(7rem, 1fr) minmax(8rem, 1.3fr) minmax(6rem, 0.8fr) minmax(6rem, 0.8fr);
+}
+
+.supportLayout,
+.legalAdminLayout,
+.financeGrid {
+  display: grid;
+  gap: 1rem;
+}
+
+.supportLayout,
+.legalAdminLayout {
+  grid-template-columns: minmax(min(100%, 17rem), 0.9fr) minmax(0, 1.6fr);
+  align-items: start;
+}
+
+.financeGrid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  margin-bottom: 1rem;
+}
+
+.supportQueue,
+.legalDocList {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.searchField.inline {
+  margin: 0 0 0.35rem;
+}
+
+.supportTicketButton,
+.legalDocList button {
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--text);
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.85rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.supportTicketButton.active,
+.legalDocList button.active {
+  border-color: rgba(255, 215, 0, 0.55);
+  background: rgba(255, 215, 0, 0.12);
+}
+
+.supportTicketButton span,
+.legalDocList small,
+.supportTicketButton small {
+  color: var(--muted);
+}
+
+.legalDocList button {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}
+
+.legalDocList small {
+  grid-column: 2;
+}
+
+.supportConversation {
+  min-height: 33rem;
+}
+
+.supportConversation .editorTitle select {
+  width: min(100%, 14rem);
+  min-width: 0;
+  min-height: 2.5rem;
+  padding: 0.55rem 2.25rem 0.55rem 0.7rem;
+}
+
+.supportMessages {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.supportMessage {
+  width: min(86%, 38rem);
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.85rem;
+}
+
+.supportMessage.team {
+  justify-self: end;
+  border-color: rgba(255, 215, 0, 0.38);
+  background: rgba(255, 215, 0, 0.1);
+}
+
+.supportMessage p {
+  color: var(--text);
+  margin: 0.25rem 0;
+}
+
+.supportMessage span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.supportReply {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+  border-top: 1px solid var(--line);
+  padding-top: 1rem;
+}
+
+.supportReply textarea {
+  min-height: 5rem;
+  resize: vertical;
+}
+
+.legalEditor {
+  margin: 0;
+}
+
+.legalBlockEditor {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.legalBlockEditor .panel {
+  display: grid;
+  gap: 0.75rem;
+  box-shadow: none;
+}
+
+.financeBreakdown {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.financeBreakdown div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  padding: 0.8rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.financeBreakdown span {
+  color: var(--muted);
+}
+
+.promoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 0.9rem;
+}
+
+.promoCard {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: var(--panel);
+}
+
+.promoCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.promoCard h2,
+.promoCard p {
+  margin: 0;
+}
+
+.promoCard p {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.promoStats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.promoStats div {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.promoStats span {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.mutedPill {
+  color: var(--muted) !important;
+  background: var(--panel2);
+}
+
+.returnCard,
+.notificationCard {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: var(--panel);
+}
+
+.returnTop,
+.returnControls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.returnTop {
+  justify-content: space-between;
+}
+
+.returnTop h2,
+.returnTop p,
+.returnReason p,
+.notificationCard p {
+  margin: 0.25rem 0 0;
+}
+
+.returnTop p,
+.returnReason span,
+.notificationCard span {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.returnReason {
+  padding: 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.returnControls {
+  flex-wrap: wrap;
+  padding-top: 0.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.returnControls select,
+.returnControls input {
+  min-height: 2.55rem;
+  padding: 0.65rem 0.75rem;
+}
+
+.returnControls select {
+  padding-right: 2.4rem;
+}
+
+.returnControls input {
+  flex: 1 1 18rem;
+}
+
+.notificationCard {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.notificationCard.unread {
+  border-color: rgba(255, 215, 0, 0.34);
+  background: rgba(255, 215, 0, 0.08);
+}
+
+.notificationCard svg {
+  color: var(--yellow);
+}
+
+.notificationCard > div {
+  min-width: 0;
+}
+
+.notificationTitleLine {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.notificationTitleLine strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.notificationCard p {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.notificationCard .noticeCode {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: fit-content;
+  margin-bottom: 0;
+  padding: 0.22rem 0.5rem;
+  color: var(--ink);
+  border-radius: 999px;
+  background: var(--yellow);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
+.managerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.managerGrid.compact {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+}
+
+.editorPanel,
+.inventoryCard {
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: var(--panel);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
+}
+
+.editorPanel {
+  width: min(100%, 74rem);
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.editorTitle,
+.inventoryHead,
+.entityActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.editorTitle.small h3 {
+  margin: 0;
+}
+
+.editorTitle span,
+.inventoryHead span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.editorTitle h2 {
+  margin: 0.15rem 0 0;
+}
+
+.editorPanel label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.editorPanel label span {
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.formHint {
+  line-height: 1.35;
+}
+
+.editorPanel input,
+.editorPanel textarea,
+.editorPanel select,
+.variantRow input {
+  width: 100%;
+  min-height: 2.55rem;
+  padding: 0.65rem 0.75rem;
+}
+
+.editorPanel select {
+  padding-right: 2.4rem;
+  background-color: #171820;
+}
+
+.editorPanel textarea {
+  min-height: 5rem;
+  resize: vertical;
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.24fr) minmax(12rem, 1fr);
+  gap: 0.7rem;
+  align-items: center;
+}
+
+.fieldRow .formHint {
+  grid-column: 2;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.checkRow {
+  display: flex !important;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.55rem !important;
+}
+
+.checkRow input {
+  width: auto;
+  min-height: 0;
+  accent-color: var(--yellow);
+}
+
+.variantEditor {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.variantRow {
+  display: grid;
+  grid-template-columns: 0.9fr 1fr 0.7fr 0.7fr 0.6fr auto;
+  gap: 0.45rem;
+  align-items: start;
+}
+
+.variantRow label {
+  min-width: 0;
+}
+
+.imageUploadGrid {
+  display: grid;
+  grid-template-columns: minmax(11rem, 0.28fr) minmax(16rem, 1fr);
+  gap: 0.8rem;
+  align-items: stretch;
+}
+
+.imagePreviewFrame,
+.fileUploadBox {
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.imagePreviewFrame {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 11rem;
+  overflow: hidden;
+  color: var(--yellow);
+  background: #f7f7f3;
+}
+
+.imagePreviewFrame img {
+  position: absolute;
+  max-width: calc(100% - 1.2rem);
+  max-height: calc(100% - 1.2rem);
+  object-fit: contain;
+}
+
+.fileUploadBox {
+  display: grid !important;
+  align-content: center;
+  gap: 0.45rem !important;
+  padding: 1rem;
+}
+
+.fileUploadBox input {
+  padding: 0.65rem;
+  border-style: dashed;
+}
+
+.fileUploadBox strong {
+  color: var(--yellow);
+}
+
+.inventoryList {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.inventoryCard {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-content: start;
+  gap: 0.85rem;
+  padding: 0.85rem;
+}
+
+.productPreview {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  min-height: 9rem;
+  overflow: hidden;
+  color: var(--yellow);
+  border-radius: 0.7rem;
+  background: #f7f7f3;
+}
+
+.productPreview img {
+  position: absolute;
+  max-width: calc(100% - 1rem);
+  max-height: calc(100% - 1rem);
+  object-fit: contain;
+}
+
+.inventoryMain,
+.stockGrid {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.rowActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.orderActions {
+  align-items: center;
+}
+
+.ghostIcon,
+.dangerIcon {
+  display: inline-grid;
+  place-items: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 0.65rem;
+}
+
+.ghostIcon,
+.ghostButton {
+  color: var(--cream);
+  border: 1px solid var(--line);
+  background: var(--panel2);
+}
+
+.dangerIcon,
+.dangerButtonInline {
+  color: #ffb1b1;
+  border: 1px solid rgba(255, 87, 87, 0.24);
+  background: rgba(255, 87, 87, 0.12);
+}
+
+.ghostButton,
+.dangerButtonInline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.35rem;
+  padding: 0 0.75rem;
+  border-radius: 999px;
+}
+
+.summaryButton {
+  min-width: 6.7rem;
+}
+
+.stockRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.7rem;
+  align-items: start;
+  padding: 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.stockRow strong,
+.stockRow span {
+  display: block;
+}
+
+.stockControls {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  align-items: center;
+  justify-content: end;
+  gap: 0.35rem;
+}
+
+.stockControls button {
+  min-width: 2.1rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+  color: var(--cream);
+  border-radius: 999px;
+  background: var(--panel2);
+}
+
+.restockControls {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, 0.7fr) minmax(6rem, 1fr) auto;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.restockControls input {
+  width: 100%;
+  min-height: 2.25rem;
+  padding: 0.55rem 0.65rem;
+}
+
+.orderAdminDetail {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.35fr);
+  gap: 1rem;
+  margin: 0 1rem 1rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.orderItems {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.orderItems div,
+.totals.mini {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.25rem 0.75rem;
+}
+
+.orderItems small,
+.totals.mini span {
+  color: var(--muted);
+}
+
+.restockWorkspace {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.restockGuideList {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.restockGuideRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr));
+  gap: 0.55rem;
+  align-items: end;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.restockGuideRow label,
+.restockGuideRow > div {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.restockGuideRow input,
+.restockGuideRow select {
+  min-width: 0;
+  width: 100%;
+}
+
+.restockGuideRow span {
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.restockGuideRow strong,
+.editorTitle > strong {
+  text-align: right;
+}
+
+.restockHistoryPanel {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.restockHistoryTools {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: 0.65rem;
+}
+
+.restockHistoryTools select {
+  width: 100%;
+  min-height: 2.65rem;
+  padding: 0.65rem 2.4rem 0.65rem 0.75rem;
+}
+
+.restockHistoryList {
+  display: grid;
+  gap: 0.65rem;
+  max-height: 34rem;
+  overflow: auto;
+  padding-right: 0.15rem;
+}
+
+.restockHistoryItem {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(max-content, auto) auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.restockHistoryItem span {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.restockHistoryItem > div {
+  min-width: 0;
+}
+
+.restockHistorySummary {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.gymRestockAdminPanel {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+
+.gymRequestAdminGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 0.85rem;
+}
+
+.gymRequestAdminCard {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.gymRequestAdminTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.gymRequestAdminTop h3,
+.gymRequestAdminTop p {
+  margin: 0.25rem 0 0;
+}
+
+.gymRequestAdminTop p,
+.gymRequestItems small,
+.gymStockSnapshot span {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.gymRequestItems {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.gymRequestItems div,
+.gymStockSnapshot {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.rewardLayout {
+  align-items: start;
+}
+
+.rewardItemRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 7.5rem), 1fr));
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.rewardItemRow .checkRow,
+.rewardItemRow .dangerIcon {
+  justify-self: start;
+}
+
+.rewardItemRow input,
+.rewardItemRow select {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.45rem;
+  padding: 0.55rem 0.65rem;
+}
+
+.rewardItemRow select {
+  padding-right: 2.4rem;
+}
+
+.checkRow.inline {
+  display: inline-flex !important;
+}
+
+.cardGrid.fluid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+}
+
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.metricCard,
+.panel,
+.table,
+.entityCard,
+.loginPanel,
+.overviewStatusCard,
+.overviewAlertRow,
+.overviewOrderRow,
+.overviewMiniRow,
+.automationRule,
+.automationItem,
+.automationRun,
+.relatedProductPicker,
+.relatedProductOption,
+.rolePreview,
+.userRoleCard,
+.dataTableRow,
+.supportTicketButton,
+.supportMessage,
+.financeBreakdown div,
+.legalDocList button,
+.analyticsRow,
+.listRow,
+.gymOrderCard,
+.filterPanel,
+.promoCard,
+.returnCard,
+.notificationCard:not(.unread),
+.editorPanel,
+.inventoryCard,
+.stockRow,
+.restockGuideRow,
+.restockHistoryItem,
+.rewardItemRow {
+  border-color: rgba(255, 255, 255, 0.12);
+  border-radius: 0.85rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02)), var(--panel);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
+}
+
+@media (max-width: 980px) {
+  .adminShell,
+  .gymShell {
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    grid-template-columns: 1fr;
+    overflow: visible;
+  }
+
+  .sidebar {
+    position: static;
+    height: auto;
+    min-height: 0;
+    grid-template-rows: auto auto auto;
+    gap: 0.9rem;
+    padding: 1rem;
+    overflow: visible;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .sidebar nav {
+    grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+    gap: 0.45rem;
+    margin-right: 0;
+    overflow-y: visible;
+    overscroll-behavior: auto;
+    padding: 0;
+  }
+
+  .workspace {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+    scrollbar-gutter: auto;
+  }
+
+  .confirmOverlay {
+    inset: 0;
+  }
+
+  .supportLayout,
+  .legalAdminLayout,
+  .financeGrid,
+  .gymSummaryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .dataTableHead {
+    display: none;
+  }
+
+  .dataTableRow.audit,
+  .dataTableRow.finance {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebarSection {
+    grid-column: 1 / -1;
+    margin-top: 0.45rem;
+  }
+
+  .sidebar nav button,
+  .logoutButton {
+    min-width: 0;
+    padding: 0.75rem 0.8rem;
+  }
+
+  .sidebar nav button span,
+  .logoutButton {
+    overflow-wrap: anywhere;
+  }
+
+  .sidebar nav button span,
+  .logoutButton span {
+    white-space: normal;
+  }
+
+  .twoColumns,
+  .cardGrid,
+  .managerGrid,
+  .managerGrid.compact,
+  .automationGrid,
+  .usersWorkspace,
+  .overviewTopGrid,
+  .overviewWorkGrid,
+  .gymStockWorkspace,
+  .restockWorkspace {
+    grid-template-columns: 1fr;
+  }
+
+  .overviewListBlock.large {
+    grid-column: auto;
+  }
+
+  .restockGuideRow,
+  .rewardItemRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .restockGuideRow .dangerIcon,
+  .rewardItemRow .dangerIcon {
+    justify-self: start;
+  }
+
+  .inventoryList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .filterPanel,
+  .imageUploadGrid,
+  .overviewStatusGrid,
+  .restockHistoryTools {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .editorPanel,
+  .roleEditor {
+    position: static;
+  }
+
+  .table {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tableHead,
+  .tableRow {
+    min-width: 82rem;
+  }
+
+  .tableHead.orders,
+  .tableRow.orders {
+    min-width: 68rem;
+  }
+
+  .tableHead.rewardOrders,
+  .tableRow.rewardOrders {
+    min-width: 58rem;
+  }
+}
+
+@media (max-width: 1180px) {
+  .rewardLayout,
+  .restockWorkspace {
+    grid-template-columns: 1fr;
+  }
+
+  .rewardLayout .editorPanel,
+  .restockWorkspace .editorPanel {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .sidebar {
+    padding: 0.85rem;
+  }
+
+  .sidebar nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sidebar nav button,
+  .logoutButton {
+    justify-content: flex-start;
+    gap: 0.5rem;
+    min-height: 2.65rem;
+    padding: 0.68rem 0.65rem;
+    font-size: 0.86rem;
+  }
+
+  .sidebarBadge {
+    position: absolute;
+    top: 0.28rem;
+    right: 0.28rem;
+    margin-left: 0;
+  }
+
+  .workspace {
+    padding: 0.85rem;
+  }
+
+.pageHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .pageTabs {
+    align-items: stretch;
+  }
+
+  .pageTabs button,
+  .pageTabs .primaryButton {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .supportReply,
+  .gymRestockRow,
+  .financeBreakdown div,
+  .supportThreadHead {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .supportMessage {
+    width: 100%;
+  }
+
+  .formGrid,
+  .fieldRow,
+  .variantRow,
+  .inventoryList,
+  .imageUploadGrid,
+  .filterPanel,
+  .overviewStatusGrid,
+  .overviewHeroStats,
+  .restockHistoryTools,
+  .stockRow,
+  .restockControls,
+  .restockGuideRow,
+  .restockHistoryItem,
+  .automationRule,
+  .automationItem,
+  .automationRun,
+  .rewardItemRow,
+  .overviewOrderRow,
+  .overviewMiniRow,
+  .orderAdminDetail,
+  .gymOrderMeta {
+    grid-template-columns: 1fr;
+  }
+
+  .overviewOrderRow b,
+  .overviewMiniRow b,
+  .analyticsRow b {
+    justify-self: start;
+  }
+
+  .gymHeader,
+  .gymOrderTop,
+  .gymOrderActions,
+  .userRoleTop,
+  .entityCard > div,
+  .gymAccessHead,
+  .pickupConfirm {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .gymHeaderStatus {
+    text-align: left;
+  }
+
+  .pill,
+  .accessStatus {
+    min-height: 1.55rem;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.68rem;
+  }
+
+  .userRoleTop .pill,
+  .gymAccessHead .accessStatus {
+    align-self: flex-start;
+  }
+
+  .logoutButton.inline,
+  .pickupConfirm .primaryButton {
+    width: 100%;
+  }
+
+  .stockControls {
+    justify-content: start;
+  }
+
+  .fieldRow .formHint {
+    grid-column: auto;
+  }
+
+  .tableHead.orders {
+    display: none;
+  }
+
+  .tableRow.orders {
+    min-width: 0;
+    grid-template-columns: 1fr;
+    align-items: stretch;
+    gap: 0.7rem;
+    padding: 0.9rem;
+  }
+
+  .tableRow.orders > strong {
+    font-size: 1rem;
+  }
+
+  .tableRow.orders > [data-label] {
+    display: grid;
+    grid-template-columns: minmax(5.5rem, 0.38fr) minmax(0, 1fr);
+    gap: 0.7rem;
+    align-items: center;
+  }
+
+  .tableRow.orders > [data-label]::before {
+    content: attr(data-label);
+    color: var(--muted);
+    font-size: 0.76rem;
+    font-weight: 700;
+  }
+
+  .tableRow.orders select {
+    min-height: 2.55rem;
+  }
+
+  .orderActions {
+    justify-content: flex-start;
+  }
+
+  .summaryButton {
+    flex: 1 1 8rem;
+  }
+
+  .orderAdminDetail {
+    padding: 0.9rem;
+  }
+}
+
+.pageHeader > *,
+.editorTitle > *,
+.entityActions > *,
+.primaryButton span,
+.ghostButton span {
+  min-width: 0;
+}
+
+.pageHeader h1,
+.editorTitle h2,
+.panel h2,
+.entityCard h2 {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 420px) {
+  .brand img {
+    width: 2.55rem;
+    height: 2.55rem;
+  }
+
+  .sidebar nav {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebarSection {
+    margin-top: 0.25rem;
+  }
+
+  .workspace {
+    padding: 0.7rem;
+  }
+
+  .pageHeader h1 {
+    font-size: clamp(1.65rem, 11vw, 2.35rem);
+  }
+
+  .loginExamples {
+    align-items: center;
+    flex-direction: column;
+    border-radius: 0.9rem;
+  }
+
+  .editorPanel,
+  .panel,
+  .entityCard,
+  .metricCard,
+  .userRoleCard {
+    padding: 0.8rem;
+  }
+
+  .permissionChips span {
+    font-size: 0.68rem;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}

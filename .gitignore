@@ -1,0 +1,14 @@
+.agents/
+.codex/
+.edge-profile/
+node_modules/
+.npm-cache/
+.env
+.env.local
+.env.*.local
+dist/
+apps/*/dist/
+.netlify/
+.render/
+*.log
+customer-dom.html

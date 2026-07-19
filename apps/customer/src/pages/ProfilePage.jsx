@@ -85,7 +85,11 @@ export function ProfilePage({
     }
     setIsSaving(true);
     try {
-      await onSave(profile);
+      const payload =
+        tab === "address"
+          ? { addresses: [profile.addresses[0]] }
+          : { name: profile.name, phone: profile.phone };
+      await onSave(payload);
       setSuccessMessage(tab === "address" ? "Domicilio actualizado correctamente" : "Datos actualizados correctamente");
       window.setTimeout(() => selectTab("summary"), 900);
     } catch (error) {

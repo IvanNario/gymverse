@@ -580,16 +580,6 @@ await Notification.create([
     linkType: "restock",
   },
   {
-    recipient: customer._id,
-    role: "customer",
-    noticeCode: "NTF-APP-001",
-    title: "Pedido en camino",
-    message: "Tu pedido GV-20260621-1002 está en tránsito.",
-    type: "info",
-    linkType: "order",
-    linkId: homeOrder._id,
-  },
-  {
     recipient: gymUser._id,
     role: "gym",
     noticeCode: "NTF-GYM-001",

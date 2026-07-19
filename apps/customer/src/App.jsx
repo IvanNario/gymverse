@@ -13,6 +13,8 @@ import { ShopPage } from "./pages/ShopPage.jsx";
 import { SupportPage } from "./pages/SupportPage.jsx";
 import { api, getToken, setToken } from "./services/api.js";
 
+const routeViews = new Set(["shop", "product", "cart", "content", "orders", "notifications", "profile", "support", "legal", "payment-confirmation"]);
+
 function wait(ms) {
   return new Promise((resolve) => {
     window.setTimeout(resolve, ms);
@@ -51,6 +53,9 @@ export function App() {
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [paymentResult, setPaymentResult] = useState(null);
   const [notice, setNotice] = useState("");
+  const [routeProductId, setRouteProductId] = useState("");
+  const [deferredInstallPrompt, setDeferredInstallPrompt] = useState(null);
+  const [installDismissed, setInstallDismissed] = useState(false);
   const userId = user?.id || user?._id || "";
 
   const catalogQuery = useMemo(() => {
@@ -75,6 +80,53 @@ export function App() {
       .then((data) => setUser(data.user))
       .catch(() => setToken(null))
       .finally(() => setIsBooting(false));
+  }, []);
+
+  useEffect(() => {
+    function applyRoute() {
+      const params = new URLSearchParams(window.location.search);
+      const nextView = params.get("view");
+      const nextTab = params.get("tab");
+      const nextProduct = params.get("product");
+      if (nextView && routeViews.has(nextView)) setView(nextView);
+      if (nextTab) setProfileTab(nextTab);
+      setRouteProductId(nextProduct || "");
+    }
+    applyRoute();
+    window.addEventListener("popstate", applyRoute);
+    return () => window.removeEventListener("popstate", applyRoute);
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (view !== "shop") params.set("view", view);
+    if (view === "profile" && profileTab !== "summary") params.set("tab", profileTab);
+    if (view === "product" && selectedProduct?._id) params.set("product", selectedProduct._id);
+    const nextUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ""}`;
+    const currentUrl = `${window.location.pathname}${window.location.search}`;
+    if (nextUrl !== currentUrl) window.history.pushState({}, "", nextUrl);
+  }, [profileTab, selectedProduct?._id, view]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [profileTab, selectedProduct?._id, view]);
+
+  useEffect(() => {
+    if (!routeProductId || !products.length) return;
+    const product = products.find((entry) => entry._id === routeProductId);
+    if (product) {
+      setSelectedProduct(product);
+      setView("product");
+    }
+  }, [products, routeProductId]);
+
+  useEffect(() => {
+    function onBeforeInstallPrompt(event) {
+      event.preventDefault();
+      setDeferredInstallPrompt(event);
+    }
+    window.addEventListener("beforeinstallprompt", onBeforeInstallPrompt);
+    return () => window.removeEventListener("beforeinstallprompt", onBeforeInstallPrompt);
   }, []);
 
   useEffect(() => {
@@ -337,13 +389,10 @@ export function App() {
     showNotice(isFavorite ? "Favorito removido" : "Favorito guardado");
   }
 
-  async function checkout() {
+  async function checkout({ shippingAddress, saveAddress = false } = {}) {
     if (!user) return setView("profile");
-    if (delivery === "home" && !user.addresses?.[0]) {
-      showNotice("Agrega una dirección en tu perfil");
-      setView("profile");
-      return;
-    }
+    const activeShippingAddress = delivery === "home" ? shippingAddress || user.addresses?.[0] : undefined;
+    if (delivery === "home" && !activeShippingAddress) return showNotice("Agrega un domicilio de entrega");
     if (delivery === "pickup" && !pickupGym) {
       showNotice("Afilia un gimnasio desde tu perfil");
       setProfileTab("gyms");
@@ -357,13 +406,17 @@ export function App() {
     const payload = {
       deliveryMethod: delivery,
       pickupGym,
-      shippingAddress: user.addresses?.[0],
+      shippingAddress: activeShippingAddress,
       paymentMethod,
       couponCode: couponQuote?.code,
       items: cart.map((item) => ({ productId: item.product._id, sku: item.variant.sku, quantity: item.quantity })),
     };
     setIsCheckingOut(true);
     try {
+      if (delivery === "home" && saveAddress && activeShippingAddress) {
+        const profileData = await api("/auth/me", { method: "PATCH", body: { addresses: [activeShippingAddress] } });
+        setUser(profileData.user);
+      }
       await wait(750);
       const data = await api("/orders", { method: "POST", body: payload });
       const profile = await api("/auth/me");
@@ -384,6 +437,14 @@ export function App() {
     } finally {
       setIsCheckingOut(false);
     }
+  }
+
+  async function installPwa() {
+    if (!deferredInstallPrompt) return;
+    deferredInstallPrompt.prompt();
+    await deferredInstallPrompt.userChoice.catch(() => null);
+    setDeferredInstallPrompt(null);
+    setInstallDismissed(true);
   }
 
   async function redeemReward(item) {
@@ -585,6 +646,11 @@ export function App() {
       )}
       {view === "legal" && <LegalPage documents={legalDocuments} onBack={() => setView("profile")} />}
       {notice && <div className="toast">{notice}</div>}
+      {deferredInstallPrompt && !installDismissed && (
+        <button className="installPwaButton" type="button" onClick={installPwa}>
+          Instalar
+        </button>
+      )}
       <div className="appVersionBadge">Versión 1.0</div>
       <BottomNav
         active={view === "product" ? "shop" : view === "payment-confirmation" ? "orders" : view === "legal" || view === "support" ? "profile" : view}

@@ -1,4 +1,4 @@
-import { LockKeyhole, Mail, Phone, ShieldCheck, UserRound } from "lucide-react";
+import { Eye, EyeOff, KeyRound, LockKeyhole, Mail, Phone, ShieldCheck, UserRound } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { api, setToken } from "../services/api.js";
 import { validateAuthForm } from "../utils/forms.js";
@@ -8,8 +8,13 @@ const viteGoogleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
 export function AuthPage({ onAuth }) {
   const [mode, setMode] = useState("login");
   const [form, setForm] = useState({ name: "", email: "", phone: "", password: "", confirmPassword: "" });
+  const [resetForm, setResetForm] = useState({ email: "", code: "", newPassword: "", confirmPassword: "" });
+  const [resetStep, setResetStep] = useState("request");
   const [error, setError] = useState("");
+  const [info, setInfo] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showResetPassword, setShowResetPassword] = useState(false);
   const [googleClientId, setGoogleClientId] = useState(viteGoogleClientId);
   const [isGoogleConfigLoading, setIsGoogleConfigLoading] = useState(!viteGoogleClientId);
   const [isGoogleReady, setIsGoogleReady] = useState(false);
@@ -81,6 +86,7 @@ export function AuthPage({ onAuth }) {
   async function submit(event) {
     event.preventDefault();
     setError("");
+    setInfo("");
     const validation = validateAuthForm(mode, form);
     if (validation) {
       setError(validation);
@@ -96,10 +102,56 @@ export function AuthPage({ onAuth }) {
       setToken(data.token);
       onAuth(data.user);
     } catch (err) {
+      setError(err.message.includes("Credenciales") ? "Correo o contraseña incorrectos. Revisa tus datos e intenta de nuevo." : err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  async function requestResetCode(event) {
+    event.preventDefault();
+    setError("");
+    setInfo("");
+    setIsSubmitting(true);
+    try {
+      const data = await api("/auth/password-reset/request", { method: "POST", body: { email: resetForm.email } });
+      setResetStep("confirm");
+      setInfo(data.devCode ? `Código de prueba: ${data.devCode}` : data.message);
+    } catch (err) {
       setError(err.message);
     } finally {
       setIsSubmitting(false);
     }
+  }
+
+  async function confirmResetCode(event) {
+    event.preventDefault();
+    setError("");
+    setInfo("");
+    if (resetForm.newPassword !== resetForm.confirmPassword) {
+      setError("Las contraseñas no coinciden");
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      const data = await api("/auth/password-reset/confirm", {
+        method: "POST",
+        body: { email: resetForm.email, code: resetForm.code, newPassword: resetForm.newPassword },
+      });
+      setToken(data.token);
+      onAuth(data.user);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  function switchMode(nextMode) {
+    setMode(nextMode);
+    setError("");
+    setInfo("");
+    setShowPassword(false);
   }
 
   async function handleGoogleCredential(response) {
@@ -128,19 +180,25 @@ export function AuthPage({ onAuth }) {
           <img src="/logo-yellow-bg.png" alt="GymVerse" />
           <div>
             <span>GymVerse</span>
-            <h1>{mode === "login" ? "Bienvenido de vuelta" : "Crea tu cuenta"}</h1>
-            <p>{mode === "login" ? "Accede a tus pedidos, puntos y recompensas." : "Compra, gana puntos y recoge en gimnasios afiliados."}</p>
+            <h1>{mode === "recover" ? "Recupera tu acceso" : mode === "login" ? "Bienvenido de vuelta" : "Crea tu cuenta"}</h1>
+            <p>
+              {mode === "recover"
+                ? "Te enviaremos un código para crear una contraseña nueva."
+                : mode === "login"
+                  ? "Accede a tus pedidos, puntos y recompensas."
+                  : "Compra, gana puntos y recoge en gimnasios afiliados."}
+            </p>
           </div>
         </div>
         <div className="authSwitch" role="tablist" aria-label="Acceso">
-          <button className={mode === "login" ? "active" : ""} onClick={() => setMode("login")} type="button">
+          <button className={mode === "login" ? "active" : ""} onClick={() => switchMode("login")} type="button">
             Iniciar sesión
           </button>
-          <button className={mode === "register" ? "active" : ""} onClick={() => setMode("register")} type="button">
+          <button className={mode === "register" ? "active" : ""} onClick={() => switchMode("register")} type="button">
             Registro
           </button>
         </div>
-        <div className="googleAuthBox">
+        {mode !== "recover" && <div className="googleAuthBox">
           {isGoogleConfigLoading ? (
             <button className="googleFallbackButton" type="button" disabled>
               Preparando Google Login...
@@ -155,8 +213,73 @@ export function AuthPage({ onAuth }) {
               Google Login no configurado
             </button>
           )}
-        </div>
-        <div className="authDivider"><span>o usa tu correo</span></div>
+        </div>}
+        {mode !== "recover" && <div className="authDivider"><span>o usa tu correo</span></div>}
+        {mode === "recover" ? (
+          <form className="authCard" onSubmit={resetStep === "request" ? requestResetCode : confirmResetCode}>
+            <label>
+              <Mail size={18} />
+              <input
+                type="email"
+                value={resetForm.email}
+                onChange={(event) => setResetForm({ ...resetForm, email: event.target.value })}
+                placeholder="correo@ejemplo.com"
+                autoComplete="email"
+                required
+                readOnly={resetStep === "confirm"}
+              />
+            </label>
+            {resetStep === "confirm" && (
+              <>
+                <label>
+                  <KeyRound size={18} />
+                  <input
+                    value={resetForm.code}
+                    onChange={(event) => setResetForm({ ...resetForm, code: event.target.value.replace(/\D/g, "").slice(0, 6) })}
+                    placeholder="Código de 6 dígitos"
+                    inputMode="numeric"
+                    required
+                  />
+                </label>
+                <label className="passwordField">
+                  <LockKeyhole size={18} />
+                  <input
+                    type={showResetPassword ? "text" : "password"}
+                    value={resetForm.newPassword}
+                    onChange={(event) => setResetForm({ ...resetForm, newPassword: event.target.value })}
+                    placeholder="Nueva contraseña"
+                    autoComplete="new-password"
+                    minLength={8}
+                    required
+                  />
+                  <button type="button" onClick={() => setShowResetPassword((current) => !current)} aria-label={showResetPassword ? "Ocultar contraseña" : "Ver contraseña"}>
+                    {showResetPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </label>
+                <label>
+                  <LockKeyhole size={18} />
+                  <input
+                    type={showResetPassword ? "text" : "password"}
+                    value={resetForm.confirmPassword}
+                    onChange={(event) => setResetForm({ ...resetForm, confirmPassword: event.target.value })}
+                    placeholder="Confirmar contraseña"
+                    autoComplete="new-password"
+                    minLength={8}
+                    required
+                  />
+                </label>
+              </>
+            )}
+            {info && <p className="successText">{info}</p>}
+            {error && <p className="errorText">{error}</p>}
+            <button className="primaryButton" disabled={isSubmitting}>
+              {isSubmitting ? "Validando..." : resetStep === "request" ? "Enviar código" : "Cambiar contraseña"}
+            </button>
+            <button className="linkButton" type="button" onClick={() => switchMode("login")}>
+              Volver al inicio de sesión
+            </button>
+          </form>
+        ) : (
         <form className="authCard" onSubmit={submit}>
           {mode === "register" && (
             <>
@@ -195,10 +318,10 @@ export function AuthPage({ onAuth }) {
               required
             />
           </label>
-          <label>
+          <label className="passwordField">
             <LockKeyhole size={18} />
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={form.password}
               onChange={(event) => setForm({ ...form, password: event.target.value })}
               placeholder="Contraseña"
@@ -206,6 +329,9 @@ export function AuthPage({ onAuth }) {
               minLength={8}
               required
             />
+            <button type="button" onClick={() => setShowPassword((current) => !current)} aria-label={showPassword ? "Ocultar contraseña" : "Ver contraseña"}>
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
           </label>
           {mode === "register" && (
             <label>
@@ -225,7 +351,17 @@ export function AuthPage({ onAuth }) {
           <button className="primaryButton" disabled={isSubmitting}>
             {isSubmitting ? "Validando..." : mode === "login" ? "Entrar" : "Registrarme"}
           </button>
+          {mode === "login" && (
+            <button className="linkButton" type="button" onClick={() => {
+              setResetForm({ ...resetForm, email: form.email });
+              setResetStep("request");
+              switchMode("recover");
+            }}>
+              ¿Olvidaste tu contraseña?
+            </button>
+          )}
         </form>
+        )}
         <div className="authAssurance">
           <ShieldCheck size={16} />
           <span>Tus datos se protegen con controles de privacidad y pagos procesados por Mercado Pago.</span>

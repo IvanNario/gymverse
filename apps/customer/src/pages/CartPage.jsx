@@ -3,6 +3,16 @@ import { Dumbbell, Home, LockKeyhole, Minus, Plus, ShieldCheck, Tag, WalletCards
 import { ConfirmDialog } from "../components/ConfirmDialog.jsx";
 import { PaginationControls, usePagedItems } from "../components/PaginationControls.jsx";
 import { money } from "../services/api.js";
+import { validateAddress } from "../utils/forms.js";
+
+const emptyCheckoutAddress = {
+  label: "Casa",
+  street: "",
+  city: "",
+  state: "",
+  zip: "",
+  phone: "",
+};
 
 export function CartPage({
   cart,
@@ -27,6 +37,9 @@ export function CartPage({
   const [couponCode, setCouponCode] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [couponConfirm, setCouponConfirm] = useState(null);
+  const [addressDraft, setAddressDraft] = useState(user?.addresses?.[0] || emptyCheckoutAddress);
+  const [saveAddress, setSaveAddress] = useState(!user?.addresses?.[0]);
+  const [checkoutError, setCheckoutError] = useState("");
   const cartPager = usePagedItems(cart);
   const subtotal = cart.reduce((sum, item) => sum + item.variant.price * item.quantity, 0);
   const baseShipping = delivery === "home" ? 79 : 0;
@@ -35,7 +48,7 @@ export function CartPage({
   const address = user?.addresses?.[0];
   const localStockByItem = new Map(localGymStock.map((item) => [`${item.product}:${item.sku}`, Number(item.quantity || 0)]));
   const stockIssues =
-    delivery === "pickup"
+    delivery === "pickup" && gyms.length > 0 && pickupGym
       ? cart
           .map((item) => {
             const available = localStockByItem.get(`${item.product._id}:${item.variant.sku}`) || 0;
@@ -43,6 +56,11 @@ export function CartPage({
           })
           .filter(Boolean)
       : [];
+
+  useEffect(() => {
+    setAddressDraft(user?.addresses?.[0] || emptyCheckoutAddress);
+    setSaveAddress(!user?.addresses?.[0]);
+  }, [user]);
 
   useEffect(() => {
     if (suggestedCoupon && !couponCode) setCouponCode(suggestedCoupon);
@@ -63,13 +81,21 @@ export function CartPage({
   }
 
   function openConfirmation() {
+    setCheckoutError("");
     if (cart.length === 0 || isCheckingOut || stockIssues.length) return;
+    if (delivery === "home") {
+      const validation = validateAddress(addressDraft);
+      if (validation) {
+        setCheckoutError(validation);
+        return;
+      }
+    }
     setShowConfirmation(true);
   }
 
   async function confirmCheckout() {
     setShowConfirmation(false);
-    await onCheckout();
+    await onCheckout({ shippingAddress: delivery === "home" ? addressDraft : undefined, saveAddress });
   }
 
   function confirmRemoveCoupon() {
@@ -157,13 +183,27 @@ export function CartPage({
           )
         )}
         {delivery === "home" && (
-          <div className="addressPreview">
-            <Home size={18} />
-            <div>
-              <strong>{address?.label || "Sin dirección"}</strong>
-              <p>{address ? `${address.street}, ${address.city}, ${address.state}, ${address.zip}` : "Agrega una dirección desde Perfil"}</p>
+          <section className="checkoutAddressBox">
+            <div className="addressPreview">
+              <Home size={18} />
+              <div>
+                <strong>{address?.label ? "Domicilio de entrega" : "Agrega domicilio de entrega"}</strong>
+                <p>{address?.street ? `${address.street}, ${address.city}, ${address.state}, ${address.zip}` : "Puedes guardarlo en tu perfil o usarlo solo para esta compra."}</p>
+              </div>
             </div>
-          </div>
+            <div className="checkoutAddressGrid">
+              <input value={addressDraft.label || ""} onChange={(event) => setAddressDraft({ ...addressDraft, label: event.target.value })} placeholder="Etiqueta" />
+              <input value={addressDraft.phone || ""} onChange={(event) => setAddressDraft({ ...addressDraft, phone: event.target.value })} placeholder="Teléfono" inputMode="tel" />
+              <input className="wide" value={addressDraft.street || ""} onChange={(event) => setAddressDraft({ ...addressDraft, street: event.target.value })} placeholder="Calle y número" />
+              <input value={addressDraft.city || ""} onChange={(event) => setAddressDraft({ ...addressDraft, city: event.target.value })} placeholder="Ciudad" />
+              <input value={addressDraft.state || ""} onChange={(event) => setAddressDraft({ ...addressDraft, state: event.target.value })} placeholder="Estado" />
+              <input value={addressDraft.zip || ""} onChange={(event) => setAddressDraft({ ...addressDraft, zip: event.target.value })} placeholder="Código postal" inputMode="numeric" />
+            </div>
+            <label className="checkRow inline">
+              <input type="checkbox" checked={saveAddress} onChange={(event) => setSaveAddress(event.target.checked)} />
+              <span>Guardar este domicilio en mi perfil</span>
+            </label>
+          </section>
         )}
         {stockIssues.length > 0 && (
           <div className="stockWarning">
@@ -180,7 +220,7 @@ export function CartPage({
             <span>Cupón</span>
             <div className="inputWithIcon">
               <Tag size={16} />
-              <input value={couponCode} onChange={(event) => setCouponCode(event.target.value.toUpperCase())} placeholder="GYM10" />
+              <input value={couponCode} onChange={(event) => setCouponCode(event.target.value.toUpperCase())} placeholder="Ejemplo: GYM10" />
             </div>
           </label>
           <button className="iconTextButton" disabled={cart.length === 0 || !couponCode.trim()}>
@@ -274,6 +314,7 @@ export function CartPage({
             </div>
           </div>
         )}
+        {checkoutError && <p className="errorText">{checkoutError}</p>}
         <button className="primaryButton" onClick={openConfirmation} disabled={isCheckingOut || cart.length === 0 || (delivery === "pickup" && (!pickupGym || stockIssues.length > 0))}>
           {isCheckingOut ? (
             <>

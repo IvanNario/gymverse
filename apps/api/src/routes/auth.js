@@ -38,6 +38,19 @@ function validateAddress(address = {}) {
   return "";
 }
 
+function createResetCode() {
+  return String(crypto.randomInt(100000, 1000000));
+}
+
+async function deliverPasswordResetCode(user, code) {
+  if (env.nodeEnv !== "production") {
+    console.log(`Password reset code for ${user.email}: ${code}`);
+    return { delivered: true, devCode: code };
+  }
+  console.log(`Password reset requested for ${user.email}. Configure an email provider to deliver code.`);
+  return { delivered: false };
+}
+
 authRouter.post("/register", async (request, response) => {
   const name = cleanString(request.body.name, 120);
   const email = normalizeEmail(request.body.email);
@@ -81,6 +94,66 @@ authRouter.post("/login", async (request, response) => {
     request.user = user;
     await writeAuditLog(request, { action: "auth.login", resource: "user", resourceId: user._id, metadata: { role: user.role } });
   }
+
+  response.json({ token: signToken(user), user: publicUser(user) });
+});
+
+authRouter.post("/password-reset/request", async (request, response) => {
+  const email = normalizeEmail(request.body.email);
+  if (!isEmail(email)) return response.status(400).json({ message: "Escribe un correo válido" });
+
+  const user = await User.findOne({ email }).select("+passwordResetCodeHash +passwordResetExpiresAt +passwordResetAttempts");
+  if (!user || user.role !== "customer" || user.status === "disabled") {
+    return response.json({ message: "Si el correo existe, enviaremos un código para recuperar la cuenta." });
+  }
+
+  const code = createResetCode();
+  user.passwordResetCodeHash = await bcrypt.hash(code, 10);
+  user.passwordResetExpiresAt = new Date(Date.now() + 15 * 60 * 1000);
+  user.passwordResetAttempts = 0;
+  await user.save();
+
+  const delivery = await deliverPasswordResetCode(user, code);
+  response.json({
+    message: "Si el correo existe, enviaremos un código para recuperar la cuenta.",
+    ...(delivery.devCode ? { devCode: delivery.devCode } : {}),
+  });
+});
+
+authRouter.post("/password-reset/confirm", async (request, response) => {
+  const email = normalizeEmail(request.body.email);
+  const code = String(request.body.code || "").trim();
+  const newPassword = String(request.body.newPassword || "");
+  if (!isEmail(email)) return response.status(400).json({ message: "Escribe un correo válido" });
+  if (!/^\d{6}$/.test(code)) return response.status(400).json({ message: "Escribe el código de 6 dígitos" });
+  if (!isStrongEnoughPassword(newPassword)) return response.status(400).json({ message: "La nueva contraseña debe tener al menos 8 caracteres, letras y números" });
+
+  const user = await User.findOne({ email }).select("+passwordResetCodeHash +passwordResetExpiresAt +passwordResetAttempts");
+  if (!user || user.role !== "customer" || user.status === "disabled" || !user.passwordResetCodeHash || !user.passwordResetExpiresAt) {
+    return response.status(400).json({ message: "Código inválido o vencido" });
+  }
+  if (user.passwordResetExpiresAt.getTime() < Date.now()) {
+    user.passwordResetCodeHash = undefined;
+    user.passwordResetExpiresAt = undefined;
+    user.passwordResetAttempts = 0;
+    await user.save();
+    return response.status(400).json({ message: "Código inválido o vencido" });
+  }
+  if (user.passwordResetAttempts >= 5) return response.status(429).json({ message: "Demasiados intentos. Solicita un código nuevo." });
+
+  const valid = await bcrypt.compare(code, user.passwordResetCodeHash);
+  if (!valid) {
+    user.passwordResetAttempts += 1;
+    await user.save();
+    return response.status(400).json({ message: "Código inválido o vencido" });
+  }
+
+  user.passwordHash = await bcrypt.hash(newPassword, 10);
+  user.authProvider = user.authProvider === "google" ? "mixed" : user.authProvider;
+  user.passwordResetCodeHash = undefined;
+  user.passwordResetExpiresAt = undefined;
+  user.passwordResetAttempts = 0;
+  await user.save();
 
   response.json({ token: signToken(user), user: publicUser(user) });
 });

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Gift, Heart, Percent, Search, SlidersHorizontal } from "lucide-react";
+import { ConfirmDialog } from "../components/ConfirmDialog.jsx";
 import { PaginationControls, usePagedItems } from "../components/PaginationControls.jsx";
 import { money } from "../services/api.js";
 
@@ -19,10 +20,25 @@ export function ShopPage({
   onUsePromotion,
   onOpenProduct,
 }) {
+  const [rewardConfirm, setRewardConfirm] = useState(null);
   const productsPager = usePagedItems(products);
   const activeDropItems = drop?.items?.filter((item) => item.active) || [];
   const rewardsPager = usePagedItems(activeDropItems);
   const promotionsPager = usePagedItems(promotions);
+
+  function confirmRedeem(item) {
+    const variant = item.product?.variants?.find((entry) => entry.sku === item.sku);
+    setRewardConfirm({
+      title: "Canjear recompensa",
+      message: `Vas a canjear ${item.product?.name || "esta recompensa"} ${variant?.label ? `(${variant.label})` : ""} por ${item.pointsCost} pts. Se descontarán de tu cuenta y se generará una solicitud de retiro.`,
+      confirmLabel: "Canjear",
+      danger: false,
+      onConfirm: async () => {
+        await onRedeem(item);
+        setRewardConfirm(null);
+      },
+    });
+  }
 
   return (
     <section className="screen">
@@ -53,7 +69,7 @@ export function ShopPage({
               const variant = item.product?.variants?.find((entry) => entry.sku === item.sku);
               const disabled = (user.points || 0) < item.pointsCost || item.stock <= 0;
               return (
-                <button key={item._id} className="rewardRedeemCard" onClick={() => onRedeem(item)} disabled={disabled}>
+                <button key={item._id} className="rewardRedeemCard" onClick={() => confirmRedeem(item)} disabled={disabled}>
                   <span>{item.product?.name}</span>
                   <strong>{item.pointsCost} pts</strong>
                   <small>{variant?.label || item.sku} · Disponible: {item.stock} pz</small>
@@ -151,6 +167,7 @@ export function ShopPage({
         })}
       </div>
       <PaginationControls {...productsPager} />
+      <ConfirmDialog open={Boolean(rewardConfirm)} {...(rewardConfirm || {})} onCancel={() => setRewardConfirm(null)} />
     </section>
   );
 }

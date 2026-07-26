@@ -26,13 +26,16 @@ function publicRewardOrder(order, { viewer }) {
 rewardsRouter.get("/me", requireAuth, async (request, response) => {
   const rewardOrders = await RewardOrder.find({ customer: request.user._id })
     .populate("pickupGym")
+    .populate("items.product", "name imageUrl variants.sku variants.label")
     .sort({ createdAt: -1 })
     .limit(50);
   response.json({ rewardOrders: rewardOrders.map((order) => publicRewardOrder(order, { viewer: request.user })) });
 });
 
 rewardsRouter.post("/redeem", requireAuth, async (request, response) => {
-  const { dropId, itemId, quantity = 1, deliveryMethod = "pickup", pickupGym, shippingAddress } = request.body;
+  const { dropId, itemId, productId, quantity = 1, deliveryMethod = "pickup", pickupGym, shippingAddress } = request.body;
+  const requestedSku = cleanString(request.body.sku, 80);
+  const requestedProductId = cleanString(productId, 80);
   const amount = positiveInt(quantity, { min: 1, max: 5 });
   if (!amount) return response.status(400).json({ message: "Cantidad inválida" });
   if (!["pickup", "home"].includes(deliveryMethod)) return response.status(400).json({ message: "Método de entrega inválido" });
@@ -40,8 +43,16 @@ rewardsRouter.post("/redeem", requireAuth, async (request, response) => {
   const drop = await RewardDrop.findOne({ _id: dropId, status: "active" });
   if (!drop) return response.status(404).json({ message: "Drop no disponible" });
 
-  const item = drop.items.id(itemId);
+  const item = validObjectId(itemId)
+    ? drop.items.id(itemId)
+    : drop.items.find((entry) => String(entry.product) === requestedProductId && entry.sku === requestedSku);
   if (!item || !item.active) return response.status(404).json({ message: "Producto de recompensa no disponible" });
+  if (requestedProductId && String(item.product) !== requestedProductId) {
+    return response.status(409).json({ message: "La recompensa seleccionada ya no coincide con el producto mostrado. Actualiza la pantalla e intenta de nuevo." });
+  }
+  if (requestedSku && item.sku !== requestedSku) {
+    return response.status(409).json({ message: "La variante de recompensa cambió. Actualiza la pantalla e intenta de nuevo." });
+  }
   if (item.stock < amount) return response.status(409).json({ message: "Stock insuficiente en el drop" });
 
   const product = await Product.findById(item.product);
@@ -130,6 +141,7 @@ rewardsRouter.post("/redeem", requireAuth, async (request, response) => {
 
   const updatedUser = await request.user.constructor.findById(request.user._id);
   await rewardOrder.populate("pickupGym");
+  await rewardOrder.populate("items.product", "name imageUrl variants.sku variants.label");
   response.status(201).json({
     rewardOrder: publicRewardOrder(rewardOrder, { viewer: request.user }),
     user: publicUserProfile(updatedUser, { includePrivate: true }),

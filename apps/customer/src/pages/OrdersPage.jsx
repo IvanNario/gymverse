@@ -313,8 +313,8 @@ export function OrdersPage({ orders, rewardOrders = [], returnRequests = [], onC
               <div className="orderItems">
                 {order.items.map((item) => (
                   <div key={`${order._id}-${item.sku}`}>
-                    <span>{item.quantity}x {item.productName}</span>
-                    <small>{item.variantLabel}</small>
+                    <span>{item.quantity}x {item.product?.name || item.productName}</span>
+                    <small>{item.product?.variants?.find((variant) => variant.sku === item.sku)?.label || item.variantLabel}</small>
                   </div>
                 ))}
               </div>

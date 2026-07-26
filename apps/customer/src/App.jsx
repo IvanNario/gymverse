@@ -500,19 +500,29 @@ export function App() {
 
   async function redeemReward(item) {
     if (!user) return setView("profile");
+    const productId = item.product?._id || item.product;
     const payload = {
       dropId: drop._id,
       itemId: item._id,
+      productId,
+      sku: item.sku,
       quantity: 1,
       deliveryMethod: "pickup",
       pickupGym,
     };
-    const data = await api("/rewards/redeem", { method: "POST", body: payload });
-    setUser(data.user);
-    await loadRewardOrders();
-    const dropData = await api("/catalog/reward-drop");
-    setDrop(dropData.drop);
-    showNotice("Recompensa canjeada");
+    try {
+      const data = await api("/rewards/redeem", { method: "POST", body: payload });
+      setUser(data.user);
+      if (data.rewardOrder?._id) {
+        setRewardOrders((current) => [data.rewardOrder, ...current.filter((order) => order._id !== data.rewardOrder._id)]);
+      }
+      await loadRewardOrders();
+      const dropData = await api("/catalog/reward-drop");
+      setDrop(dropData.drop);
+      showNotice("Recompensa canjeada");
+    } catch (error) {
+      showNotice(error.message);
+    }
   }
 
   async function cancelOrder(id) {

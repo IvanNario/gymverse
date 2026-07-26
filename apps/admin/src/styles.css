@@ -8,6 +8,9 @@
   --panel2: #2b2c36;
   --muted: #aeb0b8;
   --line: rgba(255, 255, 255, 0.1);
+  --glow: rgba(255, 215, 0, 0.18);
+  --soft-shadow: 0 18px 48px rgba(0, 0, 0, 0.26);
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -17,6 +20,7 @@
 
 html {
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -37,11 +41,17 @@ button {
   max-width: 100%;
   border: 0;
   cursor: pointer;
-  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, color 160ms ease;
+  transition:
+    transform 180ms var(--ease-premium),
+    background 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    opacity 180ms ease;
 }
 
 button:hover {
-  transform: translateY(-1px);
+  transform: translateY(-1px) scale(1.005);
 }
 
 button:disabled {
@@ -81,6 +91,15 @@ select:focus {
 option {
   color: var(--cream);
   background: #171820;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid rgba(255, 215, 0, 0.72);
+  outline-offset: 2px;
 }
 
 .appLoadingScreen {
@@ -520,7 +539,7 @@ option {
 .page {
   display: grid;
   gap: clamp(0.85rem, 1.4vw, 1.2rem);
-  animation: pageIn 220ms ease both;
+  animation: pageIn 240ms var(--ease-premium) both;
 }
 
 .pageHeader {
@@ -528,6 +547,12 @@ option {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  min-width: 0;
+}
+
+.pageHeader > div {
+  flex: 1 1 min(100%, 18rem);
+  min-width: 0;
 }
 
 .pageHeader h1,
@@ -549,10 +574,17 @@ option {
   font-weight: 800;
   min-width: 0;
   white-space: normal;
+  box-shadow: 0 14px 30px rgba(255, 215, 0, 0.14);
 }
 
 .primaryButton.compact {
   width: auto;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.primaryButton:hover {
+  box-shadow: 0 18px 38px rgba(255, 215, 0, 0.22);
 }
 
 .metricGrid {
@@ -1477,6 +1509,7 @@ option {
   border-radius: 0.95rem;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.025)), var(--panel);
   box-shadow: 0 28px 80px rgba(0, 0, 0, 0.42);
+  animation: adminSurfaceIn 220ms var(--ease-premium) both;
   overflow-y: auto;
 }
 
@@ -1719,12 +1752,14 @@ option {
   border: 1px solid var(--line);
   border-radius: 0.8rem;
   background: rgba(255, 255, 255, 0.035);
-  color: var(--text);
+  color: var(--cream);
   display: grid;
   gap: 0.2rem;
+  min-width: 0;
   padding: 0.85rem;
   text-align: left;
   cursor: pointer;
+  overflow: hidden;
 }
 
 .supportTicketButton.active,
@@ -1737,6 +1772,15 @@ option {
 .legalDocList small,
 .supportTicketButton small {
   color: var(--muted);
+}
+
+.supportTicketButton strong,
+.supportTicketButton span,
+.supportTicketButton small,
+.legalDocList strong,
+.legalDocList small {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .legalDocList button {
@@ -1752,9 +1796,21 @@ option {
   min-height: 33rem;
 }
 
+.supportConversation .editorTitle {
+  align-items: flex-start;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.supportConversation .editorTitle > div {
+  flex: 1 1 min(100%, 18rem);
+  min-width: 0;
+}
+
 .supportConversation .editorTitle select {
   width: min(100%, 14rem);
   min-width: 0;
+  flex: 0 1 14rem;
   min-height: 2.5rem;
   padding: 0.55rem 2.25rem 0.55rem 0.7rem;
 }
@@ -1767,10 +1823,12 @@ option {
 
 .supportMessage {
   width: min(86%, 38rem);
+  max-width: 100%;
   border: 1px solid var(--line);
   border-radius: 0.85rem;
   background: rgba(255, 255, 255, 0.04);
   padding: 0.85rem;
+  overflow-wrap: anywhere;
 }
 
 .supportMessage.team {
@@ -1780,7 +1838,7 @@ option {
 }
 
 .supportMessage p {
-  color: var(--text);
+  color: var(--cream);
   margin: 0.25rem 0;
 }
 
@@ -1791,7 +1849,7 @@ option {
 
 .supportReply {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   gap: 0.75rem;
   align-items: center;
   border-top: 1px solid var(--line);
@@ -1799,6 +1857,7 @@ option {
 }
 
 .supportReply textarea {
+  min-width: 0;
   min-height: 5rem;
   resize: vertical;
 }
@@ -2546,6 +2605,17 @@ option {
   }
 }
 
+@keyframes adminSurfaceIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.992);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .metricCard,
 .panel,
 .table,
@@ -2583,7 +2653,8 @@ option {
   border-color: rgba(255, 255, 255, 0.12);
   border-radius: 0.85rem;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02)), var(--panel);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
+  box-shadow: var(--soft-shadow);
+  animation: adminSurfaceIn 260ms var(--ease-premium) both;
 }
 
 @media (max-width: 980px) {
@@ -2794,6 +2865,15 @@ option {
     grid-template-columns: 1fr;
   }
 
+  .supportConversation .editorTitle select,
+  .supportReply .primaryButton.compact {
+    width: 100%;
+  }
+
+  .supportReply > svg {
+    display: none;
+  }
+
   .supportMessage {
     width: 100%;
   }
@@ -2918,6 +2998,9 @@ option {
 .pageHeader > *,
 .editorTitle > *,
 .entityActions > *,
+.supportReply > *,
+.supportMessage > *,
+.supportTicketButton > *,
 .primaryButton span,
 .ghostButton span {
   min-width: 0;
@@ -2926,7 +3009,9 @@ option {
 .pageHeader h1,
 .editorTitle h2,
 .panel h2,
-.entityCard h2 {
+.entityCard h2,
+.supportTicketButton span,
+.supportMessage p {
   overflow-wrap: anywhere;
 }
 

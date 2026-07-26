@@ -136,7 +136,7 @@ export function SupportPage({ tickets = [], onCreate, onReply, onClose, onBack }
       {selected && (
         <section className="supportThread">
           <div className="supportThreadHead">
-            <div>
+            <div className="supportThreadTitle">
               <span>{selected.ticketNumber}</span>
               <h2>{selected.subject}</h2>
             </div>

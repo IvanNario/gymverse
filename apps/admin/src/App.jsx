@@ -156,9 +156,17 @@ export function App() {
   }, [user]);
 
   useEffect(() => {
+    if (!["admin", "staff"].includes(user?.role)) return undefined;
+    const timer = window.setInterval(() => {
+      refreshAdminData({ silent: true });
+    }, 15000);
+    return () => window.clearInterval(timer);
+  }, [user]);
+
+  useEffect(() => {
     if (user?.role !== "gym") return undefined;
     const timer = window.setInterval(() => {
-      loadGymData();
+      refreshGymData({ silent: true });
     }, 15000);
     return () => window.clearInterval(timer);
   }, [user]);
@@ -176,7 +184,50 @@ export function App() {
     window.setTimeout(() => setNotice(""), 2400);
   }
 
-  async function loadAdminData() {
+  function updateUserIfChanged(nextUser) {
+    setUser((currentUser) => {
+      const currentSnapshot = JSON.stringify(currentUser || null);
+      const nextSnapshot = JSON.stringify(nextUser || null);
+      return currentSnapshot === nextSnapshot ? currentUser : nextUser;
+    });
+  }
+
+  async function loadSessionUser({ silent = false } = {}) {
+    try {
+      const data = await api("/auth/me");
+      if (!["admin", "staff", "gym"].includes(data.user.role)) {
+        setToken(null);
+        setUser(null);
+        return;
+      }
+      updateUserIfChanged(data.user);
+    } catch (error) {
+      if ([401, 403].includes(error.status)) {
+        setToken(null);
+        setUser(null);
+        return;
+      }
+      if (!silent) showNotice(error.message);
+    }
+  }
+
+  async function refreshAdminData({ silent = false } = {}) {
+    try {
+      await Promise.all([loadSessionUser({ silent: true }), loadAdminData({ silent: true })]);
+    } catch (error) {
+      if (!silent) showNotice(error.message);
+    }
+  }
+
+  async function refreshGymData({ silent = false } = {}) {
+    try {
+      await Promise.all([loadSessionUser({ silent: true }), loadGymData({ silent: true })]);
+    } catch (error) {
+      if (!silent) showNotice(error.message);
+    }
+  }
+
+  async function loadAdminData({ silent = false } = {}) {
     try {
       const canModule = (permission) => user?.role === "admin" || canAccess(user, permission);
       const load = async (key, condition, path) => [key, condition ? await api(path) : null];
@@ -237,11 +288,11 @@ export function App() {
       setAdminUsers(data.adminUsers?.users || []);
       setRolePresets(data.adminUsers?.rolePresets || ROLE_PRESETS);
     } catch (error) {
-      showNotice(error.message);
+      if (!silent) showNotice(error.message);
     }
   }
 
-  async function loadGymData() {
+  async function loadGymData({ silent = false } = {}) {
     try {
       const [ordersData, stockData, requestsData, productsData] = await Promise.all([
         api("/orders"),
@@ -254,7 +305,7 @@ export function App() {
       setGymRestockRequests(requestsData.requests || []);
       setProducts(productsData.products || []);
     } catch (error) {
-      showNotice(error.message);
+      if (!silent) showNotice(error.message);
     }
   }
 

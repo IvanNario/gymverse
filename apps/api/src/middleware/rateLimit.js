@@ -1,12 +1,29 @@
 const buckets = new Map();
+const MAX_BUCKETS = 5000;
 
 function clientKey(request) {
-  return request.ip || request.headers["x-forwarded-for"] || request.socket?.remoteAddress || "unknown";
+  const forwardedFor = String(request.headers["x-forwarded-for"] || "").split(",")[0].trim();
+  return request.ip || forwardedFor || request.socket?.remoteAddress || "unknown";
+}
+
+function pruneExpiredBuckets(now) {
+  for (const [key, bucket] of buckets.entries()) {
+    if (bucket.resetAt <= now) buckets.delete(key);
+  }
+  if (buckets.size <= MAX_BUCKETS) return;
+  const overflow = buckets.size - MAX_BUCKETS;
+  let removed = 0;
+  for (const key of buckets.keys()) {
+    buckets.delete(key);
+    removed += 1;
+    if (removed >= overflow) break;
+  }
 }
 
 export function rateLimit({ windowMs = 60_000, max = 30, name = "default" } = {}) {
   return (request, response, next) => {
     const now = Date.now();
+    if (buckets.size > MAX_BUCKETS || Math.random() < 0.01) pruneExpiredBuckets(now);
     const key = `${name}:${clientKey(request)}`;
     const bucket = buckets.get(key) || { count: 0, resetAt: now + windowMs };
 

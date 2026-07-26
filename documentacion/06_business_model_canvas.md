@@ -54,6 +54,8 @@ GymVerse integra tienda fitness, pagos con Mercado Pago, pago al recoger, retiro
 - Red de gimnasios afiliados.
 - Red de proveedores.
 - Integración con Mercado Pago.
+- Almacenamiento externo de imágenes.
+- Correo transaccional para recuperación de cuenta.
 - Sistema de puntos.
 - Contenido fitness.
 - Equipo operativo y de soporte.
@@ -79,8 +81,9 @@ GymVerse integra tienda fitness, pagos con Mercado Pago, pago al recoger, retiro
 - Mercado Pago.
 - Servicios de hosting.
 - MongoDB/servicio de base de datos.
-- Netlify.
-- Render.
+- Vercel.
+- Cloudinary.
+- Resend u otro proveedor de correo transaccional.
 - Equipo logístico.
 - Equipo de soporte.
 

@@ -21,6 +21,8 @@ export const env = {
   adminOrigin: process.env.ADMIN_ORIGIN || "http://localhost:5174",
   authRateLimitWindowMs: Number(process.env.AUTH_RATE_LIMIT_WINDOW_MS || 900000),
   authRateLimitMax: Number(process.env.AUTH_RATE_LIMIT_MAX || 12),
+  emailFrom: process.env.EMAIL_FROM || "GymVerse <no-reply@gymverse.mx>",
+  resendApiKey: process.env.RESEND_API_KEY || "",
   googleClientId: process.env.GOOGLE_CLIENT_ID || "",
   mercadoPagoAccessToken: process.env.MERCADO_PAGO_ACCESS_TOKEN || "",
   mercadoPagoWebhookUrl: process.env.MERCADO_PAGO_WEBHOOK_URL || "",

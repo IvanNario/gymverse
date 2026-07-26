@@ -3,7 +3,7 @@
 ## 1. Seguridad general
 
 - Rutas privadas requieren token JWT.
-- Login y registro tienen rate limit.
+- Login, registro, Google Login y recuperación de contraseña tienen rate limit.
 - Cargas JSON tienen límite de tamaño.
 - Payloads inseguros se rechazan.
 - Admin, staff y gym se validan por rol.
@@ -28,7 +28,8 @@
 ## 4. Perfil
 
 - Nombre limpio con longitud limitada.
-- Correo válido y único.
+- El correo no se edita desde el perfil del cliente.
+- Teléfono opcional con formato válido.
 - Direcciones se limpian y solo se guardan si tienen etiqueta y calle.
 - Datos sensibles de dirección se almacenan cifrados.
 

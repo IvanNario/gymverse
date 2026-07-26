@@ -22,7 +22,11 @@ export async function api(path, options = {}) {
     body: options.body ? JSON.stringify(options.body) : undefined,
   });
   const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(data.message || "Solicitud fallida");
+  if (!response.ok) {
+    const error = new Error(data.message || "Solicitud fallida");
+    error.status = response.status;
+    throw error;
+  }
   return data;
 }
 
@@ -61,6 +65,9 @@ function readFileAsDataUrl(file) {
 }
 
 export async function uploadImage(file) {
+  const allowedTypes = new Set(["image/png", "image/jpeg", "image/webp"]);
+  if (!allowedTypes.has(file.type)) throw new Error("Sube una imagen PNG, JPG o WebP válida");
+  if (file.size > 4 * 1024 * 1024) throw new Error("La imagen no debe superar 4 MB");
   const dataUrl = await readFileAsDataUrl(file);
   return api("/admin/uploads/images", { method: "POST", body: { filename: file.name, dataUrl } });
 }

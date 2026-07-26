@@ -131,27 +131,7 @@ export function App() {
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([
-      api("/catalog/categories"),
-      api(`/catalog/products?${catalogQuery}`),
-      user ? api("/catalog/my-gyms") : Promise.resolve({ gyms: [] }),
-      api("/catalog/reward-drop"),
-      api("/catalog/promotions"),
-      api("/catalog/content"),
-      api("/catalog/legal"),
-    ])
-      .then(([categoryData, productData, gymData, dropData, promotionsData, contentData, legalData]) => {
-        if (cancelled) return;
-        setCategories(categoryData.categories);
-        setProducts(productData.products);
-        setGyms(gymData.gyms);
-        setDrop(dropData.drop);
-        setPromotions(promotionsData.promotions);
-        setContentPosts(contentData.posts);
-        setLegalDocuments(legalData.documents || []);
-        setPickupGym((current) => current || gymData.gyms[0]?._id || "");
-      })
-      .catch((error) => showNotice(error.message));
+    loadCatalogData({ isCancelled: () => cancelled });
     return () => {
       cancelled = true;
     };
@@ -165,14 +145,8 @@ export function App() {
   }, [delivery, gyms, pickupGym]);
 
   useEffect(() => {
-    if (!user || delivery !== "pickup" || !pickupGym) {
-      setLocalGymStock([]);
-      return;
-    }
-    api(`/catalog/my-gyms/${pickupGym}/stock`)
-      .then((data) => setLocalGymStock(data.stock || []))
-      .catch(() => setLocalGymStock([]));
-  }, [user, delivery, pickupGym]);
+    loadLocalGymStock({ silent: true });
+  }, [userId, delivery, pickupGym]);
 
   useEffect(() => {
     if (selectedCategory === "all" || selectedCategory === "favorites") return;
@@ -198,10 +172,10 @@ export function App() {
   useEffect(() => {
     if (!user) return undefined;
     const timer = window.setInterval(() => {
-      loadNotifications({ silent: true });
-    }, 45000);
+      refreshCustomerData({ silent: true });
+    }, 15000);
     return () => window.clearInterval(timer);
-  }, [user, unreadNotifications]);
+  }, [userId, catalogQuery, delivery, pickupGym, unreadNotifications]);
 
   useEffect(() => {
     if (!user) return;
@@ -231,6 +205,83 @@ export function App() {
   function showNotice(message) {
     setNotice(message);
     window.setTimeout(() => setNotice(""), 2200);
+  }
+
+  function updateUserIfChanged(nextUser) {
+    setUser((currentUser) => {
+      const currentSnapshot = JSON.stringify(currentUser || null);
+      const nextSnapshot = JSON.stringify(nextUser || null);
+      return currentSnapshot === nextSnapshot ? currentUser : nextUser;
+    });
+  }
+
+  async function loadSessionUser({ silent = false } = {}) {
+    try {
+      const data = await api("/auth/me");
+      updateUserIfChanged(data.user);
+    } catch (error) {
+      if ([401, 403].includes(error.status)) {
+        setToken(null);
+        setUser(null);
+        return;
+      }
+      if (!silent) showNotice(error.message);
+    }
+  }
+
+  async function loadCatalogData({ silent = false, isCancelled = () => false } = {}) {
+    try {
+      const [categoryData, productData, gymData, dropData, promotionsData, contentData, legalData] = await Promise.all([
+        api("/catalog/categories"),
+        api(`/catalog/products?${catalogQuery}`),
+        user ? api("/catalog/my-gyms") : Promise.resolve({ gyms: [] }),
+        api("/catalog/reward-drop"),
+        api("/catalog/promotions"),
+        api("/catalog/content"),
+        api("/catalog/legal"),
+      ]);
+      if (isCancelled()) return;
+      setCategories(categoryData.categories);
+      setProducts(productData.products);
+      setGyms(gymData.gyms);
+      setDrop(dropData.drop);
+      setPromotions(promotionsData.promotions);
+      setContentPosts(contentData.posts);
+      setLegalDocuments(legalData.documents || []);
+      setPickupGym((current) => current || gymData.gyms[0]?._id || "");
+    } catch (error) {
+      if (!silent && !isCancelled()) showNotice(error.message);
+    }
+  }
+
+  async function loadLocalGymStock({ silent = false } = {}) {
+    if (!user || delivery !== "pickup" || !pickupGym) {
+      setLocalGymStock([]);
+      return;
+    }
+    try {
+      const data = await api(`/catalog/my-gyms/${pickupGym}/stock`);
+      setLocalGymStock(data.stock || []);
+    } catch (error) {
+      setLocalGymStock([]);
+      if (!silent) showNotice(error.message);
+    }
+  }
+
+  async function refreshCustomerData({ silent = false } = {}) {
+    try {
+      await Promise.all([
+        loadSessionUser({ silent: true }),
+        loadCatalogData({ silent: true }),
+        loadLocalGymStock({ silent: true }),
+        loadOrders(),
+        loadRewardOrders(),
+        loadNotifications({ silent: true }),
+        loadSupportTickets(),
+      ]);
+    } catch (error) {
+      if (!silent) showNotice(error.message);
+    }
   }
 
   async function loadOrders() {

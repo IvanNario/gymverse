@@ -16,7 +16,7 @@ La API centraliza autenticación, permisos, reglas de negocio, pagos, notificaci
 |---|---|
 | Cliente | React 18 + Vite |
 | Admin | React 18 + Vite |
-| API | Node.js 20+ + Express 5 |
+| API | Node.js 20.19+ + Express 5 |
 | Base de datos | MongoDB |
 | ODM | Mongoose |
 | Autenticación | JWT |
@@ -25,6 +25,8 @@ La API centraliza autenticación, permisos, reglas de negocio, pagos, notificaci
 | CORS | cors |
 | Logs | morgan |
 | Pagos | Mercado Pago Checkout Pro |
+| Imágenes | Cloudinary |
+| Correo transaccional | Resend opcional |
 | Iconos | lucide-react |
 | PWA | Manifest + Service Worker |
 
@@ -56,7 +58,6 @@ GymVerse/
   documentacion/
   assets/
   DEPLOYMENT.md
-  render.yaml
   package.json
 ```
 
@@ -98,14 +99,20 @@ GymVerse/
 | `ADMIN_ORIGIN` | URL pública del admin. |
 | `AUTH_RATE_LIMIT_WINDOW_MS` | Ventana del rate limit de auth. |
 | `AUTH_RATE_LIMIT_MAX` | Intentos máximos de auth. |
+| `EMAIL_FROM` | Remitente para correos transaccionales. |
+| `RESEND_API_KEY` | API key opcional para enviar códigos de recuperación. |
+| `GOOGLE_CLIENT_ID` | Cliente OAuth para validar Google Login en API. |
 | `MERCADO_PAGO_ACCESS_TOKEN` | Token de Mercado Pago. |
 | `MERCADO_PAGO_WEBHOOK_URL` | Webhook público de Mercado Pago. |
-| `VITE_API_URL` | URL de API usada por cliente/admin en Netlify. |
+| `CLOUDINARY_CLOUD_NAME` | Cuenta Cloudinary para imágenes. |
+| `CLOUDINARY_API_KEY` | API key de Cloudinary. |
+| `CLOUDINARY_API_SECRET` | API secret de Cloudinary. |
+| `VITE_API_URL` | URL de API usada por cliente/admin en Vercel. |
 
 ## 7. Seguridad técnica
 
 - JWT para sesión.
-- Rate limit en login y registro.
+- Rate limit en login, registro, Google Login y recuperación de contraseña.
 - Helmet para cabeceras HTTP.
 - CORS restringido a cliente y admin.
 - Sanitización de payloads peligrosos.
@@ -130,27 +137,30 @@ El checkout en línea usa Mercado Pago Checkout Pro.
 **Webhook:**
 
 ```text
-https://TU-API.onrender.com/api/orders/mercado-pago/webhook
+https://TU-API-VERCEL.vercel.app/api/orders/mercado-pago/webhook
 ```
 
 ## 9. Despliegue
 
 | Componente | Plataforma |
 |---|---|
-| API | Render |
-| Cliente | Netlify |
-| Admin | Netlify |
+| API | Vercel |
+| Cliente | Vercel |
+| Admin | Vercel |
 
-La API puede desplegarse con `render.yaml`. Cliente y admin usan sus respectivos `netlify.toml`.
+El despliegue recomendado usa tres proyectos de Vercel conectados al mismo repositorio: API serverless, PWA cliente y panel admin.
 
 ## 10. Checklist producción
 
-- Node 20 o superior.
+- Node 20.19 o superior compatible.
 - MongoDB disponible.
 - `JWT_SECRET` seguro.
 - `DATA_ENCRYPTION_KEY` de al menos 32 caracteres.
 - `CLIENT_ORIGIN` y `ADMIN_ORIGIN` reales.
 - Mercado Pago configurado.
+- Cloudinary configurado para imágenes subidas.
+- Google Login configurado si se mostrará en producción.
+- Resend configurado si se usará recuperación real por correo.
 - Ejecutar `npm run check`.
 - Ejecutar `npm run audit`.
 - Ejecutar `npm audit --omit=dev`.

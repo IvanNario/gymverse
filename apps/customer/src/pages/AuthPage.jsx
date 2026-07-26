@@ -1,7 +1,7 @@
 import { Eye, EyeOff, KeyRound, LockKeyhole, Mail, Phone, ShieldCheck, UserRound } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { api, setToken } from "../services/api.js";
-import { validateAuthForm } from "../utils/forms.js";
+import { passwordStrengthMessage, validateAuthForm } from "../utils/forms.js";
 
 const viteGoogleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
 
@@ -51,7 +51,7 @@ export function AuthPage({ onAuth }) {
         ux_mode: "popup",
         auto_select: false,
       });
-      googleButtonRef.current.innerHTML = "";
+      googleButtonRef.current.replaceChildren();
       window.google.accounts.id.renderButton(googleButtonRef.current, {
         theme: "filled_black",
         size: "large",
@@ -130,6 +130,11 @@ export function AuthPage({ onAuth }) {
     setInfo("");
     if (resetForm.newPassword !== resetForm.confirmPassword) {
       setError("Las contraseñas no coinciden");
+      return;
+    }
+    const passwordMessage = passwordStrengthMessage(resetForm.newPassword);
+    if (passwordMessage) {
+      setError(passwordMessage);
       return;
     }
     setIsSubmitting(true);

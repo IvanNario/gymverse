@@ -9,6 +9,7 @@ import { cleanString, isEmail, isStrongEnoughPassword, isValidOptionalPhone, nor
 import { publicUserProfile } from "../utils/privacy.js";
 import { writeAuditLog } from "../utils/auditLog.js";
 import { verifyGoogleIdToken } from "../utils/googleAuth.js";
+import { sendPasswordResetEmail } from "../utils/email.js";
 import { env } from "../config/env.js";
 
 export const authRouter = Router();
@@ -43,11 +44,24 @@ function createResetCode() {
 }
 
 async function deliverPasswordResetCode(user, code) {
-  if (env.nodeEnv !== "production") {
+  if (!env.resendApiKey && env.nodeEnv !== "production") {
     console.log(`Password reset code for ${user.email}: ${code}`);
     return { delivered: true, devCode: code };
   }
-  console.log(`Password reset requested for ${user.email}. Configure an email provider to deliver code.`);
+
+  try {
+    const delivery = await sendPasswordResetEmail({ to: user.email, name: user.name, code });
+    if (delivery.delivered) return delivery;
+  } catch (error) {
+    console.error(`Password reset email failed for ${user.email}: ${error.message}`);
+  }
+
+  if (env.nodeEnv !== "production") {
+    console.log(`Password reset code for ${user.email}: ${code}`);
+    return { delivered: false, devCode: code };
+  }
+
+  console.log(`Password reset requested for ${user.email}. Configure RESEND_API_KEY and EMAIL_FROM to deliver code.`);
   return { delivered: false };
 }
 

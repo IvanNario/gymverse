@@ -23,6 +23,8 @@ if (existsSync(envExamplePath)) {
     "DATA_ENCRYPTION_KEY",
     "CLIENT_ORIGIN",
     "ADMIN_ORIGIN",
+    "EMAIL_FROM",
+    "RESEND_API_KEY",
     "GOOGLE_CLIENT_ID",
     "VITE_GOOGLE_CLIENT_ID",
     "MERCADO_PAGO_ACCESS_TOKEN",
@@ -39,6 +41,7 @@ const gitignore = readFileSync(resolve(root, ".gitignore"), "utf8");
 addCheck(".env ignorado", gitignore.split(/\r?\n/).includes(".env"), "No subas secretos al repositorio.");
 
 const userModel = readFileSync(resolve(root, "apps/api/src/models/User.js"), "utf8");
+const orderModel = readFileSync(resolve(root, "apps/api/src/models/Order.js"), "utf8");
 const orderRoutes = readFileSync(resolve(root, "apps/api/src/routes/orders.js"), "utf8");
 const appFile = readFileSync(resolve(root, "apps/api/src/app.js"), "utf8");
 const serverFile = readFileSync(resolve(root, "apps/api/src/server.js"), "utf8");
@@ -46,6 +49,7 @@ const encryptionFile = readFileSync(resolve(root, "apps/api/src/utils/encryption
 const adminRoutes = readFileSync(resolve(root, "apps/api/src/routes/admin.js"), "utf8");
 addCheck("Sin tarjetas guardadas en usuarios", !userModel.includes("paymentMethods"), "El modelo User no debe almacenar tarjetas.");
 addCheck("Pedidos no aceptan método card", !orderRoutes.includes('"card", "pickup"') && !orderRoutes.includes("paymentMethodId"), "El checkout debe usar Mercado Pago o pago al recoger.");
+addCheck("Modelo Order no permite tarjetas", !orderModel.includes('"card"') && !orderModel.includes("demo_card"), "El modelo Order solo debe aceptar Mercado Pago o pago al recoger.");
 addCheck("API usa sanitizador de payload", appFile.includes("rejectUnsafePayload"), "Activa protección contra claves peligrosas en JSON.");
 addCheck("API no cachea datos sensibles", appFile.includes("Cache-Control") && appFile.includes("no-store"), "Las respuestas /api deben usar no-store.");
 addCheck("Cifrado de campos sensibles disponible", encryptionFile.includes("aes-256-gcm"), "Usa cifrado autenticado para datos personales.");
@@ -59,6 +63,7 @@ if (existsSync(envFile)) {
   if (/NODE_ENV=production/.test(envText)) {
     addCheck("Cloudinary configurado", /CLOUDINARY_CLOUD_NAME=.+/.test(envText) && /CLOUDINARY_API_KEY=.+/.test(envText) && /CLOUDINARY_API_SECRET=.+/.test(envText), "Configura Cloudinary para subir imagenes sin filesystem local.");
     addCheck("Google Login configurado", /GOOGLE_CLIENT_ID=.+/.test(envText), "Configura GOOGLE_CLIENT_ID para validar tokens de Google.");
+    addCheck("Correo de recuperacion configurado", /RESEND_API_KEY=.+/.test(envText), "Configura RESEND_API_KEY para enviar codigos de recuperacion en produccion.");
   }
 }
 

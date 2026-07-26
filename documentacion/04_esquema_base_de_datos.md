@@ -10,12 +10,19 @@ La base de datos usa MongoDB con Mongoose. Los modelos principales cubren usuari
 |---|---|---|
 | name | String | Nombre. |
 | email | String | Correo único. |
+| phone | String | Teléfono cifrado. |
 | passwordHash | String | Contraseña cifrada. |
+| authProvider | String | password, google o mixed. |
+| googleSubject | String | Identificador privado de Google Login. |
+| passwordResetCodeHash | String | Código de recuperación cifrado por hash y oculto por defecto. |
+| passwordResetExpiresAt | Date | Vencimiento del código de recuperación. |
+| passwordResetAttempts | Number | Intentos de recuperación usados. |
 | role | String | customer, admin, staff o gym. |
 | adminRolePreset | String | Preset de permisos staff. |
 | permissions | Array String | Permisos específicos. |
 | status | String | active o disabled. |
 | gym | ObjectId | Gimnasio asociado para rol gym. |
+| affiliatedGyms | Array ObjectId | Gimnasios afiliados por el cliente. |
 | addresses | Array | Direcciones cifradas. |
 | hiddenOrders | Array ObjectId | Pedidos ocultos por cliente. |
 | favorites | Array ObjectId | Productos favoritos. |
@@ -103,8 +110,8 @@ La base de datos usa MongoDB con Mongoose. Los modelos principales cubren usuari
 | shippingAddress | Object | Dirección cifrada. |
 | status | String | Estado operativo. |
 | paymentStatus | String | pending, paid o refunded. |
-| paymentMethod | String | card, pickup o mercado_pago. |
-| paymentProvider | String | demo_card, pickup o mercado_pago. |
+| paymentMethod | String | pickup o mercado_pago. |
+| paymentProvider | String | pickup o mercado_pago. |
 | providerPreferenceId | String | Preferencia Mercado Pago. |
 | providerPaymentId | String | Pago Mercado Pago. |
 | providerStatus | String | Estado proveedor. |

@@ -29,6 +29,7 @@ Crea un proyecto de Vercel conectado al repo:
 
 Variables de entorno requeridas:
 
+- `NODE_VERSION=20.19.0` o superior compatible
 - `NODE_ENV=production`
 - `MONGODB_URI`
 - `MONGODB_DB=gymverse`
@@ -39,6 +40,8 @@ Variables de entorno requeridas:
 - `ADMIN_ORIGIN`
 - `AUTH_RATE_LIMIT_WINDOW_MS=900000`
 - `AUTH_RATE_LIMIT_MAX=12`
+- `EMAIL_FROM`
+- `RESEND_API_KEY` opcional, necesario para enviar codigos de recuperacion por correo en produccion
 - `GOOGLE_CLIENT_ID`
 - `MERCADO_PAGO_ACCESS_TOKEN`
 - `MERCADO_PAGO_WEBHOOK_URL`

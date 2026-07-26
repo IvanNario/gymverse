@@ -23,7 +23,11 @@ export async function api(path, options = {}) {
   });
 
   const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(data.message || "No se pudo completar la solicitud");
+  if (!response.ok) {
+    const error = new Error(data.message || "No se pudo completar la solicitud");
+    error.status = response.status;
+    throw error;
+  }
   return data;
 }
 

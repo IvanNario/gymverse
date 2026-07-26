@@ -57,6 +57,7 @@ Variables necesarias:
 - `MERCADO_PAGO_WEBHOOK_URL`: URL publica del webhook, por ejemplo `https://api.tudominio.com/api/orders/mercado-pago/webhook`.
 - `CLIENT_ORIGIN`: dominio publico del cliente para los retornos del checkout.
 - `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`: almacenamiento externo para imagenes subidas.
+- `EMAIL_FROM` y `RESEND_API_KEY`: opcionales para enviar codigos reales de recuperacion de contraseña por correo.
 
 Notas:
 
@@ -106,6 +107,7 @@ Antes de desplegar:
 - Define `CLIENT_ORIGIN` y `ADMIN_ORIGIN` con los dominios reales.
 - Configura `MERCADO_PAGO_ACCESS_TOKEN` y `MERCADO_PAGO_WEBHOOK_URL`.
 - Configura Cloudinary; las imagenes subidas no se guardan en local.
+- Configura `RESEND_API_KEY` si la recuperacion de contraseña debe enviar codigos reales por correo.
 - Revisa `DEPLOYMENT.md` para desplegar API, cliente y admin en Vercel.
 - Ejecuta:
 
@@ -117,7 +119,7 @@ npm run check
 
 La API incluye:
 
-- Rate limit basico en login y registro.
+- Rate limit basico en login, registro, Google Login y recuperacion de contraseña.
 - Healthcheck en `/health` con estado de base de datos.
 - Validacion de pedidos, cupones, accesos de gimnasio y reseñas.
 - Manejo consistente de rutas inexistentes, IDs invalidos, duplicados y errores internos.

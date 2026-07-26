@@ -13,6 +13,7 @@ const items = [
 export function BottomNav({ active, onChange, unread = 0 }) {
   const [isMobile, setIsMobile] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [navActivity, setNavActivity] = useState(0);
   const activeItem = useMemo(() => items.find((item) => item.id === active) || items[0], [active]);
   const ActiveIcon = activeItem.icon;
 
@@ -37,6 +38,7 @@ export function BottomNav({ active, onChange, unread = 0 }) {
       const scrollingUp = currentY < lastY - 12;
       if (currentY < 80 || scrollingUp) setIsCollapsed(false);
       if (currentY > 120 && scrollingDown) setIsCollapsed(true);
+      setNavActivity((value) => value + 1);
       lastY = currentY;
       ticking = false;
     }
@@ -49,8 +51,19 @@ export function BottomNav({ active, onChange, unread = 0 }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, [isMobile]);
 
-  function goToView(id) {
+  useEffect(() => {
+    if (!isMobile || isCollapsed) return undefined;
+    const timer = window.setTimeout(() => setIsCollapsed(true), 10000);
+    return () => window.clearTimeout(timer);
+  }, [active, isCollapsed, isMobile, navActivity]);
+
+  function expandNav() {
     setIsCollapsed(false);
+    setNavActivity((value) => value + 1);
+  }
+
+  function goToView(id) {
+    expandNav();
     onChange(id);
   }
 
@@ -72,7 +85,7 @@ export function BottomNav({ active, onChange, unread = 0 }) {
         className={`mobileNavFab ${isCollapsed ? "isVisible" : ""}`}
         type="button"
         aria-label={`Abrir menú: ${activeItem.label}`}
-        onClick={() => setIsCollapsed(false)}
+        onClick={expandNav}
       >
         <ActiveIcon size={21} />
         {unread > 0 && <strong className="navBadge">{unread}</strong>}

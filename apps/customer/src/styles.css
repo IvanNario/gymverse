@@ -188,6 +188,44 @@ textarea:focus-visible {
   box-shadow: var(--soft-shadow);
 }
 
+.productGrid > *,
+.contentGrid > *,
+.contentProductList > *,
+.cartList > *,
+.orderList > *,
+.rewardHistory > *,
+.notificationList > *,
+.supportTickets > .supportTicketMini,
+.promoCustomerList > *,
+.profileStats > *,
+.confirmationSummary > * {
+  animation: progressiveIn 320ms var(--ease-premium) both;
+}
+
+:is(.productGrid, .contentGrid, .contentProductList, .cartList, .orderList, .rewardHistory, .notificationList, .supportTickets, .promoCustomerList, .profileStats, .confirmationSummary) > *:nth-child(1) {
+  animation-delay: 30ms;
+}
+
+:is(.productGrid, .contentGrid, .contentProductList, .cartList, .orderList, .rewardHistory, .notificationList, .supportTickets, .promoCustomerList, .profileStats, .confirmationSummary) > *:nth-child(2) {
+  animation-delay: 60ms;
+}
+
+:is(.productGrid, .contentGrid, .contentProductList, .cartList, .orderList, .rewardHistory, .notificationList, .supportTickets, .promoCustomerList, .profileStats, .confirmationSummary) > *:nth-child(3) {
+  animation-delay: 90ms;
+}
+
+:is(.productGrid, .contentGrid, .contentProductList, .cartList, .orderList, .rewardHistory, .notificationList, .supportTickets, .promoCustomerList, .profileStats, .confirmationSummary) > *:nth-child(4) {
+  animation-delay: 120ms;
+}
+
+:is(.productGrid, .contentGrid, .contentProductList, .cartList, .orderList, .rewardHistory, .notificationList, .supportTickets, .promoCustomerList, .profileStats, .confirmationSummary) > *:nth-child(5) {
+  animation-delay: 150ms;
+}
+
+:is(.productGrid, .contentGrid, .contentProductList, .cartList, .orderList, .rewardHistory, .notificationList, .supportTickets, .promoCustomerList, .profileStats, .confirmationSummary) > *:nth-child(n + 6) {
+  animation-delay: 180ms;
+}
+
 .appHeader {
   display: flex;
   align-items: center;
@@ -833,9 +871,12 @@ textarea:focus-visible {
 }
 
 .dangerButton {
-  width: 2.5rem;
+  width: auto;
+  min-width: 7.5rem;
+  padding: 0 1rem;
   color: #ffb1b1;
   background: rgba(255, 87, 87, 0.14);
+  white-space: nowrap;
 }
 
 .cartItem,
@@ -1265,6 +1306,12 @@ textarea:focus-visible {
   z-index: 20;
   overflow: hidden;
   box-shadow: 0 18px 42px rgba(0, 0, 0, 0.35);
+  transform-origin: bottom center;
+  transition:
+    transform 240ms var(--ease-premium),
+    opacity 180ms ease,
+    box-shadow 180ms ease;
+  will-change: transform, opacity;
 }
 
 .bottomNav button {
@@ -1306,6 +1353,42 @@ textarea:focus-visible {
 .bottomNav .active {
   color: var(--ink);
   background: var(--yellow);
+}
+
+.mobileNavFab {
+  position: fixed;
+  right: 1rem;
+  bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  z-index: 22;
+  display: none;
+  place-items: center;
+  width: 3.45rem;
+  height: 3.45rem;
+  color: var(--ink);
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  border-radius: 50%;
+  background: var(--yellow);
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.38), 0 0 0 8px rgba(255, 215, 0, 0.08);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(0.5rem) scale(0.88);
+  transition:
+    transform 240ms var(--ease-premium),
+    opacity 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.mobileNavFab.isVisible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.mobileNavFab .navBadge {
+  top: -0.2rem;
+  right: -0.15rem;
+  border: 2px solid var(--yellow);
+  background: var(--cream);
 }
 
 .authScreen {
@@ -1497,7 +1580,9 @@ textarea:focus-visible {
   color: var(--ink);
   border-radius: 0.8rem;
   background: var(--yellow);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
   font-weight: 800;
+  animation: toastPopIn 260ms var(--ease-premium) both;
 }
 
 .appVersionBadge {
@@ -2466,6 +2551,7 @@ textarea:focus-visible {
   padding: 1rem;
   background: rgba(8, 9, 11, 0.72);
   backdrop-filter: blur(12px);
+  animation: overlayFadeIn 180ms ease both;
 }
 
 .confirmPanel {
@@ -2477,6 +2563,7 @@ textarea:focus-visible {
   border-radius: 1rem;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.025)), var(--panel);
   box-shadow: 0 28px 80px rgba(0, 0, 0, 0.36);
+  animation: popupIn 240ms var(--ease-premium) both;
 }
 
 .confirmIcon {
@@ -2526,9 +2613,21 @@ textarea:focus-visible {
 }
 
 .confirmActions {
-  display: grid;
-  grid-template-columns: auto 1fr;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
   gap: 0.7rem;
+}
+
+.confirmActions .iconTextButton,
+.confirmActions .primaryButton,
+.confirmActions .dangerButton {
+  width: auto;
+  flex: 0 0 auto;
+  min-width: 7.5rem;
+  padding-inline: 1rem;
+  white-space: nowrap;
 }
 
 .legalLinkCard {
@@ -2828,6 +2927,52 @@ textarea:focus-visible {
   }
 }
 
+@keyframes progressiveIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popupIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes toastPopIn {
+  0% {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.96);
+  }
+  72% {
+    opacity: 1;
+    transform: translateY(-0.12rem) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @keyframes expandIn {
   from {
     opacity: 0;
@@ -3017,6 +3162,18 @@ textarea:focus-visible {
   }
 }
 
+@media (max-width: 640px) {
+  .bottomNav.isCollapsed {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(calc(100% + 1.4rem)) scale(0.94);
+  }
+
+  .mobileNavFab {
+    display: inline-grid;
+  }
+}
+
 @media (max-width: 520px) {
   .profileStats,
   .confirmationSummary,
@@ -3130,7 +3287,14 @@ textarea:focus-visible {
   }
 
   .confirmActions {
-    grid-template-columns: 1fr;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .confirmActions .iconTextButton,
+  .confirmActions .primaryButton,
+  .confirmActions .dangerButton {
+    width: 100%;
   }
 
   .availabilityLine {

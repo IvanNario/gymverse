@@ -1,115 +1,107 @@
 # Business Model Canvas - GymVerse
 
+**Fecha de actualización:** 26 de julio de 2026
+
 ## 1. Segmentos de clientes
 
-- Personas que entrenan en gimnasio.
-- Compradores de suplementos y accesorios.
-- Clientes que buscan promociones, puntos y recompensas.
-- Gimnasios afiliados como puntos de retiro.
-- Proveedores fitness.
-- Equipos administrativos de ecommerce fitness.
+- Clientes fitness que compran suplementos, accesorios y productos relacionados con entrenamiento.
+- Personas que prefieren recoger productos en su gimnasio.
+- Gimnasios que buscan beneficios para miembros y nuevas fuentes de ingreso.
+- Proveedores y marcas fitness que necesitan distribución digital.
+- Equipos administrativos que operan inventario, pedidos, promociones y recompensas.
 
 ## 2. Propuesta de valor
 
-GymVerse integra tienda fitness, pagos con Mercado Pago, pago al recoger, retiro en gimnasios, cupones, puntos, recompensas, guías fitness, soporte, devoluciones e inventario en una sola plataforma.
+- Compra fitness desde una PWA móvil, con catálogo, promociones y favoritos.
+- Retiro en gimnasios afiliados con código de entrega.
+- Entrega a domicilio cuando el cliente lo prefiere.
+- Programa de puntos y recompensas.
+- Afiliación de gimnasios desde el perfil del cliente.
+- Stock local por gimnasio para mejorar disponibilidad en pickup.
+- Portal de gimnasio para gestionar pedidos y solicitar reabastecimiento.
+- Panel administrativo con reportes, auditoría y permisos.
 
 ## 3. Canales
 
 - PWA cliente.
-- Panel administrativo.
-- Portal de gimnasio.
-- Gimnasios afiliados.
-- Redes sociales.
-- Campañas digitales.
-- Promociones con proveedores.
-- Comunidad fitness.
+- Panel administrativo web.
+- Portal web para gimnasios.
+- Gimnasios afiliados como puntos de retiro y contacto físico.
+- Notificaciones dentro de la app.
+- Correos transaccionales para recuperación de contraseña.
+- Pasarela de pago Mercado Pago.
 
-## 4. Relación con clientes
+## 4. Relaciones con clientes
 
-- Autoservicio digital.
-- Seguimiento de pedidos.
-- Notificaciones.
-- Soporte por tickets.
-- Sistema de puntos.
-- Recompensas.
-- Favoritos.
-- Reseñas.
-- Contenido educativo.
+- Autoservicio desde la PWA.
+- Soporte mediante tickets.
+- Notificaciones de pedidos, promociones y operación.
+- Programa de fidelización por puntos.
+- Contenido fitness para educación y retención.
+- Experiencia de retiro en gimnasios afiliados.
 
-## 5. Fuentes de ingreso
+## 5. Fuentes de ingresos
 
 - Venta de productos fitness.
-- Margen comercial.
-- Promociones destacadas.
-- Alianzas con proveedores.
-- Cuotas o acuerdos con gimnasios afiliados.
-- Campañas de marketing dentro del ecosistema.
+- Margen comercial por producto.
+- Cuotas o membresías de gimnasios afiliados.
+- Campañas promocionales con proveedores.
+- Posibles comisiones por distribución o visibilidad de marcas.
+- Servicios logísticos y operativos asociados al retiro.
 
 ## 6. Recursos clave
 
-- Plataforma tecnológica.
-- Inventario.
-- Marca GymVerse.
-- Base de clientes.
+- Plataforma tecnológica GymVerse.
+- API central y base de datos.
+- Catálogo de productos y proveedores.
 - Red de gimnasios afiliados.
-- Red de proveedores.
-- Integración con Mercado Pago.
-- Almacenamiento externo de imágenes.
-- Correo transaccional para recuperación de cuenta.
-- Sistema de puntos.
-- Contenido fitness.
-- Equipo operativo y de soporte.
+- Inventario central y stock local por gimnasio.
+- Integraciones con Mercado Pago, Cloudinary, Google Login y Resend.
+- Equipo administrativo y soporte.
+- Marca, contenido y programa de puntos.
 
 ## 7. Actividades clave
 
-- Gestión de catálogo.
-- Gestión de inventario.
-- Procesamiento de pedidos.
-- Gestión de pagos.
-- Gestión de cupones.
-- Gestión de recompensas.
-- Generación de contenido.
-- Soporte y devoluciones.
-- Reabastecimiento.
-- Administración de gimnasios.
-- Reportes, auditoría y automatizaciones.
+- Gestión de catálogo, precios, variantes y stock.
+- Operación de pedidos y devoluciones.
+- Gestión de gimnasios afiliados y accesos.
+- Control de stock local y reabastecimiento.
+- Administración de promociones, cupones y recompensas.
+- Atención de soporte.
+- Publicación de contenido fitness y documentos legales.
+- Monitoreo financiero, reportes y auditoría.
 
 ## 8. Socios clave
 
-- Proveedores fitness.
 - Gimnasios afiliados.
-- Mercado Pago.
-- Servicios de hosting.
-- MongoDB/servicio de base de datos.
-- Vercel.
-- Cloudinary.
-- Resend u otro proveedor de correo transaccional.
-- Equipo logístico.
-- Equipo de soporte.
+- Proveedores de productos fitness.
+- Mercado Pago como proveedor de pagos.
+- Cloudinary para almacenamiento de imágenes.
+- Resend para correo transaccional.
+- Google como proveedor de identidad.
+- Vercel como plataforma de despliegue.
+- MongoDB Atlas o proveedor equivalente de base de datos.
 
 ## 9. Estructura de costos
 
 - Desarrollo y mantenimiento de software.
-- Infraestructura.
-- Comisiones de pago.
-- Inventario.
-- Marketing.
-- Soporte.
-- Operación administrativa.
-- Gestión de proveedores.
-- Gestión de gimnasios.
-- Seguridad, auditoría y respaldos.
+- Infraestructura de hosting y base de datos.
+- Comisiones de pasarela de pago.
+- Servicios de email e imágenes.
+- Operación logística y reabastecimiento.
+- Atención al cliente y administración.
+- Marketing y adquisición de usuarios.
+- Incentivos del programa de puntos.
 
-## 10. Canvas resumido
+## 10. Indicadores clave sugeridos
 
-| Bloque | Contenido |
+| Indicador | Objetivo |
 |---|---|
-| Segmentos | Clientes fitness, gimnasios, proveedores y equipo operativo. |
-| Propuesta | Ecommerce fitness con pagos, puntos, recompensas, retiro, contenido y administración. |
-| Canales | PWA, admin, portal gym, gimnasios, redes y campañas. |
-| Relación | Autoservicio, soporte, avisos, puntos, reseñas y guías. |
-| Ingresos | Venta, margen, alianzas, promociones y afiliaciones. |
-| Recursos | Plataforma, inventario, marca, datos, proveedores y gimnasios. |
-| Actividades | Catálogo, pedidos, pagos, stock, soporte, reportes y marketing. |
-| Socios | Proveedores, gimnasios, Mercado Pago, hosting y soporte. |
-| Costos | Software, infraestructura, inventario, comisiones, marketing y operación. |
+| Ventas totales | Medir crecimiento comercial. |
+| Pedidos por gimnasio | Medir desempeño de puntos de retiro. |
+| Tasa de recompra | Evaluar retención. |
+| Uso de cupones | Medir efectividad promocional. |
+| Canjes de recompensas | Medir fidelización. |
+| Solicitudes de reabastecimiento | Anticipar demanda local. |
+| Tiempo de entrega pickup | Medir calidad operativa. |
+| Tickets de soporte | Detectar fricción del usuario. |

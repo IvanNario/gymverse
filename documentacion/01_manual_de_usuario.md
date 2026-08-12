@@ -1,371 +1,360 @@
 # Manual de Usuario - GymVerse
 
+**Fecha de actualización:** 26 de julio de 2026
+
 ## 1. Introducción
 
-GymVerse es una plataforma fitness compuesta por una PWA para clientes, un panel administrativo y una API central. La app permite comprar productos, usar cupones, pagar con Mercado Pago o al recoger, consultar pedidos, solicitar devoluciones, recibir avisos, leer guías fitness, gestionar perfil, pedir soporte y canjear recompensas.
+GymVerse es una aplicación fitness formada por tres partes: una PWA para clientes, un panel administrativo y una API central. La plataforma permite comprar productos fitness, pagar con Mercado Pago o al recoger, retirar pedidos en gimnasios afiliados, solicitar devoluciones, recibir notificaciones, consultar contenido, crear tickets de soporte y canjear recompensas por puntos.
+
+El sistema también incluye un portal para gimnasios afiliados, desde donde cada gimnasio puede administrar pedidos de retiro, confirmar entregas con código y solicitar reabastecimiento de stock local.
 
 ## 2. Roles del sistema
 
 | Rol | Descripción | Acceso principal |
 |---|---|---|
-| Cliente | Usuario final que compra, canjea puntos y solicita soporte. | PWA cliente. |
-| Admin | Usuario con acceso total al panel. | Todo el panel administrativo. |
-| Staff | Usuario interno con permisos por módulo. | Módulos asignados. |
-| Gym | Usuario asociado a un gimnasio afiliado. | Portal de retiro de pedidos. |
+| Cliente | Usuario final que compra, guarda favoritos, afilia gimnasios y canjea puntos. | PWA cliente. |
+| Admin | Usuario con control total del panel y gestión de usuarios internos. | Panel administrativo completo. |
+| Staff | Usuario interno con permisos específicos por módulo. | Panel administrativo según permisos. |
+| Gym | Usuario vinculado a un gimnasio afiliado. | Portal de gimnasio. |
 
 ## 3. App Cliente
 
 ### 3.1 Registro
 
-El cliente crea una cuenta con nombre, correo y contraseña.
+El cliente puede crear una cuenta usando formulario tradicional o Google Login cuando está configurado.
 
-**Validaciones:**
+**Campos del registro tradicional:**
 
-- Nombre, correo y contraseña son obligatorios.
-- El correo debe tener formato válido.
-- La contraseña debe tener al menos 8 caracteres.
-- El correo no puede estar registrado previamente.
+- Nombre completo.
+- Correo electrónico.
+- Teléfono.
+- Contraseña.
+- Confirmación de contraseña.
+
+**Validaciones principales:**
+
+- Nombre obligatorio con mínimo 3 caracteres.
+- Correo obligatorio con formato válido y no registrado previamente.
+- Teléfono obligatorio con formato válido.
+- Contraseña mínima de 8 caracteres, con letras y números.
+- Confirmación de contraseña igual a la contraseña.
 
 ### 3.2 Inicio de sesión
 
-El cliente inicia sesión con correo y contraseña.
+El cliente inicia sesión con correo y contraseña, o con Google Login si el servicio está activo.
 
-**Validaciones:**
+**Validaciones principales:**
 
-- El correo debe tener formato válido.
-- La contraseña no puede estar vacía.
-- La cuenta no debe estar desactivada.
-- Si los datos no coinciden, se muestra "Credenciales inválidas".
+- Correo con formato válido.
+- Contraseña presente.
+- Cuenta activa.
+- Google Login solo permite acceso a cuentas de cliente; cuentas admin, staff o gym no entran por esta vista.
+- Si las credenciales no coinciden, se muestra error de acceso.
 
-### 3.3 Tienda
+### 3.3 Recuperación de contraseña
 
-La tienda muestra catálogo, promociones, productos favoritos y recompensas activas.
+La vista de recuperación permite solicitar un código por correo y definir una nueva contraseña.
+
+**Flujo:**
+
+1. El usuario escribe su correo.
+2. GymVerse genera un código de 6 dígitos con vencimiento.
+3. El usuario captura el código y la nueva contraseña.
+4. Si el código es correcto, se actualiza la contraseña y se inicia sesión.
+
+**Validaciones principales:**
+
+- Correo obligatorio y válido.
+- Código numérico de 6 dígitos.
+- Código vigente.
+- Máximo de intentos por código.
+- Nueva contraseña con mínimo 8 caracteres, letras y números.
+
+### 3.4 Tienda
+
+La tienda muestra productos activos, categorías, promociones publicadas y accesos a recompensas.
 
 **Funciones:**
 
 - Buscar productos por texto.
 - Filtrar por categoría.
-- Ver productos favoritos.
-- Usar promociones disponibles.
-- Canjear productos con puntos.
+- Ver promociones activas.
+- Aplicar un cupón sugerido.
 - Abrir detalle de producto.
+- Agregar productos al carrito.
+- Consultar favoritos.
 
-### 3.4 Detalle de producto
+### 3.5 Detalle de producto
 
-Permite revisar información completa del producto.
+La vista de producto muestra información completa de un producto y sus variantes.
 
 **Funciones:**
 
-- Ver imagen, descripción, categoría, variantes, precio y stock.
-- Marcar o quitar de favoritos.
-- Consultar promedio y listado de reseñas.
-- Publicar reseña con calificación de 1 a 5 estrellas.
-- Agregar al carrito.
+- Ver imagen, nombre, descripción, categoría, precio, variantes y stock.
+- Marcar o quitar favorito.
+- Consultar reseñas.
+- Publicar reseña.
+- Agregar variante al carrito.
 
-**Validaciones:**
+**Validaciones principales:**
 
+- Solo se muestran productos activos.
 - No se puede agregar una variante sin stock.
-- La reseña requiere calificación válida y comentario suficientemente descriptivo.
-- Si el cliente ya reseñó el producto, se actualiza su reseña.
+- La reseña requiere calificación de 1 a 5 y comentario descriptivo.
+- Solo existe una reseña por cliente y producto; si el cliente vuelve a opinar, se actualiza.
 
-### 3.5 Guías fitness
+### 3.6 Carrito
 
-La sección Guías muestra contenido publicado por GymVerse.
+El carrito permite revisar productos, modificar cantidades, aplicar cupones y confirmar la compra.
 
 **Funciones:**
 
-- Filtrar por entrenamiento, nutrición, recuperación o hábitos.
-- Leer contenido completo.
-- Ver nivel y tiempo estimado de lectura.
-- Consultar productos relacionados y abrirlos desde la guía.
+- Aumentar o disminuir cantidades.
+- Eliminar productos.
+- Elegir entrega en gimnasio afiliado o entrega a domicilio.
+- Elegir Mercado Pago o pago al recoger.
+- Aplicar y quitar cupones.
+- Ver resumen de subtotal, envío, descuento y total.
 
-### 3.6 Carrito y checkout
+**Reglas importantes:**
 
-El carrito permite revisar productos, elegir entrega, aplicar cupón y seleccionar método de pago.
+- Para retiro en gimnasio, el cliente debe tener al menos un gimnasio afiliado en su perfil.
+- El stock usado para retiro es el stock local del gimnasio seleccionado.
+- Para entrega a domicilio, el stock usado es el inventario central del producto.
+- El pago al recoger solo está disponible cuando la entrega es por retiro en gimnasio.
+- En entrega a domicilio se puede usar un domicilio guardado o capturar uno para esa compra.
+- El cliente puede guardar el domicilio capturado durante el checkout.
 
-**Opciones de entrega:**
+### 3.7 Perfil
 
-- Retiro en gimnasio.
-- Envío a domicilio.
+La sección Perfil concentra la información personal, domicilio, seguridad y gimnasios afiliados.
 
-**Métodos de pago:**
+**Pestañas principales:**
 
-- Mercado Pago.
-- Pago al recoger, solo cuando la entrega es retiro en gimnasio.
+- Resumen: datos generales, puntos y accesos rápidos.
+- Cuenta: edición de nombre y teléfono.
+- Domicilio: dirección principal de entrega.
+- Seguridad: cambio de contraseña.
+- Gimnasios: búsqueda, afiliación y baja de gimnasios.
 
-**Validaciones:**
+**Validaciones principales:**
 
-- No se puede finalizar compra con carrito vacío.
-- El carrito tiene límite de productos.
-- Cada variante tiene límite de cantidad.
-- Para domicilio se requiere dirección completa.
-- Para retiro se requiere gimnasio activo y habilitado.
-- Mercado Pago debe estar configurado para pagos en línea.
-- El pago al recoger no aplica para domicilio.
-- El stock se valida antes de crear el pedido.
+- El correo no se edita desde perfil.
+- Nombre mínimo de 3 caracteres.
+- Teléfono con formato válido.
+- Domicilio con etiqueta, teléfono, calle, ciudad, estado y código postal.
+- Código postal con mínimo 4 dígitos.
+- Cambio de contraseña requiere contraseña actual, contraseña nueva válida y confirmación.
+- Para afiliar un gimnasio, debe estar activo y permitir retiro.
 
-### 3.7 Cupones
+### 3.8 Gimnasios afiliados del cliente
 
-El cliente puede aplicar cupones en el carrito.
+El cliente busca gimnasios por nombre, código, ciudad o dirección y los afilia a su cuenta.
 
-**Tipos de cupón:**
+**Funciones:**
 
-- Porcentaje.
-- Monto fijo.
-- Envío gratis.
-
-**Validaciones:**
-
-- El cupón debe estar activo.
-- Debe estar dentro de fechas vigentes.
-- Debe cumplir compra mínima.
-- No debe superar su límite de usos.
-
-### 3.8 Confirmación y Mercado Pago
-
-Cuando el cliente elige Mercado Pago, el sistema crea el pedido como pendiente de pago y redirige al checkout de Mercado Pago. Al regresar, la app sincroniza el pago con la API.
+- Buscar gimnasios con al menos 2 caracteres.
+- Afiliar un gimnasio.
+- Quitar un gimnasio afiliado.
+- Usar los gimnasios afiliados como puntos de retiro.
 
 **Reglas:**
 
-- El pago en línea tiene ventana de 24 horas.
-- Si el pago vence, el pedido puede cancelarse y se restaura el stock.
-- Si el pago se aprueba, el pedido pasa a preparación y se otorgan puntos una sola vez.
+- El carrito solo muestra como puntos de retiro los gimnasios afiliados del cliente.
+- Si el cliente quita un gimnasio, ya no aparece para nuevas compras.
+- La afiliación no afecta pedidos ya creados.
 
-### 3.9 Mis compras
+### 3.9 Pedidos
 
-La vista de pedidos permite consultar compras y recompensas.
+La vista de pedidos permite consultar historial, estado, pagos, devoluciones y códigos de retiro.
 
-**Funciones:**
+**Estados operativos:**
 
-- Ver seguimiento del pedido.
-- Ver código de retiro.
-- Pagar pedidos pendientes.
-- Cancelar pedidos en estados iniciales.
-- Solicitar devolución de pedidos entregados.
-- Ocultar pedidos del historial visible.
-- Ver canjes de recompensas.
-
-**Estados de pedido:**
-
-- Pendiente de pago.
-- Pagado.
-- Preparando.
-- Listo para recoger.
-- En camino.
-- Entregado.
-- Cancelado.
-- Devuelto.
-
-### 3.10 Devoluciones
-
-El cliente puede solicitar devolución únicamente en pedidos entregados.
-
-**Validaciones:**
-
-- El pedido debe estar entregado.
-- El motivo debe tener al menos 10 caracteres.
-- Solo puede existir una solicitud por pedido.
-
-### 3.11 Avisos
-
-La sección Avisos muestra notificaciones del sistema.
+- pending_payment: pendiente de pago.
+- paid: pagado.
+- preparing: en preparación.
+- ready_for_pickup: listo para recoger.
+- shipped: enviado.
+- delivered: entregado.
+- cancelled: cancelado.
 
 **Funciones:**
 
-- Ver avisos de pedidos, pagos, soporte y devoluciones.
-- Marcar todos como leídos.
-- Limpiar avisos.
-- Activar permisos de notificación del navegador.
+- Ver detalle del pedido.
+- Continuar pago pendiente de Mercado Pago.
+- Cancelar pedidos permitidos.
+- Ver código de retiro cuando aplica.
+- Solicitar devolución en pedidos entregados.
+- Ocultar pedidos del historial del cliente.
 
-### 3.12 Perfil
+### 3.10 Recompensas
 
-Permite administrar datos de cuenta y domicilio.
+El cliente acumula puntos por compras entregadas y puede canjear recompensas activas.
 
-**Funciones:**
+**Validaciones principales:**
 
-- Ver compras, domicilios, puntos y favoritos.
-- Editar nombre y correo.
-- Guardar domicilio.
-- Acceder a documentos legales.
-- Abrir soporte.
-- Cerrar sesión.
+- El cliente debe tener puntos suficientes.
+- La recompensa debe estar activa y vigente.
+- La variante debe tener stock.
+- Si el canje es a domicilio, se requiere dirección.
+- Si el canje es pickup, se requiere gimnasio de retiro.
 
-**Nota:** Las tarjetas ya no se guardan en GymVerse como flujo principal; Mercado Pago procesa los medios de pago.
+### 3.11 Notificaciones
 
-### 3.13 Soporte
-
-El cliente puede crear tickets y responder conversaciones.
-
-**Categorías:**
-
-- Pedido.
-- Pago.
-- Devolución.
-- Cuenta.
-- Gimnasio.
-- Otro.
+La app muestra avisos del sistema, pedidos, recompensas, soporte y promociones.
 
 **Funciones:**
 
-- Crear ticket.
-- Consultar estado.
-- Responder mensajes.
-- Cerrar ticket.
+- Ver notificaciones.
+- Marcar como leídas.
+- Limpiar notificaciones visibles.
+- Consultar contador de no leídas.
+
+### 3.12 Soporte
+
+El cliente puede crear tickets de soporte y consultar sus respuestas.
+
+**Funciones:**
+
+- Crear ticket con categoría, asunto y mensaje.
+- Ver estado del ticket.
+- Revisar respuesta administrativa.
+
+### 3.13 Legal y contenido
+
+GymVerse incluye documentos legales publicados y contenido fitness.
+
+**Contenido:**
+
+- Términos y condiciones.
+- Política de privacidad.
+- Política de pagos.
+- Política de devoluciones.
+- Guías fitness de entrenamiento, nutrición, recuperación y hábitos.
 
 ## 4. Panel Administrativo
 
-### 4.1 Login admin/staff/gym
+### 4.1 Login administrativo
 
-El panel permite acceso a usuarios con rol admin, staff o gym.
+Admin, staff y gym entran por el panel administrativo con correo y contraseña.
 
 **Validaciones:**
 
-- Credenciales correctas.
+- Credenciales válidas.
 - Cuenta activa.
-- Rol autorizado.
-- Staff solo ve módulos permitidos.
-- Gym entra al portal de gimnasio.
+- Rol permitido.
+- Registro de auditoría en accesos internos.
 
 ### 4.2 Resumen
 
-Muestra métricas de ventas, ganancia, reabastecimiento, pedidos, clientes, stock bajo, gimnasios y pagos pendientes.
+Muestra métricas operativas: ventas, pedidos, inventario, reabastecimiento y actividad reciente.
 
 ### 4.3 Pedidos
 
-Permite consultar, filtrar, actualizar, archivar y descargar guías PDF.
+Permite gestionar pedidos de clientes.
 
 **Funciones:**
 
-- Buscar por pedido, cliente, producto o SKU.
-- Filtrar por estado, pago y entrega.
-- Cambiar estado.
-- Cambiar pago.
-- Confirmar retiro con código.
-- Descargar guía PDF.
-- Archivar pedidos cancelados.
-- Restaurar archivados.
-
-### 4.4 Avisos
-
-Permite consultar notificaciones internas y enviar avisos por rol o usuario.
-
-### 4.5 Soporte
-
-Permite responder tickets, cambiar estado, prioridad y dar seguimiento a conversaciones con clientes.
-
-### 4.6 Devoluciones
-
-Permite revisar solicitudes, cambiar estado y registrar nota de resolución.
-
-**Estados:**
-
-- En revisión.
-- Aprobada.
-- Rechazada.
-- Recibida.
-- Reembolsada.
-
-### 4.7 Inventario
-
-Permite crear, editar, archivar productos y ajustar stock.
-
-**Validaciones:**
-
-- Producto con nombre, slug, categoría, proveedor y descripción.
-- Variantes con SKU, etiqueta, precio y stock.
-- Números no negativos.
-- Imágenes PNG, JPG o WebP, máximo 4 MB.
-
-### 4.8 Reabastecimiento
-
-Permite crear guías PDF de compra a proveedores e historial de guías.
-
-### 4.9 Gimnasios
-
-Permite administrar gimnasios afiliados, pagos mensuales y accesos tipo gym.
-
-**Funciones:**
-
-- Crear/editar gimnasio.
-- Marcar pago mensual.
-- Activar o desactivar retiro.
-- Crear acceso de usuario para gimnasio.
-- Desactivar o reactivar acceso.
-
-### 4.10 Proveedores
-
-Permite crear, editar y archivar proveedores.
-
-### 4.11 Promociones
-
-Permite crear cupones de porcentaje, monto fijo o envío gratis.
-
-**Campos:**
-
-- Código.
-- Título.
-- Descripción.
-- Tipo.
-- Valor.
-- Compra mínima.
-- Tope de descuento.
-- Límite de usos.
-- Fechas de inicio y fin.
-- Estado activo/pausado.
-
-### 4.12 Recompensas
-
-Permite crear drops canjeables con puntos y gestionar pedidos de recompensa.
-
-### 4.13 Contenido
-
-Permite crear guías fitness con tipo, nivel, lectura estimada, tags, productos relacionados y estado borrador/publicado.
-
-### 4.14 Automatizaciones
-
-Permite ejecutar reglas operativas:
-
-- Pausar promociones vencidas.
-- Detectar stock bajo.
-- Avisar pagos de Mercado Pago pendientes.
-- Marcar gimnasios con pago vencido.
-
-### 4.15 Finanzas
-
-Muestra resumen financiero, ingresos, costos, utilidad, descuentos y pagos pendientes.
-
-### 4.16 Auditoría
-
-Muestra acciones relevantes ejecutadas por usuarios internos: login, cambios de pedido, archivo, soporte, devoluciones, usuarios y otros eventos.
-
-### 4.17 Legal
-
-Permite editar documentos legales publicados o en borrador, incluyendo bloques de texto, versión y orden.
-
-### 4.18 Usuarios y roles
-
-Solo admin puede crear y administrar usuarios internos.
-
-**Presets de rol:**
-
-- Operación diaria.
-- Inventario y compras.
-- Afiliados.
-- Marketing y contenido.
-- Finanzas y reportes.
-- Supervisor.
-
-### 4.19 Reportes
-
-Permite descargar reportes PDF y CSV de ventas, registros, pagos y movimientos.
-
-## 5. Portal de Gimnasio
-
-El rol gym accede a un portal enfocado en pedidos de retiro de su gimnasio.
-
-**Funciones:**
-
-- Ver pedidos asignados al gimnasio.
-- Actualizar estados permitidos.
+- Ver pedidos activos.
+- Actualizar estado.
+- Actualizar pago.
 - Confirmar entrega con código de retiro.
-- Marcar pago al recoger.
+- Descargar guía de envío PDF.
+- Archivar y desarchivar pedidos cancelados.
+
+### 4.4 Inventario
+
+Administra productos, categorías, variantes, precios, costos, stock e imágenes.
+
+**Funciones:**
+
+- Crear y editar productos.
+- Crear y editar categorías.
+- Gestionar variantes.
+- Registrar entradas de stock.
+- Subir imágenes de producto a Cloudinary.
+- Consultar inventario central.
+
+### 4.5 Reabastecimiento
+
+Gestiona entradas de inventario central y solicitudes de stock local de gimnasios.
+
+**Funciones:**
+
+- Registrar movimientos de stock.
+- Generar guías PDF de reabastecimiento.
+- Consultar historial.
+- Ver solicitudes de gimnasios.
+- Confirmar o cancelar solicitudes de reabastecimiento.
+
+### 4.6 Gimnasios
+
+Administra gimnasios afiliados.
+
+**Funciones:**
+
+- Crear y editar gimnasios.
+- Activar, pausar o archivar gimnasios.
+- Configurar si permiten retiro.
+- Gestionar cuota mensual y estado de pago.
+- Crear o actualizar acceso del usuario tipo gym.
+
+### 4.7 Portal de gimnasio
+
+El usuario de gimnasio gestiona únicamente su operación.
+
+**Funciones:**
+
+- Ver resumen del gimnasio.
+- Consultar pedidos asignados a su gimnasio.
+- Cambiar estados permitidos.
+- Confirmar entrega con código.
+- Consultar stock local.
+- Solicitar reabastecimiento.
+
+**Reglas:**
+
+- El gimnasio solo ve pedidos vinculados a su gimnasio.
+- No puede entregar sin código de retiro válido.
+- Puede solicitar máximo 20 líneas por solicitud.
+- Cada línea solicita de 1 a 10 piezas.
+- El stock local por SKU no puede superar 10 piezas.
+
+### 4.8 Cupones y promociones
+
+Gestiona descuentos y campañas.
+
+**Funciones:**
+
+- Crear cupones porcentuales, fijos o de envío gratis.
+- Definir compra mínima, vigencia, límite de uso y tope de descuento.
+- Activar o desactivar cupones.
+
+### 4.9 Recompensas
+
+Administra drops de recompensas y órdenes de canje.
+
+**Funciones:**
+
+- Crear recompensas.
+- Definir costo en puntos, vigencia y stock.
+- Gestionar órdenes de recompensa.
+- Descargar guías PDF cuando aplique.
+
+### 4.10 Contenido, legal, soporte y notificaciones
+
+**Contenido:** crear, publicar, archivar y restaurar publicaciones.
+
+**Legal:** publicar documentos legales versionados.
+
+**Soporte:** atender tickets y responder solicitudes.
+
+**Notificaciones:** enviar avisos por audiencia.
+
+### 4.11 Finanzas, reportes y auditoría
+
+**Finanzas:** ingresos, pedidos, recompensas, membresías y reabastecimiento.
+
+**Reportes:** descarga de reportes PDF y CSV.
+
+**Auditoría:** bitácora de acciones internas relevantes.

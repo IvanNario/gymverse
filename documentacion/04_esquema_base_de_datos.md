@@ -1,58 +1,62 @@
 # Esquema de Base de Datos - GymVerse
 
+**Fecha de actualización:** 26 de julio de 2026
+
 ## 1. Resumen
 
-La base de datos usa MongoDB con Mongoose. Los modelos principales cubren usuarios, pedidos, productos, inventario, cupones, recompensas, contenido, soporte, devoluciones, notificaciones, legales, auditoría y automatizaciones.
+GymVerse usa MongoDB con Mongoose. La base de datos está orientada a comercio, recompensas, operación de gimnasios afiliados, soporte, contenido, auditoría y administración.
+
+Los datos sensibles como teléfonos, direcciones y contactos se almacenan cifrados mediante utilidades de cifrado configuradas con DATA_ENCRYPTION_KEY.
 
 ## 2. User
 
 | Campo | Tipo | Descripción |
 |---|---|---|
-| name | String | Nombre. |
-| email | String | Correo único. |
-| phone | String | Teléfono cifrado. |
-| passwordHash | String | Contraseña cifrada. |
+| name | String | Nombre del usuario. |
+| email | String | Correo único en minúsculas. |
+| phone | String cifrado | Teléfono del cliente o usuario. |
+| passwordHash | String | Hash de contraseña. |
 | authProvider | String | password, google o mixed. |
-| googleSubject | String | Identificador privado de Google Login. |
-| passwordResetCodeHash | String | Código de recuperación cifrado por hash y oculto por defecto. |
+| googleSubject | String | Identificador privado de Google. |
+| passwordResetCodeHash | String | Hash del código de recuperación, oculto por defecto. |
 | passwordResetExpiresAt | Date | Vencimiento del código de recuperación. |
-| passwordResetAttempts | Number | Intentos de recuperación usados. |
+| passwordResetAttempts | Number | Intentos usados para recuperación. |
 | role | String | customer, admin, staff o gym. |
-| adminRolePreset | String | Preset de permisos staff. |
-| permissions | Array String | Permisos específicos. |
+| adminRolePreset | String | Preset administrativo aplicado. |
+| permissions | Array String | Permisos por módulo. |
 | status | String | active o disabled. |
-| gym | ObjectId | Gimnasio asociado para rol gym. |
-| affiliatedGyms | Array ObjectId | Gimnasios afiliados por el cliente. |
-| addresses | Array | Direcciones cifradas. |
-| hiddenOrders | Array ObjectId | Pedidos ocultos por cliente. |
-| favorites | Array ObjectId | Productos favoritos. |
-| points | Number | Puntos acumulados. |
+| gym | ObjectId Gym | Gimnasio asociado para usuarios tipo gym. |
+| affiliatedGyms | Array ObjectId Gym | Gimnasios afiliados por el cliente. |
+| addresses | Array | Domicilios cifrados. |
+| hiddenOrders | Array ObjectId Order | Pedidos ocultos por el cliente. |
+| favorites | Array ObjectId Product | Productos favoritos. |
+| points | Number | Puntos disponibles. |
 
 ## 3. Product
 
 | Campo | Tipo | Descripción |
 |---|---|---|
-| name | String | Nombre. |
-| slug | String | Identificador único. |
-| category | ObjectId | Categoría. |
-| supplier | ObjectId | Proveedor. |
-| description | String | Descripción. |
-| imageUrl | String | Imagen. |
-| tags | Array String | Etiquetas. |
+| name | String | Nombre del producto. |
+| slug | String | Identificador único para URL. |
+| category | ObjectId Category | Categoría del producto. |
+| supplier | ObjectId Supplier | Proveedor. |
+| description | String | Descripción comercial. |
+| imageUrl | String | Imagen, normalmente alojada en Cloudinary. |
+| tags | Array String | Etiquetas de búsqueda. |
 | status | String | active, draft o archived. |
-| pointsEarned | Number | Puntos por compra. |
-| variants | Array | Variantes. |
+| pointsEarned | Number | Puntos que genera al comprar. |
+| variants | Array | Variantes de producto. |
 
 ## 4. Product Variant
 
 | Campo | Tipo | Descripción |
 |---|---|---|
-| sku | String | SKU. |
-| label | String | Etiqueta. |
-| price | Number | Precio. |
+| sku | String | SKU único por variante dentro del producto. |
+| label | String | Etiqueta visible. |
+| price | Number | Precio de venta. |
 | cost | Number | Costo. |
-| stock | Number | Existencia. |
-| attributes | Map | Atributos. |
+| stock | Number | Stock central para ventas a domicilio y reabastecimiento. |
+| attributes | Map | Atributos como sabor, talla o presentación. |
 
 ## 5. Category
 
@@ -61,184 +65,157 @@ La base de datos usa MongoDB con Mongoose. Los modelos principales cubren usuari
 | name | String | Nombre único. |
 | slug | String | Slug único. |
 | description | String | Descripción. |
-| active | Boolean | Estado visible. |
+| active | Boolean | Define si se muestra en catálogo. |
 
 ## 6. Supplier
 
 | Campo | Tipo | Descripción |
 |---|---|---|
-| name | String | Nombre único. |
-| contactName | String | Contacto cifrado. |
-| email | String | Correo cifrado. |
-| phone | String | Teléfono cifrado. |
+| name | String | Nombre del proveedor. |
+| contactName | String cifrado | Persona de contacto. |
+| email | String cifrado | Correo de contacto. |
+| phone | String cifrado | Teléfono. |
 | status | String | active, paused o archived. |
 
 ## 7. Gym
 
 | Campo | Tipo | Descripción |
 |---|---|---|
-| name | String | Nombre. |
+| name | String | Nombre del gimnasio. |
 | code | String | Código único. |
-| address | String | Dirección cifrada. |
-| city | String | Ciudad cifrada. |
-| phone | String | Teléfono cifrado. |
-| pickupEnabled | Boolean | Permite retiro. |
+| address | String cifrado | Dirección. |
+| city | String cifrado | Ciudad. |
+| phone | String cifrado | Teléfono. |
+| pickupEnabled | Boolean | Permite retiro de pedidos. |
 | status | String | active, paused o archived. |
 | capacity | String | low, medium o high. |
 | membershipFee | Number | Cuota mensual. |
 | paymentStatus | String | pending, paid u overdue. |
-| lastPaymentAt | Date | Último pago. |
-| nextPaymentDue | Date | Siguiente pago. |
+| lastPaymentAt | Date | Último pago registrado. |
+| nextPaymentDue | Date | Próxima fecha de pago. |
 
-## 8. Order
+## 8. GymStock
+
+| Campo | Tipo | Descripción |
+|---|---|---|
+| gym | ObjectId Gym | Gimnasio dueño del stock local. |
+| product | ObjectId Product | Producto relacionado. |
+| productName | String | Nombre congelado para lectura rápida. |
+| sku | String | Variante del producto. |
+| variantLabel | String | Etiqueta de variante. |
+| quantity | Number | Cantidad local disponible, mínimo 0 y máximo 10. |
+
+**Índice único:** gym + product + sku.
+
+## 9. GymRestockRequest
+
+| Campo | Tipo | Descripción |
+|---|---|---|
+| requestNumber | String | Folio único de solicitud. |
+| gym | ObjectId Gym | Gimnasio solicitante. |
+| items | Array | Productos solicitados. |
+| status | String | requested, transferred o cancelled. |
+| note | String | Nota del gimnasio. |
+| adminNote | String | Nota administrativa. |
+| requestedBy | ObjectId User | Usuario gym que solicitó. |
+| confirmedBy | ObjectId User | Usuario que confirma o cancela. |
+| confirmedAt | Date | Fecha de confirmación o cancelación. |
+
+### Items de solicitud
+
+| Campo | Tipo | Descripción |
+|---|---|---|
+| product | ObjectId Product | Producto. |
+| productName | String | Nombre del producto. |
+| sku | String | SKU solicitado. |
+| variantLabel | String | Variante. |
+| quantity | Number | Cantidad entre 1 y 10. |
+| currentStock | Number | Stock local al solicitar. |
+
+## 10. Order
 
 | Campo | Tipo | Descripción |
 |---|---|---|
 | orderNumber | String | Folio único. |
-| customer | ObjectId | Cliente. |
+| customer | ObjectId User | Cliente. |
 | items | Array | Productos comprados. |
 | subtotal | Number | Subtotal. |
-| shippingFee | Number | Envío. |
-| discount | Number | Descuento. |
+| shippingFee | Number | Costo de envío. |
+| discount | Number | Descuento aplicado. |
 | discountCode | String | Cupón usado. |
 | total | Number | Total. |
 | pointsEarned | Number | Puntos generados. |
 | deliveryMethod | String | pickup o home. |
-| pickupGym | ObjectId | Gimnasio de retiro. |
-| pickupCode | String | Código de retiro. |
+| pickupGym | ObjectId Gym | Gimnasio de retiro. |
+| pickupCode | String | Código de entrega. |
 | deliveredAt | Date | Fecha de entrega. |
-| shippingAddress | Object | Dirección cifrada. |
-| status | String | Estado operativo. |
+| shippingAddress | Object cifrado | Domicilio de envío. |
+| status | String | pending_payment, paid, preparing, ready_for_pickup, shipped, delivered o cancelled. |
 | paymentStatus | String | pending, paid o refunded. |
 | paymentMethod | String | pickup o mercado_pago. |
 | paymentProvider | String | pickup o mercado_pago. |
 | providerPreferenceId | String | Preferencia Mercado Pago. |
-| providerPaymentId | String | Pago Mercado Pago. |
-| providerStatus | String | Estado proveedor. |
-| paymentUrl | String | URL de pago. |
-| paymentExpiresAt | Date | Vencimiento del pago. |
-| stockRestoredAt | Date | Restauración de stock. |
-| adminArchivedAt | Date | Archivo interno. |
-| paidAt | Date | Fecha de pago. |
-| pointsGrantedAt | Date | Fecha de puntos otorgados. |
+| providerPaymentId | String | Pago de Mercado Pago. |
+| providerStatus | String | Estado devuelto por proveedor. |
+| paymentUrl | String | Link de pago. |
+| paymentExpiresAt | Date | Vencimiento de pago pendiente. |
+| stockRestoredAt | Date | Fecha de restauración de stock. |
+| adminArchivedAt | Date | Fecha de archivo admin. |
+| paidAt | Date | Fecha de pago confirmado. |
+| pointsGrantedAt | Date | Fecha de otorgamiento de puntos. |
 
-## 9. Coupon
+## 11. Coupon
 
 | Campo | Tipo | Descripción |
 |---|---|---|
-| code | String | Código único en mayúsculas. |
-| title | String | Título. |
+| code | String | Código único normalizado. |
 | description | String | Descripción. |
 | type | String | percentage, fixed o free_shipping. |
-| value | Number | Valor. |
-| minSubtotal | Number | Compra mínima. |
-| maxDiscount | Number | Tope. |
-| usageLimit | Number | Límite de usos. |
-| usedCount | Number | Usos consumidos. |
-| active | Boolean | Activo. |
-| startsAt | Date | Inicio. |
-| endsAt | Date | Fin. |
+| value | Number | Valor del descuento. |
+| minSubtotal | Number | Subtotal mínimo. |
+| maxDiscount | Number | Tope de descuento. |
+| usageLimit | Number | Límite total de usos. |
+| usedCount | Number | Usos registrados. |
+| startsAt | Date | Inicio de vigencia. |
+| endsAt | Date | Fin de vigencia. |
+| active | Boolean | Estado activo. |
 
-## 10. ProductReview
+## 12. RewardDrop y RewardOrder
+
+RewardDrop define recompensas disponibles para canje por puntos. RewardOrder registra el canje realizado por un cliente.
+
+| Modelo | Campos clave |
+|---|---|
+| RewardDrop | title, product, sku, pointsCost, stock, startsAt, endsAt, active. |
+| RewardOrder | orderNumber, customer, rewardDrop, product, sku, pointsCost, deliveryMethod, pickupGym, shippingAddress, status. |
+
+## 13. ProductReview
 
 | Campo | Tipo | Descripción |
 |---|---|---|
-| product | ObjectId | Producto. |
-| customer | ObjectId | Cliente. |
-| rating | Number | 1 a 5. |
+| product | ObjectId Product | Producto reseñado. |
+| customer | ObjectId User | Cliente. |
+| rating | Number | Calificación de 1 a 5. |
 | comment | String | Comentario. |
-| verifiedPurchase | Boolean | Compra verificada. |
+| verifiedPurchase | Boolean | Indica si hubo compra entregada. |
 
-## 11. ReturnRequest
+**Índice único:** product + customer.
 
-| Campo | Tipo | Descripción |
-|---|---|---|
-| returnNumber | String | Folio único. |
-| order | ObjectId | Pedido. |
-| customer | ObjectId | Cliente. |
-| reason | String | Motivo. |
-| resolutionNote | String | Nota de resolución. |
-| status | String | requested, approved, rejected, received o refunded. |
-| requestedAt | Date | Fecha de solicitud. |
-| resolvedAt | Date | Fecha de resolución. |
+## 14. Soporte, legales, contenido y notificaciones
 
-## 12. SupportTicket
+| Modelo | Propósito |
+|---|---|
+| SupportTicket | Tickets de soporte de clientes. |
+| LegalDocument | Documentos legales publicados y versionados. |
+| ContentPost | Contenido fitness publicado, archivado o restaurable. |
+| Notification | Avisos dirigidos por usuario, rol o audiencia. |
 
-| Campo | Tipo | Descripción |
-|---|---|---|
-| ticketNumber | String | Folio único. |
-| customer | ObjectId | Cliente. |
-| subject | String | Asunto. |
-| category | String | order, payment, return, account, gym u other. |
-| status | String | open, waiting_customer, waiting_team o resolved. |
-| priority | String | low, normal o high. |
-| order | ObjectId | Pedido relacionado. |
-| assignedTo | ObjectId | Usuario asignado. |
-| messages | Array | Conversación. |
-| resolvedAt | Date | Cierre. |
+## 15. Auditoría, automatizaciones y reportes operativos
 
-## 13. Notification
-
-| Campo | Tipo | Descripción |
-|---|---|---|
-| recipient | ObjectId | Usuario destino. |
-| role | String | Notificación por rol. |
-| title | String | Título. |
-| message | String | Mensaje. |
-| type | String | Tipo. |
-| linkType | String | Tipo de enlace. |
-| linkId | ObjectId | Recurso enlazado. |
-| readAt | Date | Lectura individual. |
-| readBy | Array ObjectId | Lecturas por rol. |
-| clearedBy | Array ObjectId | Ocultos por usuario. |
-
-## 14. ContentPost
-
-| Campo | Tipo | Descripción |
-|---|---|---|
-| title | String | Título. |
-| slug | String | Slug único. |
-| summary | String | Resumen. |
-| body | String | Contenido. |
-| type | String | training, nutrition, recovery o lifestyle. |
-| level | String | beginner, intermediate o advanced. |
-| readMinutes | Number | Minutos de lectura. |
-| tags | Array String | Etiquetas. |
-| imageUrl | String | Imagen. |
-| featured | Boolean | Destacado. |
-| status | String | draft, published o archived. |
-| relatedProducts | Array ObjectId | Productos relacionados. |
-| publishedAt | Date | Fecha publicación. |
-| createdBy | ObjectId | Creador. |
-
-## 15. LegalDocument
-
-| Campo | Tipo | Descripción |
-|---|---|---|
-| key | String | Clave única. |
-| title | String | Título. |
-| intro | String | Introducción. |
-| status | String | draft o published. |
-| versionLabel | String | Versión. |
-| sortOrder | Number | Orden. |
-| blocks | Array | Bloques con heading y text. |
-| updatedBy | ObjectId | Último editor. |
-
-## 16. RewardDrop y RewardOrder
-
-**RewardDrop:** título, subtítulo, banner, imagen, estado, fechas, items canjeables y creador.  
-**RewardDrop item:** producto, SKU, costo en puntos, stock y activo.  
-**RewardOrder:** folio, cliente, drop, items, puntos totales, entrega, gimnasio y estado.
-
-## 17. StockMovement y RestockGuide
-
-**StockMovement:** producto, SKU, variante, proveedor, cantidad, costo, total, nota y creador.  
-**RestockGuide:** folio, items, total de piezas, costo total y creador.
-
-## 18. AuditLog
-
-Registra actor, rol, acción, recurso, ID, IP, user agent y metadata.
-
-## 19. AutomationRun
-
-Registra regla ejecutada, estado, resumen, disparadores, cambios, detalles y usuario creador.
+| Modelo | Propósito |
+|---|---|
+| AuditLog | Bitácora de acciones internas. |
+| AutomationRun | Ejecuciones de automatizaciones. |
+| StockMovement | Movimientos de inventario central. |
+| RestockGuide | Guías PDF de reabastecimiento. |
+| ReturnRequest | Solicitudes de devolución. |

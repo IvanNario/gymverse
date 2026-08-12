@@ -14,7 +14,7 @@ const emptyProduct = {
   tags: "",
   status: "active",
   pointsEarned: 0,
-  variants: [{ sku: "", label: "", price: 0, cost: 0, stock: 0, attributes: {} }],
+  variants: [{ sku: "", label: "", price: 0, cost: 0, stock: 0, imageUrl: "", attributes: {} }],
 };
 
 function slugify(value) {
@@ -124,6 +124,7 @@ export function InventoryPage({ products, categories, suppliers, onSave, onDelet
         price: Number(variant.price),
         cost: Number(variant.cost || 0),
         stock: Number(variant.stock),
+        imageUrl: variant.imageUrl || "",
         attributes: variant.attributes || {},
       })),
     };
@@ -138,6 +139,19 @@ export function InventoryPage({ products, categories, suppliers, onSave, onDelet
     try {
       const url = await onUploadImage(file);
       setForm((current) => ({ ...current, imageUrl: url }));
+    } finally {
+      setUploadingImage(false);
+      event.target.value = "";
+    }
+  }
+
+  async function handleVariantImageUpload(index, event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    setUploadingImage(true);
+    try {
+      const url = await onUploadImage(file);
+      updateVariant(index, { imageUrl: url });
     } finally {
       setUploadingImage(false);
       event.target.value = "";
@@ -293,7 +307,7 @@ export function InventoryPage({ products, categories, suppliers, onSave, onDelet
               <button
                 type="button"
                 className="ghostButton"
-                onClick={() => setForm({ ...form, variants: [...form.variants, { sku: "", label: "", price: 0, cost: 0, stock: 0, attributes: {} }] })}
+                onClick={() => setForm({ ...form, variants: [...form.variants, { sku: "", label: "", price: 0, cost: 0, stock: 0, imageUrl: "", attributes: {} }] })}
               >
                 <Plus size={16} />
                 Variante
@@ -320,6 +334,11 @@ export function InventoryPage({ products, categories, suppliers, onSave, onDelet
                 <label>
                   <span>Stock inicial</span>
                   <input type="number" min="0" placeholder="24" value={variant.stock} onChange={(event) => updateVariant(index, { stock: event.target.value })} required />
+                </label>
+                <label className="variantImageField">
+                  <span>Imagen</span>
+                  <input value={variant.imageUrl || ""} onChange={(event) => updateVariant(index, { imageUrl: event.target.value })} placeholder="URL opcional" />
+                  <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => handleVariantImageUpload(index, event)} />
                 </label>
                 <button
                   type="button"
@@ -398,6 +417,9 @@ export function InventoryPage({ products, categories, suppliers, onSave, onDelet
                 <div className="stockGrid">
                   {product.variants.map((variant) => (
                     <div className="stockRow" key={variant.sku}>
+                      <div className="variantMiniImage">
+                        {(variant.imageUrl || product.imageUrl) ? <img src={variant.imageUrl || product.imageUrl} alt="" /> : <ImagePlus size={15} />}
+                      </div>
                       <div>
                         <strong>{variant.label}</strong>
                         <span>{variant.sku} · Venta {money(variant.price)} · Costo {money(variant.cost)} · {product.pointsEarned || 0} pts</span>

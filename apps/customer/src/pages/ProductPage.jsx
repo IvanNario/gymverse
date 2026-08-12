@@ -10,6 +10,7 @@ export function ProductPage({ product, isFavorite, onToggleFavorite, onBack, onA
   const [reviewForm, setReviewForm] = useState({ rating: 5, comment: "" });
   const [reviewMessage, setReviewMessage] = useState("");
   const variant = product.variants.find((item) => item.sku === sku);
+  const activeImageUrl = variant?.imageUrl || product.imageUrl;
   const reviewsPager = usePagedItems(reviews);
 
   useEffect(() => {
@@ -50,7 +51,7 @@ export function ProductPage({ product, isFavorite, onToggleFavorite, onBack, onA
 
       <div className="productDetailLayout">
         <div className="detailArt" data-kind={product.category?.slug}>
-          {product.imageUrl && <img src={product.imageUrl} alt="" />}
+          {activeImageUrl && <img src={activeImageUrl} alt={`${product.name} ${variant?.label || ""}`} />}
         </div>
 
         <div className="productDetailInfo">

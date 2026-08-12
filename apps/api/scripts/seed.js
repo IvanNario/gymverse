@@ -151,7 +151,15 @@ const products = await Product.create([
     pointsEarned: 75,
     variants: [
       { sku: "WHEY-VAN-2LB", label: "Vainilla 2 lb", price: 749, cost: 520, stock: 34, attributes: { sabor: "Vainilla" } },
-      { sku: "WHEY-CHO-2LB", label: "Chocolate 2 lb", price: 749, cost: 520, stock: 21, attributes: { sabor: "Chocolate" } },
+      {
+        sku: "WHEY-CHO-2LB",
+        label: "Chocolate 2 lb",
+        price: 749,
+        cost: 520,
+        stock: 21,
+        imageUrl: "https://res.cloudinary.com/dvrsmlqk7/image/upload/v1786553781/gymverse/products/variants/whey-elite-2lb-chocolate-1786553780.png",
+        attributes: { sabor: "Chocolate" },
+      },
     ],
   },
   {
@@ -165,7 +173,15 @@ const products = await Product.create([
     pointsEarned: 45,
     variants: [
       { sku: "CREA-300", label: "300 g", price: 429, cost: 260, stock: 18, attributes: { peso: "300 g" } },
-      { sku: "CREA-500", label: "500 g", price: 599, cost: 390, stock: 8, attributes: { peso: "500 g" } },
+      {
+        sku: "CREA-500",
+        label: "500 g",
+        price: 599,
+        cost: 390,
+        stock: 8,
+        imageUrl: "https://res.cloudinary.com/dvrsmlqk7/image/upload/v1786553782/gymverse/products/variants/creatina-core-500g-1786553782.png",
+        attributes: { peso: "500 g" },
+      },
     ],
   },
   {
@@ -193,7 +209,15 @@ const products = await Product.create([
     pointsEarned: 22,
     variants: [
       { sku: "STRAP-BLK", label: "Negro", price: 219, cost: 110, stock: 9, attributes: { color: "Negro" } },
-      { sku: "STRAP-YEL", label: "Amarillo", price: 229, cost: 115, stock: 12, attributes: { color: "Amarillo" } },
+      {
+        sku: "STRAP-YEL",
+        label: "Amarillo",
+        price: 229,
+        cost: 115,
+        stock: 12,
+        imageUrl: "https://res.cloudinary.com/dvrsmlqk7/image/upload/v1786553784/gymverse/products/variants/straps-pro-grip-amarillo-1786553783.png",
+        attributes: { color: "Amarillo" },
+      },
     ],
   },
   {
@@ -207,7 +231,15 @@ const products = await Product.create([
     pointsEarned: 55,
     variants: [
       { sku: "PRE-NIT-FRUT", label: "Frutos rojos 300 g", price: 549, cost: 330, stock: 16, attributes: { sabor: "Frutos rojos" } },
-      { sku: "PRE-NIT-LIM", label: "Limón 300 g", price: 549, cost: 330, stock: 14, attributes: { sabor: "Limón" } },
+      {
+        sku: "PRE-NIT-LIM",
+        label: "Limón 300 g",
+        price: 549,
+        cost: 330,
+        stock: 14,
+        imageUrl: "https://res.cloudinary.com/dvrsmlqk7/image/upload/v1786553785/gymverse/products/variants/pre-workout-nitro-limon-1786553785.png",
+        attributes: { sabor: "Limón" },
+      },
     ],
   },
   {
@@ -234,7 +266,15 @@ const products = await Product.create([
     pointsEarned: 70,
     variants: [
       { sku: "HOOD-BLK-M", label: "Negra M", price: 699, cost: 390, stock: 11, attributes: { talla: "M", color: "Negro" } },
-      { sku: "HOOD-GRY-L", label: "Gris L", price: 699, cost: 390, stock: 9, attributes: { talla: "L", color: "Gris" } },
+      {
+        sku: "HOOD-GRY-L",
+        label: "Gris L",
+        price: 699,
+        cost: 390,
+        stock: 9,
+        imageUrl: "https://res.cloudinary.com/dvrsmlqk7/image/upload/v1786553786/gymverse/products/variants/hoodie-pump-gris-l-1786553786.png",
+        attributes: { talla: "L", color: "Gris" },
+      },
     ],
   },
   {
@@ -261,7 +301,15 @@ const products = await Product.create([
     pointsEarned: 18,
     variants: [
       { sku: "SHAKER-YEL", label: "Amarillo 700 ml", price: 179, cost: 80, stock: 30, attributes: { color: "Amarillo" } },
-      { sku: "SHAKER-BLK", label: "Negro 700 ml", price: 179, cost: 80, stock: 26, attributes: { color: "Negro" } },
+      {
+        sku: "SHAKER-BLK",
+        label: "Negro 700 ml",
+        price: 179,
+        cost: 80,
+        stock: 26,
+        imageUrl: "https://res.cloudinary.com/dvrsmlqk7/image/upload/v1786553787/gymverse/products/variants/shaker-gymverse-negro-1786553787.png",
+        attributes: { color: "Negro" },
+      },
     ],
   },
   {

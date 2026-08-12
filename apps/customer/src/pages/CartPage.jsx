@@ -122,7 +122,11 @@ export function CartPage({
         {cart.length === 0 && <div className="emptyCard">Tu carrito está vacío</div>}
         {cartPager.pagedItems.map((item) => (
           <article className="cartItem" key={`${item.product._id}-${item.variant.sku}`}>
-            <div className="cartThumb">{item.product.imageUrl && <img src={item.product.imageUrl} alt="" />}</div>
+            <div className="cartThumb">
+              {(item.variant.imageUrl || item.product.imageUrl) && (
+                <img src={item.variant.imageUrl || item.product.imageUrl} alt={`${item.product.name} ${item.variant.label}`} />
+              )}
+            </div>
             <div>
               <h3>{item.product.name}</h3>
               <p>{item.variant.label}</p>

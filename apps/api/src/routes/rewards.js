@@ -26,7 +26,7 @@ function publicRewardOrder(order, { viewer }) {
 rewardsRouter.get("/me", requireAuth, async (request, response) => {
   const rewardOrders = await RewardOrder.find({ customer: request.user._id })
     .populate("pickupGym")
-    .populate("items.product", "name imageUrl variants.sku variants.label")
+    .populate("items.product", "name imageUrl variants.sku variants.label variants.imageUrl")
     .sort({ createdAt: -1 })
     .limit(50);
   response.json({ rewardOrders: rewardOrders.map((order) => publicRewardOrder(order, { viewer: request.user })) });
@@ -141,7 +141,7 @@ rewardsRouter.post("/redeem", requireAuth, async (request, response) => {
 
   const updatedUser = await request.user.constructor.findById(request.user._id);
   await rewardOrder.populate("pickupGym");
-  await rewardOrder.populate("items.product", "name imageUrl variants.sku variants.label");
+  await rewardOrder.populate("items.product", "name imageUrl variants.sku variants.label variants.imageUrl");
   response.status(201).json({
     rewardOrder: publicRewardOrder(rewardOrder, { viewer: request.user }),
     user: publicUserProfile(updatedUser, { includePrivate: true }),

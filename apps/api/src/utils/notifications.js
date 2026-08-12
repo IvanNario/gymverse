@@ -27,6 +27,7 @@ export async function createNotification({ recipient, role, title, message, type
         }))
       );
     }
+    return [];
   }
   return Notification.create({
     recipient,

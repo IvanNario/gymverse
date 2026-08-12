@@ -146,6 +146,7 @@ const products = await Product.create([
     category: supplements._id,
     supplier: nutrimax._id,
     description: "Proteína con 24 g por servicio para recuperación diaria.",
+    imageUrl: "https://placehold.co/1200x900/f7f2de/15151c/png?text=Whey+Elite+2+lb",
     tags: ["proteína", "whey", "recuperación"],
     pointsEarned: 75,
     variants: [
@@ -159,6 +160,7 @@ const products = await Product.create([
     category: supplements._id,
     supplier: nutrimax._id,
     description: "Creatina monohidratada micronizada para ciclos de fuerza.",
+    imageUrl: "https://placehold.co/1200x900/f4f6f0/15151c/png?text=Creatina+Core",
     tags: ["creatina", "fuerza"],
     pointsEarned: 45,
     variants: [
@@ -172,6 +174,7 @@ const products = await Product.create([
     category: apparel._id,
     supplier: ironwear._id,
     description: "Corte atletico, secado rapido y tejido ligero.",
+    imageUrl: "https://placehold.co/1200x900/eeeeea/15151c/png?text=Playera+DryFit",
     tags: ["playera", "ropa", "dryfit"],
     pointsEarned: 35,
     variants: [
@@ -185,6 +188,7 @@ const products = await Product.create([
     category: accessories._id,
     supplier: liftools._id,
     description: "Correas acolchadas para jalones, peso muerto y sesiones pesadas.",
+    imageUrl: "https://placehold.co/1200x900/f3f1ec/15151c/png?text=Straps+Pro+Grip",
     tags: ["straps", "agarre", "accesorios"],
     pointsEarned: 22,
     variants: [
@@ -198,6 +202,7 @@ const products = await Product.create([
     category: supplements._id,
     supplier: nutrimax._id,
     description: "Pre entreno con cafeína, beta alanina y enfoque para sesiones intensas.",
+    imageUrl: "https://placehold.co/1200x900/fff0d6/15151c/png?text=Pre+Workout+Nitro",
     tags: ["pre entreno", "energía", "suplementos"],
     pointsEarned: 55,
     variants: [
@@ -211,6 +216,7 @@ const products = await Product.create([
     category: supplements._id,
     supplier: nutrimax._id,
     description: "Aminoácidos para hidratación y recuperación durante entrenamientos largos.",
+    imageUrl: "https://placehold.co/1200x900/eef6f4/15151c/png?text=BCAA+Recovery",
     tags: ["bcaa", "recuperación", "hidratación"],
     pointsEarned: 38,
     variants: [
@@ -223,6 +229,7 @@ const products = await Product.create([
     category: apparel._id,
     supplier: ironwear._id,
     description: "Sudadera ligera para calentar, entrenar y moverte cómodo antes de la rutina.",
+    imageUrl: "https://placehold.co/1200x900/edf0f5/15151c/png?text=Hoodie+Pump",
     tags: ["sudadera", "ropa", "pump"],
     pointsEarned: 70,
     variants: [
@@ -236,6 +243,7 @@ const products = await Product.create([
     category: apparel._id,
     supplier: ironwear._id,
     description: "Short de entrenamiento con tela elástica y cintura cómoda.",
+    imageUrl: "https://placehold.co/1200x900/f2f2ef/15151c/png?text=Short+Flex",
     tags: ["short", "ropa", "pierna"],
     pointsEarned: 42,
     variants: [
@@ -248,6 +256,7 @@ const products = await Product.create([
     category: accessories._id,
     supplier: liftools._id,
     description: "Shaker de 700 ml con rejilla mezcladora y tapa segura para llevar al gym.",
+    imageUrl: "https://placehold.co/1200x900/ffe680/15151c/png?text=Shaker+GymVerse",
     tags: ["shaker", "accesorios", "proteína"],
     pointsEarned: 18,
     variants: [
@@ -261,6 +270,7 @@ const products = await Product.create([
     category: accessories._id,
     supplier: liftools._id,
     description: "Cinturón de soporte para levantamientos pesados y trabajo de fuerza.",
+    imageUrl: "https://placehold.co/1200x900/efeee8/15151c/png?text=Cinturon+Power",
     tags: ["cinturón", "fuerza", "accesorios"],
     pointsEarned: 65,
     variants: [
@@ -572,6 +582,7 @@ await GymRestockRequest.create([
 
 await Notification.create([
   {
+    recipient: admin._id,
     role: "admin",
     noticeCode: "NTF-ADMIN-001",
     title: "Solicitud de stock local",

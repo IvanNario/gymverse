@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { requireAuth } from "../middleware/auth.js";
+import { Order } from "../models/Order.js";
 import { SupportTicket } from "../models/SupportTicket.js";
 import { createNotification, notifyAdmins } from "../utils/notifications.js";
 import { cleanString, validObjectId } from "../utils/validation.js";
@@ -45,7 +46,12 @@ supportRouter.post("/", async (request, response) => {
   const category = ["order", "payment", "return", "account", "gym", "other"].includes(request.body.category)
     ? request.body.category
     : "other";
-  const order = validObjectId(request.body.order) ? request.body.order : undefined;
+  let order = undefined;
+  if (validObjectId(request.body.order)) {
+    const customerOrder = await Order.findOne({ _id: request.body.order, customer: request.user._id }).select("_id");
+    if (!customerOrder) return response.status(404).json({ message: "Pedido no encontrado para tu cuenta" });
+    order = customerOrder._id;
+  }
 
   if (!subject || !message) return response.status(400).json({ message: "Asunto y mensaje son requeridos" });
 

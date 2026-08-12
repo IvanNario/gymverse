@@ -787,7 +787,12 @@ ordersRouter.post("/:id/pickup-confirm", requireAuth, requireRole("admin", "staf
 });
 
 ordersRouter.get("/:id/shipping-guide.pdf", requireAuth, requireRole("admin", "staff", "gym"), requireOrdersPanelAccess, async (request, response) => {
-  const order = await Order.findById(request.params.id).populate("customer pickupGym");
+  const filter = { _id: request.params.id };
+  if (request.user.role === "gym") {
+    filter.pickupGym = request.user.gym;
+    filter.deliveryMethod = "pickup";
+  }
+  const order = await Order.findOne(filter).populate("customer pickupGym");
   if (!order) return response.status(404).json({ message: "Pedido no encontrado" });
 
   const address = order.shippingAddress || {};
